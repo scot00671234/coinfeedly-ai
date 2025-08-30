@@ -1,0 +1,97 @@
+s of this deployment | 
+
+Initializing deployment
+Clonning Repo github.com/scot00671234/AIForecast-Hub.git to /etc/dokploy/applications/aiforecast-hub-app-puvo1p/code: ✅
+Cloning into '/etc/dokploy/applications/aiforecast-hub-app-puvo1p/code'...
+remote: Enumerating objects: 351, done.
+Cloned github.com/scot00671234/AIForecast-Hub.git: ✅
+Build nixpacks: ✅
+Source Type: github: ✅
+╔════════════════════════ Nixpacks v1.39.0 ═══════════════════════╗
+║ setup      │ nodejs_18, openssl                                 ║
+║─────────────────────────────────────────────────────────────────║
+║ caddy      │ pkgs: caddy                                        ║
+║            │ cmds: caddy fmt --overwrite /assets/Caddyfile      ║
+║─────────────────────────────────────────────────────────────────║
+║ install    │ npm ci --production=false --no-audit --no-fund     ║
+║            │ npm cache clean --force                            ║
+║─────────────────────────────────────────────────────────────────║
+║ build      │ NODE_ENV=production npm run build                  ║
+║            │ rm -rf node_modules/.vite node_modules/.cache .npm ║
+║            │ npm prune --production                             ║
+║─────────────────────────────────────────────────────────────────║
+║ start      │ NODE_ENV=production node dist/index.js             ║
+╚═════════════════════════════════════════════════════════════════╝
+#0 building with "default" instance using docker driver
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.66kB 0.0s done
+#1 DONE 0.1s
+#2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+#2 DONE 0.3s
+#3 [internal] load .dockerignore
+#3 transferring context: 784B done
+#3 DONE 0.0s
+#4 [ 1/18] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+#4 DONE 0.0s
+#5 [ 2/18] WORKDIR /app/
+#5 CACHED
+#6 [internal] load build context
+#6 transferring context: 21.30MB 0.2s done
+#6 DONE 0.2s
+#7 [ 3/18] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+#7 DONE 0.0s
+#8 [ 4/18] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+#8 0.220 unpacking 'https://github.com/NixOS/nixpkgs/archive/ba913eda2df8eb72147259189d55932012df6301.tar.gz' into the Git cache...
+#8 60.48 error:
+#8 60.48        … while calling the 'import' builtin
+#8 60.48          at /app/.nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix:3:12:
+#8 60.48             2|
+#8 60.48             3| let pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/ba913eda2df8eb72147259189d55932012df6301.tar.gz") { overlays = [  ]; };
+#8 60.48              |            ^
+#8 60.48             4| in with pkgs;
+#8 60.48
+#8 60.48        … while realising the context of a path
+#8 60.48
+#8 60.48        … while calling the 'fetchTarball' builtin
+#8 60.48          at /app/.nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix:3:20:
+#8 60.48             2|
+#8 60.48             3| let pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/ba913eda2df8eb72147259189d55932012df6301.tar.gz") { overlays = [  ]; };
+#8 60.48              |                    ^
+#8 60.48             4| in with pkgs;
+#8 60.48
+#8 60.48        error: writing to file: No space left on device
+#8 ERROR: process "/bin/bash -ol pipefail -c nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d" did not complete successfully: exit code: 1
+------
+> [ 4/18] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d:
+60.48        … while realising the context of a path
+60.48
+60.48        … while calling the 'fetchTarball' builtin
+60.48          at /app/.nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix:3:20:
+60.48             2|
+60.48             3| let pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/ba913eda2df8eb72147259189d55932012df6301.tar.gz") { overlays = [  ]; };
+60.48              |                    ^
+60.48             4| in with pkgs;
+60.48
+60.48        error: writing to file: No space left on device
+------
+7 warnings found (use docker --debug to expand):
+ - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "ANTHROPIC_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "DEEPSEEK_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "OPENAI_API_KEY") (line 14)
+- UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "ANTHROPIC_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DEEPSEEK_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "OPENAI_API_KEY") (line 13)
+Dockerfile:8
+--------------------
+|
+|     COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+| >>> RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+|     COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+|     RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+--------------------
+ERROR: failed to solve: process "/bin/bash -ol pipefail -c nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d" did not complete successfully: exit code: 1
+Error: Docker build failed
+Error response from daemon: No such container: aiforecast-hub-app-puvo1p-sqOoRM-IBt
+Error ❌
+Error response from daemon: No such container: aiforecast-hub-app-puvo1p-sqOoRM-IBt

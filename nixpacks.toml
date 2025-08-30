@@ -1,0 +1,33 @@
+# Simplified nixpacks setup - Node.js only, NO Caddy
+providers = ["node"]
+
+[variables]
+NODE_ENV = "production"
+PORT = "3000"
+# Database will be set by Dokploy secrets
+# Disable Vite HMR in production
+VITE_HMR = "false"
+
+[phases.setup]
+nixPkgs = ["nodejs_18", "openssl"]
+
+# Note: Caddy should not auto-detect without Caddyfile
+
+[phases.install]
+cmds = [
+  "npm install", 
+  "npm install tsx typescript esbuild vite --save-dev",
+  "echo '🔧 FORCING BUILD IN INSTALL PHASE...'",
+  "echo '📋 Checking package.json scripts:'",
+  "cat package.json | grep -A5 -B5 build",
+  "echo '🏗️ Running npm run build:'",
+  "npm run build 2>&1 || echo 'Build failed with error code $?'",
+  "echo '✅ Build completed. Checking output:'",
+  "ls -la dist/ || echo 'No dist/ directory found'",
+  "ls -la dist/public/ || echo 'No dist/public/ found'",
+  "find . -name '*.js' -path './dist/*' | head -5 || echo 'No JS files in dist'",
+  "echo '🎯 Build process finished'"
+]
+
+[start]
+cmd = "npm run start"

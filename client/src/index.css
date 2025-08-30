@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles for navigation menu */
+.nav-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+.nav-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nav-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.nav-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--border) / 0.8);
+}
+
+:root {
+  /* Light Theme - Inspired by minimalist aesthetic */
+  --background: hsl(0, 0%, 99%);
+  --foreground: hsl(0, 0%, 8%);
+  --card: hsl(0, 0%, 97%);
+  --card-foreground: hsl(0, 0%, 8%);
+  --popover: hsl(0, 0%, 97%);
+  --popover-foreground: hsl(0, 0%, 8%);
+  --primary: hsl(0, 0%, 20%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(0, 0%, 95%);
+  --secondary-foreground: hsl(0, 0%, 8%);
+  --muted: hsl(0, 0%, 95%);
+  --muted-foreground: hsl(0, 0%, 55%);
+  --accent: hsl(0, 0%, 95%);
+  --accent-foreground: hsl(0, 0%, 8%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 88%);
+  --input: hsl(0, 0%, 88%);
+  --ring: hsl(0, 0%, 20%);
+  --chart-1: hsl(210, 100%, 50%);
+  --chart-2: hsl(142, 76%, 36%);
+  --chart-3: hsl(280, 65%, 60%);
+  --chart-4: hsl(25, 95%, 53%);
+  --chart-5: hsl(340, 75%, 55%);
+  --radius: 0.75rem;
+  
+  /* Minimal Glass Effect - Light */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  
+  /* Backgrounds */
+  --bg-primary: hsl(0, 0%, 99%);
+  --bg-secondary: hsl(0, 0%, 97%);
+  --bg-tertiary: hsl(0, 0%, 95%);
+  
+  /* Text Colors */
+  --text-primary: hsl(0, 0%, 8%);
+  --text-secondary: hsl(0, 0%, 35%);
+  --text-muted: hsl(0, 0%, 55%);
+  
+  /* Borders */
+  --border-subtle: hsl(0, 0%, 88%);
+  --border-prominent: hsl(0, 0%, 82%);
+}
+
+.dark {
+  /* Dark Theme - Deep black inspired by Vercel aesthetic */
+  --background: hsl(0, 0%, 2%);
+  --foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 4%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --popover: hsl(0, 0%, 4%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --primary: hsl(0, 0%, 90%);
+  --primary-foreground: hsl(0, 0%, 10%);
+  --secondary: hsl(0, 0%, 8%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 8%);
+  --muted-foreground: hsl(0, 0%, 45%);
+  --accent: hsl(0, 0%, 8%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 12%);
+  --input: hsl(0, 0%, 12%);
+  --ring: hsl(0, 0%, 90%);
+  --chart-1: hsl(210, 100%, 60%);
+  --chart-2: hsl(142, 76%, 36%);
+  --chart-3: hsl(280, 65%, 60%);
+  --chart-4: hsl(25, 95%, 53%);
+  --chart-5: hsl(340, 75%, 55%);
+  
+  /* Minimal Glass Effect - Dark */
+  --glass-bg: rgba(0, 0, 0, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  
+  /* Backgrounds */
+  --bg-primary: hsl(0, 0%, 2%);
+  --bg-secondary: hsl(0, 0%, 4%);
+  --bg-tertiary: hsl(0, 0%, 8%);
+  
+  /* Text Colors */
+  --text-primary: hsl(0, 0%, 98%);
+  --text-secondary: hsl(0, 0%, 65%);
+  --text-muted: hsl(0, 0%, 45%);
+  
+  /* Borders */
+  --border-subtle: hsl(0, 0%, 12%);
+  --border-prominent: hsl(0, 0%, 18%);
+}
+
+/* Clean Background Utilities */
+@layer utilities {
+  /* Gradient backgrounds */
+  .bg-gradient-minimal {
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--muted) / 0.3) 50%, 
+      hsl(var(--background)) 100%);
+  }
+  
+  .bg-gradient-subtle {
+    background: linear-gradient(180deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--muted) / 0.2) 100%);
+  }
+  
+  /* Vercel-style hero gradient */
+  .bg-vercel-hero {
+    background: linear-gradient(180deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--background)) 70%, 
+      hsl(var(--muted) / 0.15) 100%);
+  }
+  
+  /* Dot pattern background */
+  .bg-dots-minimal {
+    background-image: radial-gradient(circle, hsl(var(--muted-foreground) / 0.1) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  
+  /* Grid pattern background */
+  .bg-grid-minimal {
+    background-image: 
+      linear-gradient(hsl(var(--border) / 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.3) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  
+  /* Noise texture for depth */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Account for sticky header */
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-optical-sizing: auto;
+    font-weight: 400;
+    line-height: 1.6;
+    
+    /* Mobile-specific improvements */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+    
+    /* Enhanced smooth scrolling for webkit browsers */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Enhanced Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+  
+  /* Landing page hero animations */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in-up 1s ease-out forwards;
+  }
+  
+  .animate-fade-in-delayed {
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
+  }
+}
+
+@layer components {
+  /* Minimal Glass Card - Inspired by Vercel aesthetic */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    @apply rounded-xl;
+  }
+
+  /* Ultra-minimal background */
+  .minimal-bg {
+    background: var(--bg-primary);
+  }
+
+  /* Elevated surface */
+  .elevated-surface {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* Premium card surface */
+  .premium-surface {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-prominent);
+  }
+
+  /* Subtle hover effect */
+  .hover-lift {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  .dark .hover-lift:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Minimal button styles */
+  .btn-minimal {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-200;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  
+  .btn-minimal:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+  }
+
+  /* Premium navigation */
+  .nav-minimal {
+    @apply backdrop-blur-md;
+    background: rgba(var(--bg-primary-rgb), 0.8);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  /* Geometric logo shape */
+  .logo-triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 17px solid var(--primary);
+  }
+
+  /* Enhanced transitions */
+  .smooth-transition {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .micro-transition {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  /* Ultra-clean scrollbar */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-subtle) transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--border-prominent);
+  }
+
+  /* Minimal focus states */
+  .focus-minimal:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+
+  /* Typography enhancements */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Mobile-specific touch improvements */
+  .mobile-touch {
+    min-height: 44px; /* Apple's recommended minimum touch target */
+    min-width: 44px;
+  }
+  
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Better mobile interactions */
+  .mobile-friendly {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Responsive text sizing */
+  @media (max-width: 640px) {
+    .text-responsive {
+      font-size: 0.9rem;
+    }
+    
+    .heading-responsive {
+      font-size: 1.5rem;
+    }
+  }
+}

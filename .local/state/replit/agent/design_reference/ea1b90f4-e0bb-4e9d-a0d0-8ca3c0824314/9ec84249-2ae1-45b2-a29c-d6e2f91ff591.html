@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIForecast Hub - AI Commodity Price Predictions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            50: '#eff6ff',
+                            500: '#0070f3',
+                            600: '#0066d9',
+                            900: '#1e3a8a',
+                        },
+                        'glass': {
+                            light: 'rgba(255, 255, 255, 0.1)',
+                            dark: 'rgba(0, 0, 0, 0.1)',
+                        }
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="font-inter antialiased transition-colors duration-300" id="app-body">
+    <!-- @COMPONENT: MainApp [root application container] -->
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-black dark:via-slate-900 dark:to-slate-800 transition-all duration-300">
+        
+        <!-- @COMPONENT: Header [navigation and theme toggle] -->
+        <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-black/80 border-b border-gray-200/50 dark:border-gray-700/50">
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-tr from-primary-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-sm"></i>
+                        </div>
+                        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">AIForecast Hub</h1>
+                    </div>
+                    
+                    <!-- Navigation Links -->
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#" class="text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors">Dashboard</a>
+                        <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors">Commodities</a>
+                        <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors">Analytics</a>
+                        <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors">API</a>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-sun text-gray-600 dark:text-gray-300" id="theme-icon"></i>
+                    </button>
+                </div>
+            </nav>
+        </header>
+        <!-- @END_COMPONENT: Header -->
+
+        <!-- @COMPONENT: MainContent [dashboard layout] -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- @COMPONENT: StatsOverview [key metrics cards] -->
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Total Predictions Card -->
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Predictions</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white" data-bind="stats.totalPredictions">12,847</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl">
+                            <i class="fas fa-brain text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-600 dark:text-green-400 flex items-center">
+                            <i class="fas fa-arrow-up text-xs mr-1"></i>
+                            +12%
+                        </span>
+                        <span class="text-gray-500 dark:text-gray-400 ml-2">vs last month</span>
+                    </div>
+                </div>
+
+                <!-- Best AI Model Card -->
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Top Performer</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white" data-bind="stats.topModel">Claude</p>
+                        </div>
+                        <div class="p-3 bg-green-100 dark:bg-green-900/50 rounded-xl">
+                            <i class="fas fa-trophy text-green-600 dark:text-green-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Accuracy: </span>
+                        <span class="text-sm font-semibold text-green-600 dark:text-green-400" data-bind="stats.topAccuracy">87.2%</span>
+                    </div>
+                </div>
+
+                <!-- Active Commodities Card -->
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Active Commodities</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white" data-bind="stats.activeCommodities">24</p>
+                        </div>
+                        <div class="p-3 bg-amber-100 dark:bg-amber-900/50 rounded-xl">
+                            <i class="fas fa-coins text-amber-600 dark:text-amber-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Hard: 14 • Soft: 10</span>
+                    </div>
+                </div>
+
+                <!-- Avg Accuracy Card -->
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Accuracy</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white" data-bind="stats.avgAccuracy">78.4%</p>
+                        </div>
+                        <div class="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-xl">
+                            <i class="fas fa-percentage text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-600 dark:text-green-400 flex items-center">
+                            <i class="fas fa-arrow-up text-xs mr-1"></i>
+                            +3.2%
+                        </span>
+                        <span class="text-gray-500 dark:text-gray-400 ml-2">this week</span>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: StatsOverview -->
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- @COMPONENT: LeagueTable [AI model rankings] -->
+                <div class="lg:col-span-2">
+                    <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                        <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">AI Model League Table</h2>
+                                <div class="flex items-center space-x-2">
+                                    <select class="text-sm bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option>Last 30 Days</option>
+                                        <option>Last 7 Days</option>
+                                        <option>All Time</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <!-- @MAP: aiModels.map(model => ( -->
+                            <div class="space-y-4">
+                                <!-- Claude AI -->
+                                <div class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200/50 dark:border-green-700/50">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-tr from-green-500 to-emerald-600 rounded-lg text-white font-bold text-sm">1</div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900 dark:text-white" data-bind="model.name">Claude</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Anthropic</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-lg font-bold text-green-600 dark:text-green-400" data-bind="model.accuracy">87.2%</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" data-bind="model.predictions">4,231 predictions</div>
+                                    </div>
+                                </div>
+
+                                <!-- ChatGPT -->
+                                <div class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200/50 dark:border-blue-700/50">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-lg text-white font-bold text-sm">2</div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900 dark:text-white" data-bind="model.name">ChatGPT</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">OpenAI</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-lg font-bold text-blue-600 dark:text-blue-400" data-bind="model.accuracy">84.7%</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" data-bind="model.predictions">4,158 predictions</div>
+                                    </div>
+                                </div>
+
+                                <!-- Deepseek -->
+                                <div class="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 border border-purple-200/50 dark:border-purple-700/50">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-tr from-purple-500 to-violet-600 rounded-lg text-white font-bold text-sm">3</div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900 dark:text-white" data-bind="model.name">Deepseek</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Deepseek AI</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-lg font-bold text-purple-600 dark:text-purple-400" data-bind="model.accuracy">72.1%</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400" data-bind="model.predictions">4,458 predictions</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: LeagueTable -->
+
+                <!-- @COMPONENT: CommoditySelector [commodity type filter] -->
+                <div class="space-y-8">
+                    <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                        <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Commodity Categories</h2>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <!-- Hard Commodities -->
+                            <div>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                    <i class="fas fa-hammer text-gray-500 mr-2"></i>
+                                    Hard Commodities
+                                </h3>
+                                <div class="space-y-2">
+                                    <!-- @MAP: hardCommodities.map(commodity => ( -->
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group" data-event="click:selectCommodity">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300" data-bind="commodity.name">Crude Oil</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400" data-bind="commodity.symbol">WTI</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Gold</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">XAU</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Natural Gas</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">NG</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Copper</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">HG</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Silver</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">XAG</span>
+                                    </button>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                            </div>
+
+                            <!-- Soft Commodities -->
+                            <div>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                    <i class="fas fa-seedling text-gray-500 mr-2"></i>
+                                    Soft Commodities
+                                </h3>
+                                <div class="space-y-2">
+                                    <!-- @MAP: softCommodities.map(commodity => ( -->
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Coffee</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">KC</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Sugar</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">SB</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Corn</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">ZC</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Soybeans</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">ZS</span>
+                                    </button>
+                                    <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-colors flex items-center justify-between group">
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">Cotton</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">CT</span>
+                                    </button>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- @COMPONENT: RecentActivity [latest predictions feed] -->
+                    <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                        <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Recent Activity</h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <!-- @MAP: recentActivities.map(activity => ( -->
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-900 dark:text-white">
+                                            <span class="font-medium" data-bind="activity.model">Claude</span> predicted 
+                                            <span class="font-medium text-primary-600 dark:text-primary-400" data-bind="activity.commodity">Gold</span>
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400" data-bind="activity.timestamp">2 minutes ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-900 dark:text-white">
+                                            <span class="font-medium">ChatGPT</span> predicted 
+                                            <span class="font-medium text-primary-600 dark:text-primary-400">Crude Oil</span>
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">5 minutes ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-900 dark:text-white">
+                                            <span class="font-medium">Deepseek</span> predicted 
+                                            <span class="font-medium text-primary-600 dark:text-primary-400">Coffee</span>
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">8 minutes ago</p>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: RecentActivity -->
+                </div>
+                <!-- @END_COMPONENT: CommoditySelector -->
+            </div>
+
+            <!-- @COMPONENT: PriceChart [commodity price visualization] -->
+            <section class="mt-8">
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Crude Oil (WTI) - Predictions vs Actual</h2>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Current Price: <span class="font-semibold text-green-600 dark:text-green-400" data-bind="currentPrice">$78.45</span></p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 rounded-lg">7D</button>
+                                <button class="px-3 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">30D</button>
+                                <button class="px-3 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">90D</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="relative h-80">
+                            <canvas id="priceChart" class="w-full h-full"></canvas>
+                        </div>
+                        
+                        <!-- Chart Legend -->
+                        <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-gray-900 dark:bg-gray-100 rounded-full"></div>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Actual Price</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Claude</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">ChatGPT</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Deepseek</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: PriceChart -->
+
+            <!-- @COMPONENT: AccuracyMetrics [detailed performance analytics] -->
+            <section class="mt-8 grid md:grid-cols-2 gap-8">
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Model Performance Breakdown</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <!-- Claude Performance -->
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-700 dark:text-gray-300">Claude</span>
+                                    <span class="font-medium text-green-600 dark:text-green-400">87.2%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full" style="width: 87.2%"></div>
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Best at: Precious Metals, Energy</div>
+                            </div>
+                            
+                            <!-- ChatGPT Performance -->
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-700 dark:text-gray-300">ChatGPT</span>
+                                    <span class="font-medium text-blue-600 dark:text-blue-400">84.7%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full" style="width: 84.7%"></div>
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Best at: Agricultural, Industrial Metals</div>
+                            </div>
+                            
+                            <!-- Deepseek Performance -->
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-700 dark:text-gray-300">Deepseek</span>
+                                    <span class="font-medium text-purple-600 dark:text-purple-400">72.1%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-purple-500 to-violet-600 h-2 rounded-full" style="width: 72.1%"></div>
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Best at: Soft Commodities, Lumber</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Alerts -->
+                <div class="backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+                    <div class="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Market Alerts</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <!-- @MAP: marketAlerts.map(alert => ( -->
+                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200/50 dark:border-red-700/50">
+                                <i class="fas fa-exclamation-triangle text-red-500 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white" data-bind="alert.title">High Volatility Alert</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400" data-bind="alert.description">Gold showing unusual price swings (+12% in 24h)</p>
+                                    <p class="text-xs text-red-600 dark:text-red-400 mt-1" data-bind="alert.timestamp">2 hours ago</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200/50 dark:border-yellow-700/50">
+                                <i class="fas fa-info-circle text-yellow-500 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Prediction Divergence</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">AI models showing 15%+ difference for Oil predictions</p>
+                                    <p class="text-xs text-yellow-600 dark:text-yellow-400 mt-1">4 hours ago</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200/50 dark:border-green-700/50">
+                                <i class="fas fa-check-circle text-green-500 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Accuracy Milestone</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Claude achieved 90%+ accuracy for Coffee predictions</p>
+                                    <p class="text-xs text-green-600 dark:text-green-400 mt-1">6 hours ago</p>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: AccuracyMetrics -->
+        </main>
+        <!-- @END_COMPONENT: MainContent -->
+
+        <!-- @COMPONENT: Footer [app footer] -->
+        <footer class="mt-16 border-t border-gray-200/50 dark:border-gray-700/50 bg-white/50 dark:bg-black/50 backdrop-blur-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div class="md:col-span-2">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div class="w-6 h-6 bg-gradient-to-tr from-primary-500 to-indigo-600 rounded-md flex items-center justify-center">
+                                <i class="fas fa-chart-line text-white text-xs"></i>
+                            </div>
+                            <span class="font-semibold text-gray-900 dark:text-white">AIForecast Hub</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-md">
+                            Compare AI model predictions for commodity prices. Track accuracy, analyze performance, and make better trading decisions.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900 dark:text-white mb-3">Product</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                            <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400">API Access</a></li>
+                            <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400">Documentation</a></li>
+                            <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400">Data Export</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900 dark:text-white mb-3">Support</h4>
+                        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                            <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400">Help Center</a></li>
+                            <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400">Contact Us</a></li>
+                            <li><a href="#" class="hover:text-primary-600 dark:hover:text-primary-400">Status Page</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-gray-200/50 dark:border-gray-700/50 flex items-center justify-between">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">© 2024 AIForecast Hub. All rights reserved.</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Data from Yahoo Finance</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- @END_COMPONENT: Footer -->
+    </div>
+    <!-- @END_COMPONENT: MainApp -->
+
+    <script>
+        (function() {
+            // @STATE: isDark:boolean = false, selectedCommodity:string = 'oil'
+            
+            // Theme Toggle Functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const body = document.getElementById('app-body');
+            
+            let isDarkMode = localStorage.getItem('darkMode') === 'true' || 
+                           (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            function updateTheme() {
+                if (isDarkMode) {
+                    body.classList.add('dark');
+                    themeIcon.className = 'fas fa-moon text-gray-600 dark:text-gray-300';
+                } else {
+                    body.classList.remove('dark');
+                    themeIcon.className = 'fas fa-sun text-gray-600 dark:text-gray-300';
+                }
+                localStorage.setItem('darkMode', isDarkMode);
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                updateTheme();
+            });
+            
+            // Initialize theme
+            updateTheme();
+            
+            // Initialize Chart
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            // Mock data for demonstration - represents 7 days of data
+            const labels = ['Jan 15', 'Jan 16', 'Jan 17', 'Jan 18', 'Jan 19', 'Jan 20', 'Jan 21'];
+            const actualData = [75.2, 76.8, 74.1, 78.3, 79.1, 77.6, 78.45];
+            const claudeData = [74.8, 77.2, 75.5, 78.9, 79.8, 78.1, 79.2];
+            const chatgptData = [75.1, 76.5, 73.8, 77.8, 78.9, 77.2, 78.1];
+            const deepseekData = [74.5, 75.9, 74.8, 76.2, 77.8, 76.5, 77.3];
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Actual Price',
+                            data: actualData,
+                            borderColor: 'rgb(17, 24, 39)',
+                            backgroundColor: 'rgba(17, 24, 39, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Claude',
+                            data: claudeData,
+                            borderColor: 'rgb(34, 197, 94)',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            borderDash: [5, 5],
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: 'ChatGPT',
+                            data: chatgptData,
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            borderDash: [5, 5],
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: 'Deepseek',
+                            data: deepseekData,
+                            borderColor: 'rgb(147, 51, 234)',
+                            backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            borderDash: [5, 5],
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: 'rgb(17, 24, 39)',
+                            bodyColor: 'rgb(75, 85, 99)',
+                            borderColor: 'rgba(229, 231, 235, 0.8)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(229, 231, 235, 0.3)'
+                            },
+                            ticks: {
+                                color: 'rgb(107, 114, 128)'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(229, 231, 235, 0.3)'
+                            },
+                            ticks: {
+                                color: 'rgb(107, 114, 128)',
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    elements: {
+                        point: {
+                            hoverBackgroundColor: 'white',
+                            hoverBorderWidth: 2
+                        }
+                    }
+                }
+            });
+            
+            // Commodity selection handlers
+            // TODO: Implement commodity selection logic and API integration
+            document.querySelectorAll('[data-event="click:selectCommodity"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // TODO: Update chart data based on selected commodity
+                    // TODO: Fetch real data from Yahoo Finance API with rate limiting
+                    console.log('Commodity selected:', this.textContent);
+                });
+            });
+            
+        })();
+    </script>
+
+    <!-- Loading States and Skeletons would be implemented here -->
+    <!-- TODO: Add loading states for chart data fetching -->
+    <!-- TODO: Implement error handling for API failures -->
+    <!-- TODO: Add real-time price update functionality -->
+    <!-- TODO: Implement prediction data upload system -->
+    
+</body>
+</html>

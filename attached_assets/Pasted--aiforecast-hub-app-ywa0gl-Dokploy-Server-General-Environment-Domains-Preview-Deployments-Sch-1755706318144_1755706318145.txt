@@ -1,0 +1,120 @@
+
+aiforecast-hub-app-ywa0gl
+Dokploy Server
+General
+Environment
+Domains
+Preview Deployments
+Schedules
+Deployments
+Logs
+Monitoring
+Advanced
+Logs
+Watch the logs of the application in real time
+
+Select a container to view logs
+Native
+
+
+aiforecast-hub-app-ywa0gl.1.s69kxbsof6exj2axt27lxsrof (9e188b86a368) 
+Search logs...
+length: 110,
+severity: 'ERROR',
+code: '42703',
+detail: undefined,
+hint: undefined,
+position: '112',
+internalPosition: undefined,
+internalQuery: undefined,
+where: undefined,
+schema: undefined,
+table: undefined,
+column: undefined,
+dataType: undefined,
+constraint: undefined,
+file: 'parse_relation.c',
+line: '3665',
+routine: 'errorMissingColumn'
+}
+🔍 Checking for missing Claude predictions...
+❌ Missing Claude prediction check failed (non-critical): error: column "timeframe" does not exist
+at /app/node_modules/pg-pool/index.js:45:11
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+at async file:///app/node_modules/drizzle-orm/node-postgres/session.js:83:22
+at async DatabaseStorage.getPredictions (file:///app/dist/index.js:605:16)
+at async StartupManager.checkAndGenerateMissingClaudePredictions (file:///app/dist/index.js:2182:39)
+at async Timeout._onTimeout (file:///app/dist/index.js:2132:13) {
+length: 110,
+severity: 'ERROR',
+code: '42703',
+detail: undefined,
+hint: undefined,
+position: '112',
+internalPosition: undefined,
+internalQuery: undefined,
+where: undefined,
+schema: undefined,
+table: undefined,
+column: undefined,
+dataType: undefined,
+constraint: undefined,
+file: 'parse_relation.c',
+line: '3665',
+routine: 'errorMissingColumn'
+}
+✅ Background initialization complete
+Prediction scheduler is already running
+🤖 Checking for initial AI predictions...
+🔍 Checking for missing Claude predictions...
+❌ Initial prediction generation failed (non-critical): error: column "timeframe" does not exist
+at /app/node_modules/pg-pool/index.js:45:11
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+at async file:///app/node_modules/drizzle-orm/node-postgres/session.js:83:22
+at async DatabaseStorage.getPredictions (file:///app/dist/index.js:605:16)
+at async StartupManager.runInitialPredictions (file:///app/dist/index.js:2143:34)
+at async Timeout._onTimeout (file:///app/dist/index.js:2131:13) {
+length: 110,
+severity: 'ERROR',
+code: '42703',
+detail: undefined,
+hint: undefined,
+position: '112',
+internalPosition: undefined,
+internalQuery: undefined,
+where: undefined,
+schema: undefined,
+table: undefined,
+column: undefined,
+dataType: undefined,
+constraint: undefined,
+file: 'parse_relation.c',
+line: '3665',
+routine: 'errorMissingColumn'
+}
+❌ Missing Claude prediction check failed (non-critical): error: column "timeframe" does not exist
+at /app/node_modules/pg-pool/index.js:45:11
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+at async file:///app/node_modules/drizzle-orm/node-postgres/session.js:83:22
+at async DatabaseStorage.getPredictions (file:///app/dist/index.js:605:16)
+at async StartupManager.checkAndGenerateMissingClaudePredictions (file:///app/dist/index.js:2182:39)
+at async Timeout._onTimeout (file:///app/dist/index.js:2132:13) {
+length: 110,
+severity: 'ERROR',
+code: '42703',
+detail: undefined,
+hint: undefined,
+position: '112',
+internalPosition: undefined,
+internalQuery: undefined,
+where: undefined,
+schema: undefined,
+table: undefined,
+column: undefined,
+dataType: undefined,
+constraint: undefined,
+file: 'parse_relation.c',
+line: '3665',
+routine: 'errorMissingColumn'
+}
+✅ Background initialization complete

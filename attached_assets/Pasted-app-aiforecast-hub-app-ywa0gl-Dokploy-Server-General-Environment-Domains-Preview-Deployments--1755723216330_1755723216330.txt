@@ -1,0 +1,120 @@
+app
+aiforecast-hub-app-ywa0gl
+Dokploy Server
+General
+Environment
+Domains
+Preview Deployments
+Schedules
+Deployments
+Logs
+Monitoring
+Advanced
+Logs
+Watch the logs of the application in real time
+
+Select a container to view logs
+Native
+
+
+aiforecast-hub-app-ywa0gl.1.pylcj0wkh0s8540hkl3el1jt4 (a2840b53b73b) 
+Search logs...
+📁 Working directory: /app
+📁 Script directory: /app
+🔍 Checking build path: /app/dist
+✅ Found valid build at: /app/dist
+📋 Build directory contents:
+- index.js
+- public
+✅ Production environment validated
+Port: 3000
+Database: configured
+AI APIs: 4/4 configured
+Index file: /app/dist/index.js
+🚀 Starting application: node /app/dist/index.js
+🚀 Starting AIForecast Hub (Professional Edition) - Emergency Migration Fix v3.0.0
+🔧 CACHE BUST: Force rebuild with migration timing fixes
+🔧 Initializing critical services...
+Database connected successfully
+✅ Database connection established
+🔧 Production environment detected - ensuring database schema...
+🔧 Running production database migration...
+🔧 Creating table: ai_models
+🔧 Creating table: commodities
+🔧 Creating table: predictions
+🔧 Creating table: composite_index
+🔧 Creating table: actual_prices
+🔧 Creating table: accuracy_metrics
+🔧 Creating table: market_alerts
+Note: Some constraints may already exist
+🔧 Ensuring production data...
+🔧 Inserting production data...
+✅ Production data inserted
+✅ Production migration completed
+✅ Database connection verified
+✅ Database connection verified
+🚀 Running automatic migrations...
+✅ Migration 1: Timeframe column - COMPLETED
+✅ Migration 2: Composite index table - COMPLETED
+🎯 All automatic migrations completed
+✅ Database migrations completed
+✅ Database schema and default data initialized
+✅ Critical initialization complete
+🔧 Initializing critical services...
+✅ Database connection verified
+🚀 Running automatic migrations...
+✅ Migration 1: Timeframe column - COMPLETED
+✅ Migration 2: Composite index table - COMPLETED
+🎯 All automatic migrations completed
+✅ Database migrations completed
+✅ Database schema and default data initialized
+⚡ Starting heavy initialization (background)...
+8:51:34 PM [express] ✅ Server running on port 3000
+🎯 Application ready - all systems operational
+⚡ Starting heavy initialization (background)...
+📊 Found 14 commodities in database
+📊 Found 14 commodities in database
+🔄 Starting background price data initialization...
+Fetching data for Crude Oil (CL=F)
+🔄 Starting background price data initialization...
+Fetching data for Crude Oil (CL=F)
+Fetching data for Gold (GC=F)
+Fetching data for Gold (GC=F)
+Fetching data for Natural Gas (NG=F)
+Fetching data for Natural Gas (NG=F)
+Fetching data for Copper (HG=F)
+Fetching data for Copper (HG=F)
+Fetching data for Silver (SI=F)
+Fetching data for Silver (SI=F)
+Fetching data for Aluminum (ALI=F)
+Fetching data for Platinum (PL=F)
+Fetching data for Aluminum (ALI=F)
+Fetching data for Palladium (PA=F)
+Fetching data for Platinum (PL=F)
+Fetching data for Palladium (PA=F)
+Fetching data for Coffee (KC=F)
+Fetching data for Sugar (SB=F)
+Fetching data for Coffee (KC=F)
+Fetching data for Corn (ZC=F)
+Fetching data for Sugar (SB=F)
+Fetching data for Soybeans (ZS=F)
+Fetching data for Corn (ZC=F)
+Fetching data for Cotton (CT=F)
+Fetching data for Soybeans (ZS=F)
+Fetching data for Wheat (ZW=F)
+Fetching data for Cotton (CT=F)
+Fetching data for Wheat (ZW=F)
+Prediction scheduler started with schedules:
+- Monthly comprehensive: Every 1st of the month at 3 AM (3mo, 6mo, 9mo, 12mo predictions)
+- Weekly predictions have been disabled
+🤖 Checking for initial AI predictions...
+📊 Existing predictions found - skipping initial generation
+🔍 Checking for missing Claude predictions...
+✅ All commodities have recent Claude predictions
+✅ Background initialization complete
+Prediction scheduler is already running
+🤖 Checking for initial AI predictions...
+📊 Existing predictions found - skipping initial generation
+🔍 Checking for missing Claude predictions...
+✅ All commodities have recent Claude predictions
+✅ Background initialization complete

@@ -1,0 +1,160 @@
+nment
+Domains
+Preview Deployments
+Schedules
+Deployments
+Logs
+Monitoring
+Advanced
+Deployments
+See all the 10 last deployments for this application
+
+If you want to re-deploy this application use this URL in the config of your git provider or docker
+Webhook URL:
+http://147.93.87.98:3000/api/deploy/Lz1fWOZSssiu9-h22R_hw
+
+1. error
+Manual deployment
+
+less than a minute ago
+2s
+2. error
+Create a streamlined, minimal production setup using Docker Replace Nixpacks with a multi-stage Dockerfile for a significantly smaller production image and improved deployment efficiency. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 64330ba7-0a43-4a49-b596-4f282be67eeb Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/eb5c7f83-8de1-4e97-9de3-8b765d7d7f36/64330ba7-0a43-4a49-b596-4f282be67eeb/heOBiss
+Hash: 9168d576a7bfb4bad227b97010819e50aff7adaf
+
+2 minutes ago
+3s
+3. error
+Optimize server deployment for reduced disk space and improved build times Update nixpacks.toml to use a clean production server build, optimize disk space usage, and prune production dependencies for faster deployments. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 64330ba7-0a43-4a49-b596-4f282be67eeb Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/eb5c7f83-8de1-4e97-9de3-8b765d7d7f36/64330ba7-0a43-4a49-b596-4f282be67eeb/heOBiss
+Hash: 8d1a157f82808ba9e0df5283ecd5936ef051dcb8
+
+8 minutes ago
+1m 4s
+4. error
+Resolve deployment issues and prepare the application for production Refactor the build process to use a dedicated production server entry point (server/production.ts) and update nixpacks.toml to compile this file, eliminating vite dependencies and resolving path.resolve errors for production deployment. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 64330ba7-0a43-4a49-b596-4f282be67eeb Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/eb5c7f83-8de1-4e97-9de3-8b765d7d7f36/64330ba7-0a43-4a49-b596-4f282be67eeb/heOBiss
+Hash: d582fbd047f5eedd9d84ff5a605c93109328439f
+
+12 minutes ago
+1m 9s
+5. done
+Fix production path error by dynamically importing Vite setup Resolve ERR_INVALID_ARG_TYPE by implementing a dynamic import for `setupVite` in `server/index.ts`, ensuring correct path resolution in production environments. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 64330ba7-0a43-4a49-b596-4f282be67eeb Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/eb5c7f83-8de1-4e97-9de3-8b765d7d7f36/64330ba7-0a43-4a49-b596-4f282be67eeb/heOBiss
+Hash: 627436e52c280b64300e79c2cd0706d3df0f69d6
+
+21 minutes ago
+5m 21s
+6. done
+Fix frontend deployment issues and server startup problems Resolve frontend deployment failures by adjusting Nixpacks configuration, renaming the server entry point from server.js to index.js, and removing unnecessary dependencies and directories. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 64330ba7-0a43-4a49-b596-4f282be67eeb Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/eb5c7f83-8de1-4e97-9de3-8b765d7d7f36/64330ba7-0a43-4a49-b596-4f282be67eeb/heOBiss
+Hash: d6b19236f497efeea54e6d075d8c58e3198a0775
+
+27 minutes ago
+4m 9s
+7. done
+Improve caching by adding a cache-busting mechanism to the build process Implement a cache-busting strategy by introducing a .cachebust file and updating the Nixpacks configuration to clear npm cache and reinstall dependencies, ensuring fresh builds. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 432b1ac4-5016-406b-8248-f01330a06676 Replit-Commit-Checkpoint-Type: full_checkpoint
+Hash: 2a40ec15af783ff3e79a3385d7561ea3ed20b3b6
+
+38 minutes ago
+5m 19s
+8. done
+Improve build process to prevent unnecessary caching Modify Nixpacks configuration to disable caching and enforce fresh installations and builds by clearing node_modules and cache directories. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 432b1ac4-5016-406b-8248-f01330a06676 Replit-Commit-Checkpoint-Type: full_checkpoint
+Hash: 82c2be5d8432af3fff554fab4f078812948d5304
+
+42 minutes ago
+4m 14s
+9. error
+Improve build process to ensure frontend updates are reflected Modify nixpacks.toml to clean cache and force build for updated frontend components. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 432b1ac4-5016-406b-8248-f01330a06676 Replit-Commit-Checkpoint-Type: full_checkpoint
+Hash: 4c90e94d23844b31d8509e8ce5d9de4f7faeee58
+
+about 1 hour ago
+3m 28s
+10. error
+Update server to use port 3000 for deployment Adjust the default server port from 5000 to 3000 in server/index.ts to align with deployment configurations. Replit-Commit-Author: Agent Replit-Commit-Session-Id: d8955a5b-7f56-4912-ae0f-4bb1189cc9cf Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/8a46de5e-b1e5-426f-9177-ce6e4be20f9f/d8955a5b-7f56-4912-ae0f-4bb1189cc9cf/y7tSv6W
+Hash: 1f6c144e26fc743d2a9700bb0818f3f9cd684255
+
+about 1 hour ago
+3m 25s
+11. done
+Align application ports for consistent service operation Update the application's port configuration from 5000 to 3000 in nixpacks.toml to ensure consistency with other services. Replit-Commit-Author: Agent Replit-Commit-Session-Id: d8955a5b-7f56-4912-ae0f-4bb1189cc9cf Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/8a46de5e-b1e5-426f-9177-ce6e4be20f9f/d8955a5b-7f56-4912-ae0f-4bb1189cc9cf/y7tSv6W
+Hash: b2557acaef5d29d6d5e80c087e0a287faae55edc
+
+about 1 hour ago
+4m 58s
+Application: app - AIForecast Hub | Dokploy
+Deployment
+See all the details of this deployment | 
+
+Initializing deployment
+Clonning Repo github.com/scot00671234/AIForecast-Hub.git to /etc/dokploy/applications/aiforecast-hub-app-puvo1p/code: ✅
+Cloning into '/etc/dokploy/applications/aiforecast-hub-app-puvo1p/code'...
+remote: Enumerating objects: 352, done.
+Cloned github.com/scot00671234/AIForecast-Hub.git: ✅
+Build nixpacks: ✅
+Source Type: github: ✅
+╔══════════════════════════════ Nixpacks v1.39.0 ══════════════════════════════╗
+║ setup      │ nodejs_18, npm-9_x, openssl                                     ║
+║──────────────────────────────────────────────────────────────────────────────║
+║ caddy      │ pkgs: caddy                                                     ║
+║            │ cmds: caddy fmt --overwrite /assets/Caddyfile                   ║
+║──────────────────────────────────────────────────────────────────────────────║
+║ install    │ npm ci                                                          ║
+║──────────────────────────────────────────────────────────────────────────────║
+║ build      │ npm run build                                                   ║
+║──────────────────────────────────────────────────────────────────────────────║
+║ start      │ exec caddy run --config /assets/Caddyfile --adapter caddyfile   ║
+║            │ 2>&1                                                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+#0 building with "default" instance using docker driver
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.51kB done
+#1 DONE 0.0s
+#2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+#2 DONE 0.4s
+#3 [internal] load .dockerignore
+#3 transferring context: 137B 0.0s done
+#3 DONE 0.1s
+#4 [ 1/15] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+#4 DONE 0.0s
+#5 [ 2/15] WORKDIR /app/
+#5 CACHED
+#6 [internal] load build context
+#6 transferring context: 1.04MB 0.1s done
+#6 DONE 0.1s
+#7 [ 3/15] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+#7 ERROR: failed to calculate checksum of ref f1a1e2e4-6e71-4ef7-b288-97a67eb8894a::ymvgezp4iag9ikq2wbz09q3ua: "/.nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix": not found
+#8 [ 6/15] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+#8 CACHED
+#9 [ 4/15] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+#9 CACHED
+#10 [ 7/15] COPY .nixpacks/assets /assets/
+#10 ERROR: failed to calculate checksum of ref f1a1e2e4-6e71-4ef7-b288-97a67eb8894a::ymvgezp4iag9ikq2wbz09q3ua: "/.nixpacks/assets": not found
+#11 [ 5/15] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+#11 ERROR: failed to calculate checksum of ref f1a1e2e4-6e71-4ef7-b288-97a67eb8894a::ymvgezp4iag9ikq2wbz09q3ua: "/.nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix": not found
+------
+> [ 3/15] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix:
+------
+------
+> [ 5/15] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix:
+------
+------
+> [ 7/15] COPY .nixpacks/assets /assets/:
+------
+7 warnings found (use docker --debug to expand):
+ - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "ANTHROPIC_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "DEEPSEEK_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "OPENAI_API_KEY") (line 14)
+- UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "ANTHROPIC_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DEEPSEEK_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "OPENAI_API_KEY") (line 13)
+Dockerfile:12
+--------------------
+|     RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+|
+| >>> COPY .nixpacks/assets /assets/
+|     ARG ANTHROPIC_API_KEY CI DATABASE_URL DEEPSEEK_API_KEY NIXPACKS_METADATA NIXPACKS_SPA_OUTPUT_DIR NODE_ENV NPM_CONFIG_PRODUCTION OPENAI_API_KEY PORT
+|     ENV ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY CI=$CI DATABASE_URL=$DATABASE_URL DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY NIXPACKS_METADATA=$NIXPACKS_METADATA NIXPACKS_SPA_OUTPUT_DIR=$NIXPACKS_SPA_OUTPUT_DIR NODE_ENV=$NODE_ENV NPM_CONFIG_PRODUCTION=$NPM_CONFIG_PRODUCTION OPENAI_API_KEY=$OPENAI_API_KEY PORT=$PORT
+--------------------
+ERROR: failed to solve: failed to compute cache key: failed to calculate checksum of ref f1a1e2e4-6e71-4ef7-b288-97a67eb8894a::ymvgezp4iag9ikq2wbz09q3ua: "/.nixpacks/assets": not found
+Error: Docker build failed
+Error response from daemon: No such container: aiforecast-hub-app-puvo1p-Y4S4IwcPy_
+Error ❌
+Error response from daemon: No such container: aiforecast-hub-app-puvo1p-Y4S4IwcPy_

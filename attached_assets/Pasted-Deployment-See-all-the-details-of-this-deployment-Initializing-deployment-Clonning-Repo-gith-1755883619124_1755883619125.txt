@@ -1,0 +1,172 @@
+Deployment
+See all the details of this deployment | 
+
+Initializing deployment
+Clonning Repo github.com/scot00671234/AIForecast-Hub.git to /etc/dokploy/applications/aiforecast-hub-app-ywa0gl/code: ✅
+Cloning into '/etc/dokploy/applications/aiforecast-hub-app-ywa0gl/code'...
+remote: Enumerating objects: 270, done.
+Cloned github.com/scot00671234/AIForecast-Hub.git: ✅
+Build nixpacks: ✅
+Source Type: github: ✅
+╔════════════════════════ Nixpacks v1.39.0 ═══════════════════════╗
+║ setup      │ nodejs_18, npm-9_x, openssl                        ║
+║─────────────────────────────────────────────────────────────────║
+║ caddy      │ pkgs: caddy                                        ║
+║            │ cmds: caddy fmt --overwrite /assets/Caddyfile      ║
+║─────────────────────────────────────────────────────────────────║
+║ install    │ npm ci --production=false                          ║
+║─────────────────────────────────────────────────────────────────║
+║ build      │ echo 'DEPLOYMENT: Starting clean build at $(date)' ║
+║            │ rm -rf dist server/public .vite                    ║
+║            │ echo 'Cleaned build directories'                   ║
+║            │ npm run build                                      ║
+║            │ node fix-build.js                                  ║
+║            │ echo 'Build completed successfully at $(date)'     ║
+║─────────────────────────────────────────────────────────────────║
+║ start      │ PORT=3000 node production-start.js                 ║
+╚═════════════════════════════════════════════════════════════════╝
+#0 building with "default" instance using docker driver
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.36kB done
+#1 DONE 0.0s
+#2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+#2 DONE 0.3s
+#3 [internal] load .dockerignore
+#3 transferring context: 784B done
+#3 DONE 0.0s
+#4 [stage-0  1/20] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+#4 DONE 0.0s
+#5 [internal] load build context
+#5 transferring context: 10.12MB 0.1s done
+#5 DONE 0.1s
+#6 [stage-0  3/20] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+#6 CACHED
+#7 [stage-0  6/20] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+#7 CACHED
+#8 [stage-0  2/20] WORKDIR /app/
+#8 CACHED
+#9 [stage-0  4/20] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+#9 CACHED
+#10 [stage-0  5/20] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+#10 CACHED
+#11 [stage-0  7/20] COPY .nixpacks/assets /assets/
+#11 CACHED
+#12 [stage-0  8/20] COPY . /app/.
+#12 DONE 0.1s
+#13 [stage-0  9/20] RUN  caddy fmt --overwrite /assets/Caddyfile
+#13 DONE 0.5s
+#14 [stage-0 10/20] COPY . /app/.
+#14 DONE 0.2s
+#15 [stage-0 11/20] RUN --mount=type=cache,id=gN5wxUCTuE-/root/npm,target=/root/.npm npm ci --production=false
+#15 0.279 npm warn config production Use `--omit=dev` instead.
+#15 0.279 npm warn config production Use `--omit=dev` instead.
+#15 6.014 npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+#15 6.300 npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+#15 7.194 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+#15 15.51
+#15 15.51 added 521 packages, and audited 522 packages in 15s
+#15 15.51
+#15 15.51 66 packages are looking for funding
+#15 15.51   run `npm fund` for details
+#15 15.57
+#15 15.57 10 vulnerabilities (3 low, 7 moderate)
+#15 15.57
+#15 15.57 To address issues that do not require attention, run:
+#15 15.57   npm audit fix
+#15 15.57
+#15 15.57 To address all issues (including breaking changes), run:
+#15 15.57   npm audit fix --force
+#15 15.57
+#15 15.57 Run `npm audit` for details.
+#15 DONE 15.9s
+#16 [stage-0 12/20] COPY . /app/.
+#16 DONE 0.1s
+#17 [stage-0 13/20] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache echo 'DEPLOYMENT: Starting clean build at $(date)'
+#17 0.180 DEPLOYMENT: Starting clean build at $(date)
+#17 DONE 0.2s
+#18 [stage-0 14/20] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache rm -rf dist server/public .vite
+#18 DONE 0.2s
+#19 [stage-0 15/20] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache echo 'Cleaned build directories'
+#19 0.201 Cleaned build directories
+#19 DONE 0.2s
+#20 [stage-0 16/20] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache npm run build
+#20 0.404 npm warn config production Use `--omit=dev` instead.
+#20 0.447
+#20 0.447 > rest-express@1.0.0 build
+#20 0.447 > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+#20 0.447
+#20 0.684 vite v5.4.19 building for production...
+#20 0.759 transforming...
+#20 1.511 Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+#20 1.511   npx update-browserslist-db@latest
+#20 1.511   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+#20 10.19 ✓ 2081 modules transformed.
+#20 10.82 rendering chunks...
+#20 10.83 computing gzip size...
+#20 10.88 ../dist/public/index.html                   2.49 kB │ gzip:   1.00 kB
+#20 10.88 ../dist/public/assets/index-pceXbjOK.css   84.26 kB │ gzip:  14.10 kB
+#20 10.88 ../dist/public/assets/index-D5i5m3cX.js   710.31 kB │ gzip: 214.19 kB
+#20 10.88 
+#20 10.88 (!) Some chunks are larger than 500 kB after minification. Consider:
+#20 10.88 - Using dynamic import() to code-split the application
+#20 10.88 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+#20 10.88 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#20 10.88 ✓ built in 10.17s
+#20 10.98
+#20 10.98   dist/index.js  167.4kb
+#20 10.98
+#20 10.98 ⚡ Done in 30ms
+#20 DONE 11.1s
+#21 [stage-0 17/20] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache node fix-build.js
+#21 0.340 🔧 Running production build optimizations...
+#21 0.342 🧹 Cleaning and fixing static file serving for production...
+#21 0.350 ✅ Fresh static files copied to server/public
+#21 0.352 📋 Updated index.html with cache-busting: v1755883546207
+#21 0.353 🕒 Deployment ID: 1755883546207 at 2025-08-22T17:25:46.207Z
+#21 0.353 📝 Verify deployment at: https://your-domain.com/deploy-timestamp.txt
+#21 0.353 🔧 Fixing import.meta.dirname in bundled code...
+#21 0.353 🔍 Found 7 import.meta.dirname references
+#21 0.353 🚨 CRITICAL: Applying comprehensive import.meta.dirname fixes...
+#21 0.355 ✅ Added required dirname setup
+#21 0.357 ✅ Replaced 7 import.meta.dirname references
+#21 0.357 ⚠️ Remaining references: 0
+#21 0.358 ✅ Critical path.resolve calls are now using __dirname
+#21 0.362 ✅ COMPREHENSIVE dirname fix applied successfully
+#21 0.364 🔍 Build validation: {
+#21 0.364   indexExists: true,
+#21 0.364   publicExists: true,
+#21 0.364   serverPublicExists: true,
+#21 0.364   buildSize: '167.5'
+#21 0.364 }
+#21 0.364 ✅ Production build verified and optimized successfully
+#21 0.364    - dist/index.js: 167.5KB
+#21 0.365    - dist/public: exists
+#21 DONE 0.4s
+#22 [stage-0 18/20] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache echo 'Build completed successfully at $(date)'
+#22 0.216 Build completed successfully at $(date)
+#22 DONE 0.2s
+#23 [stage-0 19/20] RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+#23 DONE 0.2s
+#24 [stage-0 20/20] COPY . /app
+#24 DONE 0.2s
+#25 exporting to image
+#25 exporting layers
+#25 exporting layers 6.0s done
+#25 writing image sha256:85a325cc900998de6183cadbd51d85bb0e2341b1ef3372e537104ed84324234c
+#25 writing image sha256:85a325cc900998de6183cadbd51d85bb0e2341b1ef3372e537104ed84324234c done
+#25 naming to docker.io/library/aiforecast-hub-app-ywa0gl done
+#25 DONE 6.1s
+9 warnings found (use docker --debug to expand):
+ - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "OPENAI_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "SESSION_SECRET") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "ANTHROPIC_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DEEPSEEK_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "OPENAI_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SESSION_SECRET") (line 13)
+- UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "ANTHROPIC_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "DEEPSEEK_API_KEY") (line 14)
+=== Successfully Built! ===
+Run:
+docker run -it aiforecast-hub-app-ywa0gl
+Docker Deployed: ✅

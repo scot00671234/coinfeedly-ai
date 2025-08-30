@@ -1,0 +1,50 @@
+#18 15.29 computing gzip size...
+#18 15.71 ../dist/public/index.html                              2.24 kB │ gzip:   0.89 kB
+#18 15.72 
+#18 15.72 (!) Some chunks are larger than 500 kB after minification. Consider:
+#18 15.72 - Using dynamic import() to code-split the application
+#18 15.72 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+#18 15.72 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#18 15.72 ../dist/public/assets/index-QqoWLT-6.css              87.52 kB │ gzip:  14.37 kB
+#18 15.72 ../dist/public/assets/purify.es-BFmuJLeH.js           21.93 kB │ gzip:   8.59 kB
+#18 15.72 ../dist/public/assets/index.es-CynxPJEO.js           150.53 kB │ gzip:  51.29 kB
+#18 15.72 ../dist/public/assets/html2canvas.esm-CBrSDip1.js    201.42 kB │ gzip:  47.70 kB
+#18 15.72 ../dist/public/assets/index-Bf7VKbka.js            1,433.93 kB │ gzip: 446.01 kB
+#18 15.72 ✓ built in 15.19s
+#18 DONE 15.9s
+#19 [15/19] RUN  mkdir -p server/public
+#19 DONE 0.2s
+#20 [16/19] RUN  cp -r dist/public/* server/public/
+#20 DONE 0.2s
+#21 [17/19] RUN  esbuild server/index-production.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --outfile=dist/index.js
+#21 0.202 ✘ [ERROR] Cannot use both "outfile" and "outdir"
+#21 0.202
+#21 0.203 1 error
+#21 ERROR: process "/bin/bash -ol pipefail -c esbuild server/index-production.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --outfile=dist/index.js" did not complete successfully: exit code: 1
+------
+> [17/19] RUN  esbuild server/index-production.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --outfile=dist/index.js:
+0.202 ✘ [ERROR] Cannot use both "outfile" and "outdir"
+0.202
+0.203 1 error
+------
+7 warnings found (use docker --debug to expand):
+ - UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "ANTHROPIC_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DEEPSEEK_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "OPENAI_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "ANTHROPIC_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "DEEPSEEK_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "OPENAI_API_KEY") (line 14)
+Dockerfile:34
+--------------------
+|     RUN  mkdir -p server/public
+|     RUN  cp -r dist/public/* server/public/
+| >>> RUN  esbuild server/index-production.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --outfile=dist/index.js
+|
+|
+--------------------
+ERROR: failed to solve: process "/bin/bash -ol pipefail -c esbuild server/index-production.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --outfile=dist/index.js" did not complete successfully: exit code: 1
+Error: Docker build failed
+Error response from daemon: No such container: aiforecast-hub-app-puvo1p-yT7pDM0OeZ
+Error ❌
+Error response from daemon: No such container: aiforecast-hub-app-puvo1p-yT7pDM0OeZ

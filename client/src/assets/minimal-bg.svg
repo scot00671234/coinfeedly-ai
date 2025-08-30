@@ -1,0 +1,27 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+    <linearGradient id="fadeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:currentColor;stop-opacity:0.05" />
+      <stop offset="50%" style="stop-color:currentColor;stop-opacity:0.02" />
+      <stop offset="100%" style="stop-color:currentColor;stop-opacity:0.08" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Grid pattern -->
+  <rect width="100%" height="100%" fill="url(#grid)" />
+  
+  <!-- Subtle geometric shapes -->
+  <circle cx="150" cy="120" r="60" fill="url(#fadeGradient)" />
+  <circle cx="650" cy="480" r="80" fill="url(#fadeGradient)" />
+  
+  <!-- Floating triangles -->
+  <polygon points="200,300 250,200 300,300" fill="currentColor" opacity="0.03" />
+  <polygon points="500,150 580,100 560,200" fill="currentColor" opacity="0.04" />
+  
+  <!-- Minimal lines -->
+  <line x1="0" y1="200" x2="200" y2="200" stroke="currentColor" stroke-width="1" opacity="0.05" />
+  <line x1="600" y1="400" x2="800" y2="400" stroke="currentColor" stroke-width="1" opacity="0.05" />
+</svg>

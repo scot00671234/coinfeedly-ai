@@ -1,0 +1,52 @@
+root@b3578159f979:/app# cd server/scripts
+node run-historical-predictions.js
+file:///app/server/scripts/run-historical-predictions.js:8
+const { exec } = require('child_process');
+                 ^
+
+ReferenceError: require is not defined in ES module scope, you can use import instead
+This file is being treated as an ES module because it has a '.js' file extension and '/app/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+    at file:///app/server/scripts/run-historical-predictions.js:8:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+Node.js v18.20.5
+root@b3578159f979:/app/server/scripts# npx tsx generate-historical-predictions.ts
+npm warn config production Use `--omit=dev` instead.ate-historical-predictions.ts
+/app/server/scripts/generate-historical-predictions.ts:425
+if (require.main === module) {
+^
+
+
+ReferenceError: require is not defined in ES module scope, you can use import instead
+    at /app/server/scripts/generate-historical-predictions.ts (/app/server/scripts/generate-historical-predictions.ts:425:1)
+    at __require (file:///app/server/scripts/generate-historical-predictions.ts:2:254)
+    at <anonymous> (/app/server/scripts/generate-historical-predictions.ts:427:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+Node.js v18.20.5
+root@b3578159f979:/app/server/scripts# cd ..
+npx tsx scripts/generate-historical-predictions.ts
+npm warn config production Use `--omit=dev` instead.
+/app/server/scripts/generate-historical-predictions.ts:425
+if (require.main === module) {
+^
+
+
+ReferenceError: require is not defined in ES module scope, you can use import instead
+    at /app/server/scripts/generate-historical-predictions.ts (/app/server/scripts/generate-historical-predictions.ts:425:1)
+    at __require (file:///app/server/scripts/generate-historical-predictions.ts:2:254)
+    at <anonymous> (/app/server/scripts/generate-historical-predictions.ts:427:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12)
+
+Node.js v18.20.5
+root@b3578159f979:/app/server# ^C
+root@b3578159f979:/app/server# 

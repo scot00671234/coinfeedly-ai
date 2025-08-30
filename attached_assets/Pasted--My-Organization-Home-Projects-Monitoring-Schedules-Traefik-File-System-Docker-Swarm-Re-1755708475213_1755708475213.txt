@@ -1,0 +1,267 @@
+
+
+My Organization
+
+Home
+Projects
+Monitoring
+Schedules
+Traefik File System
+Docker
+Swarm
+Requests
+Settings
+Web Server
+Profile
+Remote Servers
+Users
+SSH Keys
+AI
+Git
+Registry
+S3 Destinations
+Certificates
+Cluster
+Notifications
+Extra
+Documentation
+Support
+Sponsor
+
+CN
+Account
+scot00671234@gmail.com
+Version v0.22.7
+
+Projects
+AIForecast Hub
+app
+
+app
+aiforecast-hub-app-ywa0gl
+Dokploy Server
+General
+Environment
+Domains
+Preview Deployments
+Schedules
+Deployments
+Logs
+Monitoring
+Advanced
+Deployments
+See all the 10 last deployments for this application
+
+If you want to re-deploy this application use this URL in the config of your git provider or docker
+Webhook URL:
+http://147.93.87.98:3000/api/deploy/bw0KMA4hlvSZmb2XcXIZ9
+
+1. done
+EMERGENCY FIX: Nuclear fallback for timeframe column issues
+Hash: 553ee663993a7a943f4ca96bd0ac3bd14aade1aa
+
+4 minutes ago
+35s
+2. done
+Add automatic database migration system
+Hash: 8cb7319283dc33d246a234f54830ef23a6b30b92
+
+11 minutes ago
+36s
+3. done
+Add a new table for tracking composite market index data Introduce the `composite_index` table to the database schema, along with automatic migration scripts to ensure its existence and populate initial data for enhanced predictive analytics. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 352a66aa-6ef5-4e22-8828-0a988a7f2c38 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/01f15f9a-1471-451e-84ad-12e7104a0ce8/352a66aa-6ef5-4e22-8828-0a988a7f2c38/qZ7uYLC
+Hash: 234f93de550d1574096bca76cc56c27bc9f9721d
+
+14 minutes ago
+39s
+4. done
+Manual deployment
+
+21 minutes ago
+3s
+5. done
+Add timeframe to prediction data and handle missing data gracefully Add a 'timeframe' column to the predictions table and implement fallback logic in data retrieval to prevent startup errors when prediction data is initially absent. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 352a66aa-6ef5-4e22-8828-0a988a7f2c38 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/01f15f9a-1471-451e-84ad-12e7104a0ce8/352a66aa-6ef5-4e22-8828-0a988a7f2c38/cR931Po
+Hash: b08c455fd0c7bd3ef1d9b1145f774cb725ec717e
+
+28 minutes ago
+1m 12s
+6. done
+Prepare the application for deployment and fix critical startup errors Update build configurations and add schema for composite index tracking; resolve undefined path errors by importing 'fileURLToPath' and ensuring correct Node.js environment handling. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 5f961fce-ca76-4e4b-a637-d5a8059aaeb7 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/3d11c952-0fe6-49da-a781-89bc6994124a/5f961fce-ca76-4e4b-a637-d5a8059aaeb7/rb9CYYb
+Hash: 2fc95418289657eb032bc8f357948388c40c86a8
+
+about 2 hours ago
+45s
+7. done
+Strengthen production readiness with robust build and startup systems Introduce a health check endpoint, refine .dockerignore and nixpacks.toml for optimized production builds, add build verification and startup scripts, and provide comprehensive environment variable guidance. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 5f961fce-ca76-4e4b-a637-d5a8059aaeb7 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/3d11c952-0fe6-49da-a781-89bc6994124a/5f961fce-ca76-4e4b-a637-d5a8059aaeb7/rb9CYYb
+Hash: f913908347876a1d4da03a22d0dc730dc18fdf71
+
+about 3 hours ago
+33s
+8. error
+Update design system to feature a clean, modern look with enhanced user experience Refine design system documentation in docs/design-system.md with updated philosophy, color system, component guidelines, and data visualization specifications, shifting towards a light-first approach with dark mode support and geometric branding elements. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 5f961fce-ca76-4e4b-a637-d5a8059aaeb7 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/3d11c952-0fe6-49da-a781-89bc6994124a/5f961fce-ca76-4e4b-a637-d5a8059aaeb7/rb9CYYb
+Hash: 3ea8b0dade815091c18e970b98b1354a3d6e0509
+
+about 3 hours ago
+32s
+9. error
+Improve dashboard header and logo link functionality Update dashboard and indices pages to use Link components for the logo, changing font weight to medium and size to lg. Ensure logo links to the dashboard. Replit-Commit-Author: Agent Replit-Commit-Session-Id: 8e83bcd4-c7d9-4018-adf3-ac51041f0120 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/3a9ef089-9770-439f-9c64-089a953622f7/8e83bcd4-c7d9-4018-adf3-ac51041f0120/53mb08t
+Hash: 8c17d7cbe6c50fe9943c11081093ff58c952f242
+
+about 3 hours ago
+29s
+10. error
+Reduce banner height for a more compact display Adjusted the `BottomBanner` component by reducing vertical padding and the `height` style property of the `AdBanner` from `90px` to `60px`. Replit-Commit-Author: Agent Replit-Commit-Session-Id: d571ea29-2b38-43a1-b195-673c9430fd83 Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/3a9ef089-9770-439f-9c64-089a953622f7/d571ea29-2b38-43a1-b195-673c9430fd83/KDuaDvp
+Hash: 481dc14b669d9397eef504febe06324c628dd958
+
+about 4 hours ago
+32s
+11. done
+Update prediction data to include monthly intervals and checks Modify the database schema to add a 'timeframe' column to the 'predictions' table, supporting monthly intervals ('3mo', '6mo', '9mo', '12mo') and adding a check constraint for valid timeframes. Replit-Commit-Author: Agent Replit-Commit-Session-Id: d2f83a52-1a3c-4c2d-b726-9b13a7cd5b9f Replit-Commit-Checkpoint-Type: full_checkpoint Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/d3915bf3-f1d2-438d-bb69-22d687bd38a8/d2f83a52-1a3c-4c2d-b726-9b13a7cd5b9f/L0lIbim
+Hash: edf065c71111a3654d4d4f5b5f757dc1b25e0a5c
+
+about 15 hours ago
+37s
+Application: app - AIForecast Hub | Dokploy
+110
+Deployment
+See all the details of this deployment | 
+
+Initializing deployment
+Clonning Repo github.com/scot00671234/AIForecast-Hub.git to /etc/dokploy/applications/aiforecast-hub-app-ywa0gl/code: ✅
+Cloning into '/etc/dokploy/applications/aiforecast-hub-app-ywa0gl/code'...
+remote: Enumerating objects: 196, done.
+Cloned github.com/scot00671234/AIForecast-Hub.git: ✅
+Build nixpacks: ✅
+Source Type: github: ✅
+╔═════════════════════ Nixpacks v1.39.0 ═════════════════════╗
+║ setup      │ nodejs_18, npm-9_x, openssl                   ║
+║────────────────────────────────────────────────────────────║
+║ caddy      │ pkgs: caddy                                   ║
+║            │ cmds: caddy fmt --overwrite /assets/Caddyfile ║
+║────────────────────────────────────────────────────────────║
+║ install    │ npm ci --production=false                     ║
+║────────────────────────────────────────────────────────────║
+║ build      │ npm run build                                 ║
+║            │ node fix-build.js                             ║
+║────────────────────────────────────────────────────────────║
+║ start      │ node production-start.js                      ║
+╚════════════════════════════════════════════════════════════╝
+#0 building with "default" instance using docker driver
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.82kB done
+#1 DONE 0.0s
+#2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+#2 DONE 0.5s
+#3 [internal] load .dockerignore
+#3 transferring context: 784B done
+#3 DONE 0.0s
+#4 [stage-0  1/16] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+#4 DONE 0.0s
+#5 [internal] load build context
+#5 transferring context: 2.99MB 0.1s done
+#5 DONE 0.1s
+#6 [stage-0  5/16] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+#6 CACHED
+#7 [stage-0  6/16] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+#7 CACHED
+#8 [stage-0  2/16] WORKDIR /app/
+#8 CACHED
+#9 [stage-0  3/16] COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix
+#9 CACHED
+#10 [stage-0  4/16] RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d
+#10 CACHED
+#11 [stage-0  7/16] COPY .nixpacks/assets /assets/
+#11 CACHED
+#12 [stage-0  8/16] COPY . /app/.
+#12 DONE 0.1s
+#13 [stage-0  9/16] RUN  caddy fmt --overwrite /assets/Caddyfile
+#13 DONE 0.4s
+#14 [stage-0 10/16] COPY . /app/.
+#14 DONE 0.1s
+#15 [stage-0 11/16] RUN --mount=type=cache,id=gN5wxUCTuE-/root/npm,target=/root/.npm npm ci --production=false
+#15 0.305 npm warn config production Use `--omit=dev` instead.
+#15 0.307 npm warn config production Use `--omit=dev` instead.
+#15 5.690 npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+#15 5.903 npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+#15 6.793 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+#15 16.16
+#15 16.16 added 521 packages, and audited 522 packages in 16s
+#15 16.16
+#15 16.16 66 packages are looking for funding
+#15 16.17   run `npm fund` for details
+#15 16.22
+#15 16.22 10 vulnerabilities (3 low, 7 moderate)
+#15 16.22
+#15 16.22 To address issues that do not require attention, run:
+#15 16.22   npm audit fix
+#15 16.22
+#15 16.22 To address all issues (including breaking changes), run:
+#15 16.22   npm audit fix --force
+#15 16.22
+#15 16.22 Run `npm audit` for details.
+#15 DONE 16.6s
+#16 [stage-0 12/16] COPY . /app/.
+#16 DONE 0.1s
+#17 [stage-0 13/16] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache npm run build
+#17 0.375 npm warn config production Use `--omit=dev` instead.
+#17 0.436
+#17 0.436 > rest-express@1.0.0 build
+#17 0.436 > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+#17 0.436
+#17 0.702 vite v5.4.19 building for production...
+#17 1.189 transforming...
+#17 1.513 Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+#17 1.513   npx update-browserslist-db@latest
+#17 1.513   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+#17 8.605 ✓ 1740 modules transformed.
+#17 9.069 rendering chunks...
+#17 9.121 computing gzip size...
+#17 9.296 ../dist/public/index.html                   2.49 kB │ gzip:   1.00 kB
+#17 9.297 ../dist/public/assets/index-CxDpJyGE.css   78.37 kB │ gzip:  13.22 kB
+#17 9.298 ../dist/public/assets/index-Bznbflkx.js   579.44 kB │ gzip: 174.91 kB
+#17 9.302 
+#17 9.302 (!) Some chunks are larger than 500 kB after minification. Consider:
+#17 9.302 - Using dynamic import() to code-split the application
+#17 9.302 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+#17 9.302 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#17 9.303 ✓ built in 8.57s
+#17 9.518
+#17 9.518   dist/index.js  160.1kb
+#17 9.518
+#17 9.518 ⚡ Done in 29ms
+#17 DONE 9.6s
+#18 [stage-0 14/16] RUN --mount=type=cache,id=gN5wxUCTuE-node_modules/cache,target=/app/node_modules/.cache node fix-build.js
+#18 0.268 🔧 Running production build optimizations...
+#18 0.270 🔧 Fixing import.meta.dirname in bundled code...
+#18 0.272 🔍 Found import.meta.dirname references, applying fixes...
+#18 0.272 ✅ Added fileURLToPath import
+#18 0.276 ✅ Fixed import.meta.dirname references in bundled code
+#18 0.277 ✅ Production build verified and optimized successfully
+#18 0.277    - dist/index.js: 160.3KB
+#18 0.277    - dist/public: exists
+#18 DONE 0.3s
+#19 [stage-0 15/16] RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+#19 DONE 0.2s
+#20 [stage-0 16/16] COPY . /app
+#20 DONE 0.1s
+#21 exporting to image
+#21 exporting layers
+#21 exporting layers 5.5s done
+#21 writing image sha256:7d59bf8b678487f6127fd61d15f48c3c1e6b39223821a36b611652524b217b33
+#21 writing image sha256:7d59bf8b678487f6127fd61d15f48c3c1e6b39223821a36b611652524b217b33 done
+#21 naming to docker.io/library/aiforecast-hub-app-ywa0gl done
+#21 DONE 5.5s
+9 warnings found (use docker --debug to expand):
+ - SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "OPENAI_API_KEY") (line 14)
+- UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "ANTHROPIC_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "DEEPSEEK_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SESSION_SECRET") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "ANTHROPIC_API_KEY") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "SESSION_SECRET") (line 14)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DEEPSEEK_API_KEY") (line 13)
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "OPENAI_API_KEY") (line 13)
+=== Successfully Built! ===
+Run:
+docker run -it aiforecast-hub-app-ywa0gl
+Docker Deployed: ✅

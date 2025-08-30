@@ -1,0 +1,70 @@
+app
+aiforecast-hub-app-vehhbf
+Dokploy Server
+General
+Environment
+Domains
+Preview Deployments
+Schedules
+Volume Backups
+Deployments
+Logs
+Monitoring
+Advanced
+Logs
+Watch the logs of the application in real time
+
+Select a container to view logs
+Native
+
+
+aiforecast-hub-app-vehhbf.1.9vrv46kxmsle2w7aiv5hnx0yx (ccffc0c18b72) 
+Search logs...
+🚀 Starting background price refresh every 300 seconds
+🚀 Starting AIForecast Hub (Professional Edition) - DEPLOYMENT FIX v1.0.1
+🔧 DEPLOYMENT: Fixed port, caching, and build process
+🚀 Environment: production, Port: 3000
+🔧 Initializing critical services...
+Database connected successfully
+✅ Database connection established
+🔧 Production environment detected - ensuring database schema...
+🔧 Running production database migration...
+🔧 Creating table: ai_models
+🔧 Creating table: commodities
+🔧 Creating table: predictions
+🔧 Creating table: composite_index
+🔧 Creating table: actual_prices
+🔧 Creating table: accuracy_metrics
+🔧 Creating table: market_alerts
+Note: Some constraints may already exist
+🔧 Ensuring production data...
+🔧 Inserting production data...
+✅ Production data inserted
+✅ Production migration completed
+✅ Database connection verified
+✅ Database connection verified
+🚀 Running automatic migrations...
+✅ Migration 1: Timeframe column - COMPLETED
+✅ Migration 2: Composite index table - COMPLETED
+🎯 All automatic migrations completed
+✅ Database migrations completed
+✅ Database schema and default data initialized
+✅ Critical initialization complete
+🔧 Initializing critical services...
+✅ Database connection verified
+🚀 Running automatic migrations...
+✅ Migration 1: Timeframe column - COMPLETED
+✅ Migration 2: Composite index table - COMPLETED
+🎯 All automatic migrations completed
+✅ Database migrations completed
+✅ Database schema and default data initialized
+⚡ Starting heavy initialization (background)...
+🔧 Environment detection: NODE_ENV=production, isProduction=true
+file:///app/dist/index.js:3980
+throw new Error(
+^
+Error: Could not find the build directory: /app/public, make sure to build the client first
+at serveStatic (file:///app/dist/index.js:3980:11)
+at file:///app/dist/index.js:4042:5
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Node.js v18.20.5

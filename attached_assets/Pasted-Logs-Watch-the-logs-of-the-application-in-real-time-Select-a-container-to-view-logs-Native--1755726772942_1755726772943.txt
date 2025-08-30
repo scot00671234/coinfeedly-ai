@@ -1,0 +1,61 @@
+Logs
+Watch the logs of the application in real time
+
+Select a container to view logs
+Native
+
+
+aiforecast-hub-app-ywa0gl.1.rhsdr0ucdugduwd33n7baga0q (d6414a796a8d) 
+Search logs...
+🚀 AIForecast Hub Production Startup
+📁 Working directory: /app
+📁 Script directory: /app
+🔍 Checking build path: /app/dist
+✅ Found valid build at: /app/dist
+📋 Build directory contents:
+- index.js
+- public
+✅ Production environment validated
+Port: 3000
+Database: configured
+AI APIs: 4/4 configured
+Index file: /app/dist/index.js
+🚀 Starting application: node /app/dist/index.js
+🚀 Starting AIForecast Hub (Professional Edition) - Emergency Migration Fix v3.0.0
+🔧 CACHE BUST: Force rebuild with migration timing fixes
+🔧 Initializing critical services...
+Database connection failed: getaddrinfo ENOTFOUND aiforecast-hub-database-dsngub
+❌ Database connection failed: getaddrinfo ENOTFOUND aiforecast-hub-database-dsngub
+🚨 Emergency migration attempt...
+🚨 Running emergency database migration...
+Note: Could not drop market_alerts
+Note: Could not drop accuracy_metrics
+Note: Could not drop actual_prices
+Note: Could not drop predictions
+Note: Could not drop commodities
+Note: Could not drop ai_models
+🔧 Running production database migration...
+❌ Emergency migration failed: Error: getaddrinfo ENOTFOUND aiforecast-hub-database-dsngub
+at /app/node_modules/pg-pool/index.js:45:11
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+at async DatabaseStorage.runProductionMigration (file:///app/dist/index.js:234:9)
+at async DatabaseStorage.runEmergencyMigration (file:///app/dist/index.js:476:11)
+at async DatabaseStorage.testConnection (file:///app/dist/index.js:219:15)
+at async DatabaseStorage.initialize (file:///app/dist/index.js:198:9)
+at async DatabaseStorage.ensureConnection (file:///app/dist/index.js:603:9)
+at async StartupManager.initializeCritical (file:///app/dist/index.js:2241:9)
+at async file:///app/dist/index.js:3906:5 {
+errno: -3008,
+code: 'ENOTFOUND',
+syscall: 'getaddrinfo',
+hostname: 'aiforecast-hub-database-dsngub'
+}
+❌ Emergency migration failed: getaddrinfo ENOTFOUND aiforecast-hub-database-dsngub
+❌ Critical startup failed: Error: Database connection required for production deployment: getaddrinfo ENOTFOUND aiforecast-hub-database-dsngub
+at DatabaseStorage.testConnection (file:///app/dist/index.js:229:17)
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+at async DatabaseStorage.initialize (file:///app/dist/index.js:198:9)
+at async DatabaseStorage.ensureConnection (file:///app/dist/index.js:603:9)
+at async StartupManager.initializeCritical (file:///app/dist/index.js:2241:9)
+at async file:///app/dist/index.js:3906:5
+❌ Application exited with code 1

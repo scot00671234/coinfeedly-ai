@@ -1,0 +1,22 @@
+# NUCLEAR: Block ALL web server detection
+*caddy*
+*Caddy*
+Caddyfile*
+*nginx*
+*apache*
+*httpd*
+*traefik*
+*proxy*
+*reverse*
+
+# Prevent auto-detection patterns
+public/
+static/
+assets/
+*.html
+dist/
+build/
+
+# Force Node.js only
+package-lock.json
+package.json

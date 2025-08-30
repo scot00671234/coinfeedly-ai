@@ -1,0 +1,108 @@
+Logs
+Watch the logs of the application in real time
+
+Select a container to view logs
+Native
+
+
+aiforecast-hub-app-ywa0gl.1.y3xed4muxki961exifojj7mv1 (7c048e945bd3) 
+Search logs...
+✅ Final accuracy rankings for 718b7776-45ca-4111-bf3b-f21e0fd9ef19: [ 'Claude: 78.1% (#1)', 'Deepseek: 67.7% (#2)', 'ChatGPT: 64.5% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/718b7776-45ca-4111-bf3b-f21e0fd9ef19/30d 304 in 599ms…
+🔍 Model ChatGPT: 12 predictions, 575 actual prices
+📈 Model ChatGPT: 12 predictions after period filter
+🎯 Model ChatGPT accuracy result: 70% (12 matches)
+✅ Final accuracy rankings for e7d8d6f2-811b-4696-a69e-1c612f952281: [ 'Claude: 77.5% (#1)', 'ChatGPT: 70% (#2)', 'Deepseek: 67.1% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/e7d8d6f2-811b-4696-a69e-1c612f952281/30d 200 in 608ms…
+🔍 Model Deepseek: 12 predictions, 569 actual prices
+📈 Model Deepseek: 12 predictions after period filter
+🎯 Model Deepseek accuracy result: 63.11% (12 matches)
+🔍 Model ChatGPT: 12 predictions, 569 actual prices
+📈 Model ChatGPT: 12 predictions after period filter
+🎯 Model ChatGPT accuracy result: 52.77% (12 matches)
+✅ Final accuracy rankings for 6a87480d-4293-48bf-851e-7c670ea2c047: [ 'Deepseek: 63.1% (#1)', 'ChatGPT: 52.8% (#2)', 'Claude: 37.4% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/6a87480d-4293-48bf-851e-7c670ea2c047/30d 200 in 621ms…
+🔍 Model Claude: 6 predictions, 569 actual prices
+📈 Model Claude: 6 predictions after period filter
+🎯 Model Claude accuracy result: 71.84% (6 matches)
+🔍 Model Claude: 6 predictions, 563 actual prices
+📈 Model Claude: 6 predictions after period filter
+🎯 Model Claude accuracy result: 85.68% (6 matches)
+🔍 Model ChatGPT: 11 predictions, 563 actual prices
+📈 Model ChatGPT: 11 predictions after period filter
+🎯 Model ChatGPT accuracy result: 64.52% (11 matches)
+🔍 Model Deepseek: 11 predictions, 563 actual prices
+📈 Model Deepseek: 11 predictions after period filter
+🎯 Model Deepseek accuracy result: 78.65% (11 matches)
+✅ Final accuracy rankings for 00bc6219-9ebd-44de-a6c2-ac1f2efd28bf: [ 'Claude: 85.7% (#1)', 'Deepseek: 78.7% (#2)', 'ChatGPT: 64.5% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/00bc6219-9ebd-44de-a6c2-ac1f2efd28bf/30d 200 in 644ms…
+🔍 Model Claude: 5 predictions, 541 actual prices
+📈 Model Claude: 5 predictions after period filter
+🎯 Model Claude accuracy result: 73.51% (5 matches)
+🔍 Model Deepseek: 12 predictions, 569 actual prices
+📈 Model Deepseek: 12 predictions after period filter
+🎯 Model Deepseek accuracy result: 68.4% (12 matches)
+🔍 Model Deepseek: 9 predictions, 541 actual prices
+📈 Model Deepseek: 9 predictions after period filter
+🎯 Model Deepseek accuracy result: 64.82% (9 matches)
+🔍 Model ChatGPT: 12 predictions, 569 actual prices
+📈 Model ChatGPT: 12 predictions after period filter
+🎯 Model ChatGPT accuracy result: 77.53% (12 matches)
+✅ Final accuracy rankings for f594884e-9f0d-4fc3-b4c7-87384f260d97: [ 'ChatGPT: 77.5% (#1)', 'Claude: 71.8% (#2)', 'Deepseek: 68.4% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/f594884e-9f0d-4fc3-b4c7-87384f260d97/30d 200 in 659ms…
+🔍 Model ChatGPT: 11 predictions, 557 actual prices
+📈 Model ChatGPT: 11 predictions after period filter
+🎯 Model ChatGPT accuracy result: 68.13% (11 matches)
+🔍 Model ChatGPT: 9 predictions, 541 actual prices
+📈 Model ChatGPT: 9 predictions after period filter
+🎯 Model ChatGPT accuracy result: 73.42% (9 matches)
+✅ Final accuracy rankings for c4cc0c04-d99b-4f06-a974-6c94275eb5f2: [ 'Claude: 73.5% (#1)', 'ChatGPT: 73.4% (#2)', 'Deepseek: 64.8% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/c4cc0c04-d99b-4f06-a974-6c94275eb5f2/30d 304 in 676ms…
+🔍 Model Deepseek: 11 predictions, 557 actual prices
+📈 Model Deepseek: 11 predictions after period filter
+🎯 Model Deepseek accuracy result: 71.1% (11 matches)
+🔍 Model Claude: 6 predictions, 557 actual prices
+📈 Model Claude: 6 predictions after period filter
+🎯 Model Claude accuracy result: 85.36% (6 matches)
+✅ Final accuracy rankings for 601260b3-fc1e-4d2f-9b69-7a7c9d0724a8: [ 'Claude: 85.4% (#1)', 'Deepseek: 71.1% (#2)', 'ChatGPT: 68.1% (#3)' ]
+3:21:18 PM [express] GET /api/accuracy-metrics/601260b3-fc1e-4d2f-9b69-7a7c9d0724a8/30d 200 in 682ms…
+📊 Found 3 model rankings with data
+✅ Returning league table with real data: [
+'Claude: 74.9% (83 predictions)',
+'Deepseek: 70.7% (165 predictions)',
+'ChatGPT: 69.9% (165 predictions)'
+]
+3:21:18 PM [express] GET /api/league-table/30d 200 in 1568ms :: [{"rank":1,"aiModel":{"id":"d5aded35…
+3:21:18 PM [express] GET /api/dashboard/stats 304 in 1587ms :: {"totalPredictions":413,"topModel":"C…
+3:21:19 PM [express] GET /api/ai-models 304 in 3ms :: [{"id":"d5aded35-b813-4cf4-9e82-017065be0cbe",…
+3:21:19 PM [express] GET /api/commodities/718b7776-45ca-4111-bf3b-f21e0fd9ef19/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/4345c35c-5ad2-46bf-bae7-f53fc1ddba76/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/d090b26c-4803-4d3e-ae2a-7515286238f0/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/601260b3-fc1e-4d2f-9b69-7a7c9d0724a8/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/6a87480d-4293-48bf-851e-7c670ea2c047/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/9f287a5a-1d77-49fe-8a77-a64eec3bd85e/latest-price 200 in 2…
+3:21:19 PM [express] GET /api/commodities/c86ba0f3-54c5-4544-90cd-522ce15503ff/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/e7d8d6f2-811b-4696-a69e-1c612f952281/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/f594884e-9f0d-4fc3-b4c7-87384f260d97/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/067fac48-d80b-4284-8e96-aac627960b5c/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/75fe3ab6-86b1-43c7-94f4-f9eb4e3a5aee/latest-price 200 in 2…
+3:21:19 PM [express] GET /api/commodities/00bc6219-9ebd-44de-a6c2-ac1f2efd28bf/latest-price 200 in 1…
+3:21:19 PM [express] GET /api/commodities/c4cc0c04-d99b-4f06-a974-6c94275eb5f2/latest-price 200 in 1…
+Fetching maximum historical data for GC=F
+Attempting to fetch max data for GC=F
+Successfully fetched 257 data points from GC=F for period max
+Received 257 data points for GC=F
+Found 35 predictions for eaba37e9-c535-4cf8-a4ad-1a85d37966e3
+Returning 259 chart data points for eaba37e9-c535-4cf8-a4ad-1a85d37966e3
+3:21:58 PM [express] GET /api/commodities/eaba37e9-c535-4cf8-a4ad-1a85d37966e3/chart-with-prediction…
+3:21:58 PM [express] GET /api/commodities/eaba37e9-c535-4cf8-a4ad-1a85d37966e3/latest-price 200 in 2…
+3:22:35 PM [express] GET /api/composite-index/latest 404 in 25ms :: {"message":"No composite index d…
+📊 HARD commodities composite index: 59.8
+Components - Directional: 81.9, Confidence: 0.7, Accuracy: 65.0, Momentum: 92.5
+📊 SOFT commodities composite index: 61.8
+Components - Directional: 90.3, Confidence: 0.7, Accuracy: 65.0, Momentum: 83.3
+3:22:35 PM [express] GET /api/composite-index/categories 200 in 85ms :: {"hard":{"value":59.80205,"t…
+3:22:35 PM [express] GET /api/fear-greed-index 200 in 95ms :: {"value":70,"classification":"Greed","…
+3:23:06 PM [express] GET /api/composite-index/latest 404 in 16ms :: {"message":"No composite index d…
+3:23:06 PM [express] GET /api/dashboard/stats 304 in 306ms :: {"totalPredictions":413,"topModel":"Cl…
+3:23:06 PM [express] GET /api/ai-models 304 in 1ms :: [{"id":"d5aded35-b813-4cf4-9e82-017065be0cbe",…
