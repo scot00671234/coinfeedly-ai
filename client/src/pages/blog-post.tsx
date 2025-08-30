@@ -26,10 +26,10 @@ const blogPosts: Record<string, BlogPost> = {
     category: "AI & Markets",
     content: (
       <div className="space-y-8">
-        <h2 className="text-3xl font-semibold text-foreground">The Purpose Behind AIForecast Hub</h2>
+        <h2 className="text-3xl font-semibold text-foreground">The Purpose Behind Coin Feedly</h2>
         
         <p className="text-foreground leading-relaxed">
-          In an era where artificial intelligence is reshaping industries, commodity trading stands at the forefront of this transformation. AIForecast Hub was created to bridge the gap between cutting-edge AI technology and practical market insights, providing traders, investors, and analysts with unprecedented clarity into how different AI models perform in real-world forecasting scenarios.
+          In an era where artificial intelligence is reshaping industries, commodity trading stands at the forefront of this transformation. Coin Feedly was created to bridge the gap between cutting-edge AI technology and practical market insights, providing traders, investors, and analysts with unprecedented clarity into how different AI models perform in real-world forecasting scenarios.
         </p>
 
         <h3 className="text-2xl font-semibold text-foreground mt-10">Why Compare AI Models?</h3>
@@ -57,11 +57,11 @@ const blogPosts: Record<string, BlogPost> = {
         <h3 className="text-xl font-medium text-foreground mt-8">Looking Forward</h3>
         
         <p className="text-foreground leading-relaxed">
-          As AI technology continues to evolve, so too will the capabilities of commodity forecasting. AIForecast Hub represents not just a current snapshot of AI performance, but a foundation for understanding how these models improve over time. We're committed to expanding our analysis, adding new commodities, and providing even deeper insights into the fascinating world of AI-powered market prediction.
+          As AI technology continues to evolve, so too will the capabilities of commodity forecasting. Coin Feedly represents not just a current snapshot of AI performance, but a foundation for understanding how these models improve over time. We're committed to expanding our analysis, adding new commodities, and providing even deeper insights into the fascinating world of AI-powered market prediction.
         </p>
 
         <p className="text-foreground leading-relaxed">
-          Whether you're a seasoned trader looking to leverage AI insights, a data scientist studying model performance, or simply curious about the intersection of artificial intelligence and financial markets, AIForecast Hub provides the tools and data you need to make informed decisions.
+          Whether you're a seasoned trader looking to leverage AI insights, a data scientist studying model performance, or simply curious about the intersection of artificial intelligence and financial markets, Coin Feedly provides the tools and data you need to make informed decisions.
         </p>
       </div>
     )
@@ -102,7 +102,7 @@ export default function BlogPost() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-all duration-300">
               <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="text-xl font-semibold text-foreground">AIForecast Hub</span>
+              <span className="text-xl font-semibold text-foreground">Coin Feedly</span>
             </Link>
             
             <NavigationMenu currentPath={location} />
@@ -177,10 +177,10 @@ export default function BlogPost() {
           >
             <div className="flex items-center justify-center space-x-3">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="font-semibold text-foreground">AIForecast Hub</span>
+              <span className="font-semibold text-foreground">Coin Feedly</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
-              <p>© 2025 AIForecast Hub</p>
+              <p>© 2025 Coin Feedly</p>
               <p className="text-xs">Loremt ApS CVR-nr 41691360</p>
             </div>
           </motion.div>

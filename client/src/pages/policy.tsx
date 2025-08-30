@@ -16,7 +16,7 @@ export default function Policy() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="text-lg font-medium text-foreground">AIForecast Hub</span>
+              <span className="text-lg font-medium text-foreground">Coin Feedly</span>
             </Link>
             
             <NavigationMenu currentPath={location} />
@@ -98,7 +98,7 @@ export default function Policy() {
                     <div>
                       <h3 className="text-xl font-semibold text-foreground mb-3">Platform Purpose</h3>
                       <p className="text-muted-foreground leading-relaxed">
-                        AIForecast Hub is for educational and informational purposes only. We track AI model performance on commodity predictions.
+                        Coin Feedly is for educational and informational purposes only. We track AI model performance on commodity predictions.
                       </p>
                     </div>
 
@@ -134,10 +134,10 @@ export default function Policy() {
           >
             <div className="flex items-center justify-center space-x-3">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="font-semibold text-foreground">AIForecast Hub</span>
+              <span className="font-semibold text-foreground">Coin Feedly</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
-              <p>© 2025 AIForecast Hub</p>
+              <p>© 2025 Coin Feedly</p>
               <p className="text-xs">Loremt ApS CVR-nr 41691360</p>
             </div>
           </motion.div>

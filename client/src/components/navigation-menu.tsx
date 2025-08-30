@@ -102,7 +102,7 @@ export function NavigationMenu({ currentPath = "/" }: NavigationMenuProps) {
         <div className="flex-shrink-0 p-4 border-b border-border/30">
           <div className="flex items-center space-x-3">
             <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent border-b-foreground"></div>
-            <span className="font-medium text-foreground text-sm">AIForecast Hub</span>
+            <span className="font-medium text-foreground text-sm">Coin Feedly</span>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             Navigate to different sections
@@ -158,7 +158,7 @@ export function NavigationMenu({ currentPath = "/" }: NavigationMenuProps) {
           <div className="flex items-center justify-center space-x-2">
             <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-b-[6px] border-l-transparent border-r-transparent border-b-muted-foreground/60"></div>
             <p className="text-xs text-muted-foreground font-medium">
-              AIForecast Hub
+              Coin Feedly
             </p>
           </div>
         </div>

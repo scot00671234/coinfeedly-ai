@@ -42,7 +42,7 @@ export default function Blog() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-all duration-300">
               <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="text-xl font-semibold text-foreground">AIForecast Hub</span>
+              <span className="text-xl font-semibold text-foreground">Coin Feedly</span>
             </Link>
             
             <NavigationMenu currentPath={location} />
@@ -94,10 +94,10 @@ export default function Blog() {
           >
             <div className="flex items-center justify-center space-x-3">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="font-semibold text-foreground">AIForecast Hub</span>
+              <span className="font-semibold text-foreground">Coin Feedly</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
-              <p>© 2025 AIForecast Hub</p>
+              <p>© 2025 Coin Feedly</p>
               <p className="text-xs">Loremt ApS CVR-nr 41691360</p>
             </div>
           </motion.div>

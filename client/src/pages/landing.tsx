@@ -88,7 +88,7 @@ export default function Landing() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="text-lg font-semibold text-foreground">AIForecast Hub</span>
+              <span className="text-lg font-semibold text-foreground">Coin Feedly</span>
             </div>
             
             {/* Navigation - hidden on mobile, shown on desktop */}
@@ -652,7 +652,7 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-medium text-foreground mb-3">
-              Why Choose AIForecast Hub
+              Why Choose Coin Feedly
             </h2>
             <p className="text-base text-muted-foreground">
               Everything you need to analyze AI prediction performance
@@ -700,7 +700,7 @@ export default function Landing() {
           <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
             <div className="flex items-center space-x-3">
               <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent border-b-muted-foreground"></div>
-              <span className="text-base font-semibold text-foreground">AIForecast Hub</span>
+              <span className="text-base font-semibold text-foreground">Coin Feedly</span>
             </div>
             <div className="flex items-center space-x-8">
               <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium">
@@ -720,7 +720,7 @@ export default function Landing() {
               </Link>
             </div>
             <div className="text-sm text-muted-foreground text-center md:text-right space-y-1">
-              <p>© 2025 AIForecast Hub</p>
+              <p>© 2025 Coin Feedly</p>
               <p className="text-xs">Loremt ApS CVR-nr 41691360</p>
             </div>
           </div>

@@ -44,7 +44,7 @@ export default function FAQ() {
     {
       id: "free-access",
       question: "Is the platform free to use?",
-      answer: "Yes, AIForecast Hub is completely free to use. Our mission is to provide transparent AI prediction analysis to help users make informed decisions. All dashboards, analytics, and historical data are accessible without any fees or subscriptions."
+      answer: "Yes, Coin Feedly is completely free to use. Our mission is to provide transparent AI prediction analysis to help users make informed decisions. All dashboards, analytics, and historical data are accessible without any fees or subscriptions."
     },
     {
       id: "methodology",
@@ -64,12 +64,12 @@ export default function FAQ() {
     {
       id: "mobile",
       question: "Is the platform mobile-friendly?",
-      answer: "Yes, AIForecast Hub is fully responsive and optimized for mobile devices. All features, charts, and analytics are accessible on smartphones and tablets, ensuring you can track AI prediction performance wherever you are."
+      answer: "Yes, Coin Feedly is fully responsive and optimized for mobile devices. All features, charts, and analytics are accessible on smartphones and tablets, ensuring you can track AI prediction performance wherever you are."
     },
     {
       id: "contact",
       question: "How can I get in touch or provide feedback?",
-      answer: "We welcome feedback and suggestions for improving AIForecast Hub. You can reach us through our official channels. We're constantly working to enhance the platform based on user needs and market developments."
+      answer: "We welcome feedback and suggestions for improving Coin Feedly. You can reach us through our official channels. We're constantly working to enhance the platform based on user needs and market developments."
     }
   ];
 
@@ -83,7 +83,7 @@ export default function FAQ() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="text-lg font-medium text-foreground">AIForecast Hub</span>
+              <span className="text-lg font-medium text-foreground">Coin Feedly</span>
             </Link>
             
             <NavigationMenu currentPath={location} />
@@ -188,10 +188,10 @@ export default function FAQ() {
           >
             <div className="flex items-center justify-center space-x-3">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="font-semibold text-foreground">AIForecast Hub</span>
+              <span className="font-semibold text-foreground">Coin Feedly</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
-              <p>© 2025 AIForecast Hub</p>
+              <p>© 2025 Coin Feedly</p>
               <p className="text-xs">Loremt ApS CVR-nr 41691360</p>
             </div>
           </motion.div>

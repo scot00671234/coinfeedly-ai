@@ -19,7 +19,7 @@ export default function About() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="text-lg font-medium text-foreground">AIForecast Hub</span>
+              <span className="text-lg font-medium text-foreground">Coin Feedly</span>
             </Link>
             
             <NavigationMenu currentPath={location} />
@@ -39,7 +39,7 @@ export default function About() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6 sm:mb-8 tracking-tight">
-            About AIForecast Hub
+            About Coin Feedly
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
             Transparent AI-powered commodity price prediction platform providing unbiased analysis and performance tracking.
@@ -58,7 +58,7 @@ export default function About() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-foreground leading-relaxed">
-                  AIForecast Hub was created to bring transparency and accountability to AI-powered market predictions. 
+                  Coin Feedly was created to bring transparency and accountability to AI-powered market predictions. 
                   We believe that as artificial intelligence becomes increasingly important in financial decision-making, 
                   there must be reliable, unbiased platforms to evaluate and compare AI model performance.
                 </p>
@@ -125,7 +125,7 @@ export default function About() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-foreground leading-relaxed"> 
-                  AIForecast Hub processes thousands of data points daily to provide accurate, 
+                  Coin Feedly processes thousands of data points daily to provide accurate, 
                   up-to-date performance metrics.
                 </p>
                 <div className="grid md:grid-cols-3 gap-4 mt-6">
@@ -219,10 +219,10 @@ export default function About() {
           >
             <div className="flex items-center justify-center space-x-3">
               <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-              <span className="font-semibold text-foreground">AIForecast Hub</span>
+              <span className="font-semibold text-foreground">Coin Feedly</span>
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
-              <p>© 2025 AIForecast Hub</p>
+              <p>© 2025 Coin Feedly</p>
               <p className="text-xs">Loremt ApS CVR-nr 41691360</p>
             </div>
           </motion.div>
