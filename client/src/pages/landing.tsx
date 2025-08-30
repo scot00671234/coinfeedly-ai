@@ -117,29 +117,13 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="py-12 md:py-20 lg:py-28 px-4 md:px-6 relative overflow-hidden">
-        {/* Animated gradient background */}
-        <motion.div 
-          className="absolute inset-0 w-full h-full"
-          animate={{
-            background: [
-              "linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c)",
-              "linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38f9d7)",
-              "linear-gradient(-45deg, #fa709a, #fee140, #f093fb, #f5576c)",
-              "linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c)"
-            ],
-            backgroundSize: ["400% 400%", "400% 400%", "400% 400%", "400% 400%"],
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%", "100% 50%"]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          style={{
-            opacity: 0.15
-          }}
-        />
-        <div className="absolute inset-0 bg-background/60" />
+        {/* Clean static background */}
+        <div className="absolute inset-0 w-full h-full">
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/50" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(var(--primary)_/_0.1)_0%,_transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(var(--muted-foreground)_/_0.05)_0%,_transparent_50%)]" />
+          <div className="absolute inset-0 backdrop-blur-[0.5px]" />
+        </div>
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div 
             className="space-y-10"
