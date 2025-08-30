@@ -117,13 +117,27 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="py-12 md:py-20 lg:py-28 px-4 md:px-6 relative overflow-hidden">
-        {/* Enhanced gradient blur background */}
-        <div className="absolute inset-0 w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/50" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(var(--primary)_/_0.1)_0%,_transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(var(--muted-foreground)_/_0.05)_0%,_transparent_50%)]" />
+        {/* Animated gradient background */}
+        <motion.div 
+          className="absolute inset-0 w-full h-full"
+          animate={{
+            background: [
+              "linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.3) 25%, hsl(var(--primary)/0.1) 50%, hsl(var(--muted)/0.2) 75%, hsl(var(--background)) 100%)",
+              "linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--primary)/0.15) 25%, hsl(var(--muted)/0.4) 50%, hsl(var(--primary)/0.08) 75%, hsl(var(--background)) 100%)",
+              "linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.2) 25%, hsl(var(--primary)/0.12) 50%, hsl(var(--muted)/0.35) 75%, hsl(var(--background)) 100%)",
+              "linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.3) 25%, hsl(var(--primary)/0.1) 50%, hsl(var(--muted)/0.2) 75%, hsl(var(--background)) 100%)"
+            ]
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(var(--primary)_/_0.08)_0%,_transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(var(--muted-foreground)_/_0.04)_0%,_transparent_50%)]" />
           <div className="absolute inset-0 backdrop-blur-[0.5px]" />
-        </div>
+        </motion.div>
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div 
             className="space-y-10"
