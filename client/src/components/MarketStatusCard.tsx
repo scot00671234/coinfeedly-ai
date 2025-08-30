@@ -25,25 +25,11 @@ export default function MarketStatusCard() {
     try {
       setLoading(true);
       
-      // Determine if market hours (9 AM - 5 PM EST, Mon-Fri)
-      const now = new Date();
-      const hour = now.getHours();
-      const day = now.getDay();
-      const isWeekday = day >= 1 && day <= 5;
-      const isMarketHours = hour >= 9 && hour <= 17;
-      const isMarketOpen = isWeekday && isMarketHours;
+      // Crypto markets are always open 24/7
+      const isMarketOpen = true;
       
-      // Next update time
-      let nextUpdate = 'Next hourly update';
-      if (!isMarketOpen) {
-        if (isWeekday && hour < 9) {
-          nextUpdate = 'Market opens 9 AM';
-        } else if (isWeekday && hour > 17) {
-          nextUpdate = 'Market opens 9 AM tomorrow';
-        } else {
-          nextUpdate = 'Market opens Monday 9 AM';
-        }
-      }
+      // Next data update time
+      const nextUpdate = 'Updates every minute';
       
       setStatus({
         isMarketOpen,
@@ -95,8 +81,7 @@ export default function MarketStatusCard() {
 
   const getStatusText = () => {
     if (status?.systemHealth === 'error') return 'System Issues';
-    if (!status?.isMarketOpen) return 'Market Closed';
-    return 'Market Open';
+    return 'Market Open 24/7';
   };
 
   return (
@@ -119,7 +104,7 @@ export default function MarketStatusCard() {
           <div className="space-y-3">
             <div className="flex justify-between items-center py-2 border-b border-border/30">
               <span className="text-xs text-muted-foreground font-medium">Data Source</span>
-              <span className="text-xs font-semibold text-foreground">Yahoo Finance</span>
+              <span className="text-xs font-semibold text-foreground">CoinGecko</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-border/30">
               <span className="text-xs text-muted-foreground font-medium">Freshness</span>
