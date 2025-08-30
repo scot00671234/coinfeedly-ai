@@ -15,8 +15,8 @@ export const commodities = pgTable("commodities", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull().unique(),
   symbol: text("symbol").notNull().unique(),
-  category: text("category").notNull(), // 'hard' or 'soft'
-  yahooSymbol: text("yahoo_symbol"), // Yahoo Finance symbol mapping
+  category: text("category").notNull(), // 'defi', 'layer1', 'meme', 'payment', etc.
+  coinGeckoId: text("coingecko_id"), // CoinGecko ID for API calls
   unit: text("unit").default("USD"),
 });
 
@@ -39,7 +39,7 @@ export const actualPrices = pgTable("actual_prices", {
   date: timestamp("date").notNull(),
   price: decimal("price", { precision: 10, scale: 4 }).notNull(),
   volume: decimal("volume", { precision: 15, scale: 2 }),
-  source: text("source").default("yahoo_finance"),
+  source: text("source").default("coingecko"),
   createdAt: timestamp("created_at").default(sql`now()`).notNull(),
 });
 

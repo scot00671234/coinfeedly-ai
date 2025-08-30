@@ -48,7 +48,7 @@ export default function Landing() {
     {
       icon: BarChart3Icon,
       title: "Real-Time Data",
-      description: "Live commodity price tracking from Yahoo Finance covering 14 major hard and soft commodities."
+      description: "Live cryptocurrency price tracking from CoinGecko covering 14 major digital assets including Bitcoin, Ethereum, and DeFi tokens."
     },
     {
       icon: TargetIcon,
@@ -58,9 +58,9 @@ export default function Landing() {
   ];
 
   const benefits = [
-    "Track 14 major commodities including Oil, Gold, Coffee, and more",
+    "Track 14 major cryptocurrencies including Bitcoin, Ethereum, Solana, and more",
     "Compare Claude, ChatGPT, and Deepseek prediction accuracy",
-    "Real-time Yahoo Finance price data integration",
+    "Real-time CoinGecko cryptocurrency price data integration",
     "Performance rankings and analytics dashboard", 
     "Historical prediction data and trend analysis",
     "Clean, minimalist interface with dark/light themes"
@@ -74,7 +74,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           <p className="text-sm font-medium">
             <span className="inline-block bg-background/20 text-background px-2 py-1 rounded-full text-xs font-semibold mr-3">New</span>
-            AI Commodity Prediction Platform - Compare Claude, ChatGPT & Deepseek accuracy
+            AI Cryptocurrency Prediction Platform - Compare Claude, ChatGPT & Deepseek accuracy
             <Link href="/dashboard" className="ml-2 underline hover:no-underline font-semibold">
               Try Now →
             </Link>
@@ -140,7 +140,7 @@ export default function Landing() {
               >
                 Compare AI Models on
                 <span className="block text-muted-foreground font-normal mt-1">
-                  Commodity Predictions
+                  Crypto Predictions
                 </span>
               </motion.h1>
               <motion.p 
@@ -150,7 +150,7 @@ export default function Landing() {
                 transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
               >
                 Track and analyze the prediction accuracy of Claude, ChatGPT, and Deepseek 
-                across 14 major commodities with real market data.
+                across 14 major cryptocurrencies with real market data.
               </motion.p>
             </div>
             
@@ -315,7 +315,7 @@ export default function Landing() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                      <h3 className="text-lg font-semibold text-foreground">Gold Price Predictions</h3>
+                      <h3 className="text-lg font-semibold text-foreground">Bitcoin Price Predictions</h3>
                       <span className="text-sm text-muted-foreground bg-muted/40 px-3 py-1 rounded-full">Live Data</span>
                     </div>
                     <div className="flex items-center space-x-4 text-xs">
@@ -341,7 +341,7 @@ export default function Landing() {
                 <div className="p-6">
                   {commodities.length > 0 && (
                     <LandingChart 
-                      commodityId={commodities.find(c => c.name === 'Gold')?.id || commodities[0]?.id} 
+                      commodityId={commodities.find(c => c.name === 'Bitcoin')?.id || commodities[0]?.id} 
                       period="3mo" 
                       height={400} 
                     />
@@ -359,7 +359,7 @@ export default function Landing() {
             viewport={{ once: true, margin: "-50px" }}
           >
             <p className="text-muted-foreground mb-6">
-              Interactive charts with 14 commodities and real-time AI predictions
+              Interactive charts with 14 cryptocurrencies and real-time AI predictions
             </p>
             <Button
               onClick={handleGetStarted}
@@ -393,7 +393,7 @@ export default function Landing() {
               Real-Time Market Data
             </h2>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Live commodity prices powered by our optimized Yahoo Finance integration
+              Live cryptocurrency prices powered by our optimized CoinGecko integration
             </p>
           </motion.div>
           
@@ -425,7 +425,7 @@ export default function Landing() {
           {commodities.length > 8 && (
             <div className="text-center">
               <p className="text-muted-foreground mb-6">
-                + {commodities.length - 8} more commodities tracked
+                + {commodities.length - 8} more cryptocurrencies tracked
               </p>
               <Button
                 onClick={handleGetStarted}

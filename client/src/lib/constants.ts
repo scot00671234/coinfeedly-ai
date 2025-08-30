@@ -4,9 +4,12 @@ export const AI_MODELS = {
   DEEPSEEK: { name: "Deepseek", color: "#8B5CF6", provider: "Deepseek AI" }
 };
 
-export const COMMODITY_CATEGORIES = {
-  HARD: "hard",
-  SOFT: "soft"
+export const CRYPTO_CATEGORIES = {
+  LAYER1: "layer1",
+  DEFI: "defi", 
+  PAYMENT: "payment",
+  LAYER2: "layer2",
+  MEME: "meme"
 } as const;
 
 export const TIME_PERIODS = {

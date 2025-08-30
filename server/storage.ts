@@ -598,22 +598,24 @@ export class DatabaseStorage implements IStorage {
 
       // Initialize Commodities
       const defaultCommodities = [
-        // Hard Commodities
-        { name: "Crude Oil", symbol: "WTI", category: "hard", yahooSymbol: "CL=F", unit: "USD/barrel" },
-        { name: "Gold", symbol: "XAU", category: "hard", yahooSymbol: "GC=F", unit: "USD/oz" },
-        { name: "Natural Gas", symbol: "NG", category: "hard", yahooSymbol: "NG=F", unit: "USD/MMBtu" },
-        { name: "Copper", symbol: "HG", category: "hard", yahooSymbol: "HG=F", unit: "USD/lb" },
-        { name: "Silver", symbol: "XAG", category: "hard", yahooSymbol: "SI=F", unit: "USD/oz" },
-        { name: "Aluminum", symbol: "ALU", category: "hard", yahooSymbol: "ALI=F", unit: "USD/tonne" },
-        { name: "Platinum", symbol: "XPT", category: "hard", yahooSymbol: "PL=F", unit: "USD/oz" },
-        { name: "Palladium", symbol: "XPD", category: "hard", yahooSymbol: "PA=F", unit: "USD/oz" },
-        // Soft Commodities
-        { name: "Coffee", symbol: "KC", category: "soft", yahooSymbol: "KC=F", unit: "USD/lb" },
-        { name: "Sugar", symbol: "SB", category: "soft", yahooSymbol: "SB=F", unit: "USD/lb" },
-        { name: "Corn", symbol: "ZC", category: "soft", yahooSymbol: "ZC=F", unit: "USD/bushel" },
-        { name: "Soybeans", symbol: "ZS", category: "soft", yahooSymbol: "ZS=F", unit: "USD/bushel" },
-        { name: "Cotton", symbol: "CT", category: "soft", yahooSymbol: "CT=F", unit: "USD/lb" },
-        { name: "Wheat", symbol: "ZW", category: "soft", yahooSymbol: "ZW=F", unit: "USD/bushel" }
+        // Layer 1 Cryptocurrencies
+        { name: "Bitcoin", symbol: "BTC", category: "layer1", coinGeckoId: "bitcoin", unit: "USD" },
+        { name: "Ethereum", symbol: "ETH", category: "layer1", coinGeckoId: "ethereum", unit: "USD" },
+        { name: "Solana", symbol: "SOL", category: "layer1", coinGeckoId: "solana", unit: "USD" },
+        { name: "Cardano", symbol: "ADA", category: "layer1", coinGeckoId: "cardano", unit: "USD" },
+        { name: "Avalanche", symbol: "AVAX", category: "layer1", coinGeckoId: "avalanche-2", unit: "USD" },
+        // DeFi Cryptocurrencies  
+        { name: "Chainlink", symbol: "LINK", category: "defi", coinGeckoId: "chainlink", unit: "USD" },
+        { name: "Uniswap", symbol: "UNI", category: "defi", coinGeckoId: "uniswap", unit: "USD" },
+        { name: "Aave", symbol: "AAVE", category: "defi", coinGeckoId: "aave", unit: "USD" },
+        // Payment & Utility
+        { name: "XRP", symbol: "XRP", category: "payment", coinGeckoId: "ripple", unit: "USD" },
+        { name: "Litecoin", symbol: "LTC", category: "payment", coinGeckoId: "litecoin", unit: "USD" },
+        { name: "Polygon", symbol: "MATIC", category: "layer2", coinGeckoId: "matic-network", unit: "USD" },
+        { name: "Polkadot", symbol: "DOT", category: "layer1", coinGeckoId: "polkadot", unit: "USD" },
+        // Meme & Community
+        { name: "Dogecoin", symbol: "DOGE", category: "meme", coinGeckoId: "dogecoin", unit: "USD" },
+        { name: "Shiba Inu", symbol: "SHIB", category: "meme", coinGeckoId: "shiba-inu", unit: "USD" }
       ];
 
       await db.insert(commodities).values(defaultCommodities);
@@ -656,10 +658,10 @@ export class DatabaseStorage implements IStorage {
     if (!this.isDbConnected) {
       // Return mock data for development
       return [
-        { id: "1", name: "Gold", symbol: "XAU", category: "hard", yahooSymbol: "GC=F", unit: "USD/oz" },
-        { id: "2", name: "Crude Oil", symbol: "CL", category: "hard", yahooSymbol: "CL=F", unit: "USD/barrel" },
-        { id: "3", name: "Coffee", symbol: "KC", category: "soft", yahooSymbol: "KC=F", unit: "USD/lb" },
-        { id: "4", name: "Corn", symbol: "ZC", category: "soft", yahooSymbol: "ZC=F", unit: "USD/bushel" }
+        { id: "1", name: "Bitcoin", symbol: "BTC", category: "layer1", coinGeckoId: "bitcoin", unit: "USD" },
+        { id: "2", name: "Ethereum", symbol: "ETH", category: "layer1", coinGeckoId: "ethereum", unit: "USD" },
+        { id: "3", name: "Solana", symbol: "SOL", category: "layer1", coinGeckoId: "solana", unit: "USD" },
+        { id: "4", name: "Cardano", symbol: "ADA", category: "layer1", coinGeckoId: "cardano", unit: "USD" }
       ];
     }
     return await db.select().from(commodities);
@@ -675,7 +677,7 @@ export class DatabaseStorage implements IStorage {
 
   async getCommodityBySymbol(symbol: string): Promise<Commodity | undefined> {
     const [commodity] = await db.select().from(commodities).where(
-      sql`${commodities.symbol} = ${symbol} OR ${commodities.yahooSymbol} = ${symbol}`
+      sql`${commodities.symbol} = ${symbol} OR ${commodities.coinGeckoId} = ${symbol}`
     );
     return commodity || undefined;
   }
@@ -1033,36 +1035,36 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Add missing Yahoo Finance update methods
-  async updateAllCommodityPricesFromYahoo(): Promise<void> {
-    console.log("Updating all commodity prices from Yahoo Finance...");
+  async updateAllCommodityPricesFromCoinGecko(): Promise<void> {
+    console.log("Updating all cryptocurrency prices from CoinGecko...");
     const commodities = await this.getCommodities();
     for (const commodity of commodities) {
       try {
-        await this.updateSingleCommodityPricesFromYahoo(commodity.id);
+        await this.updateSingleCommodityPricesFromCoinGecko(commodity.id);
       } catch (error) {
         console.error(`Failed to update prices for ${commodity.name}:`, error);
       }
     }
   }
 
-  async updateSingleCommodityPricesFromYahoo(commodityId: string): Promise<void> {
+  async updateSingleCommodityPricesFromCoinGecko(commodityId: string): Promise<void> {
     if (!this.isDbConnected) {
-      console.log("Database not connected, skipping Yahoo Finance update");
+      console.log("Database not connected, skipping CoinGecko update");
       return;
     }
     
     const commodity = await this.getCommodity(commodityId);
-    if (!commodity || !commodity.yahooSymbol) {
-      console.log(`No Yahoo symbol for commodity ${commodityId}`);
+    if (!commodity || !commodity.coinGeckoId) {
+      console.log(`No CoinGecko ID for commodity ${commodityId}`);
       return;
     }
 
     try {
-      // This would integrate with your yahoo finance service
+      // This would integrate with your CoinGecko service
       // For now, just log the attempt
-      console.log(`Updating prices for ${commodity.name} (${commodity.yahooSymbol})`);
+      console.log(`Updating prices for ${commodity.name} (${commodity.coinGeckoId})`);
     } catch (error) {
-      console.error(`Yahoo Finance update failed for ${commodity.name}:`, error);
+      console.error(`CoinGecko update failed for ${commodity.name}:`, error);
     }
   }
 

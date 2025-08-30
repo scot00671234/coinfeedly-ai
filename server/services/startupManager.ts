@@ -48,12 +48,12 @@ export class StartupManager {
       try {
         console.log('🔄 Starting background price data initialization...');
         
-        // Initialize Yahoo Finance data
-        const { yahooFinanceService } = await import('./yahooFinance');
+        // Initialize CoinGecko crypto data
+        const { coinGeckoService } = await import('./coinGeckoService');
         
         for (const commodity of commodities) {
           try {
-            await yahooFinanceService.updateCommodityPrices(commodity.id);
+            await coinGeckoService.updateCryptoPrices(commodity.id);
           } catch (error) {
             console.log(`⚠️ Could not initialize prices for ${commodity.name}:`, (error as Error).message);
           }
