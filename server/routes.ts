@@ -512,18 +512,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Commodity not found" });
       }
 
-      if (commodity.yahooSymbol) {
-        // 🚀 Use cached data instead of direct Yahoo Finance calls
-        // This eliminates 50k API calls per user and uses shared cached data
-        const cachedPriceData = await yahooFinanceCacheService.getCachedCurrentPrice(commodity.yahooSymbol);
+      if (commodity.coinGeckoId) {
+        // 🚀 Use CoinGecko API to fetch real crypto prices
+        const { coinGeckoService } = await import('./services/coinGeckoService');
+        const cryptoPriceData = await coinGeckoService.getCurrentPrice(commodity.coinGeckoId);
         
-        if (cachedPriceData) {
+        if (cryptoPriceData) {
           res.json({
-            price: cachedPriceData.price,
-            change: cachedPriceData.change,
-            changePercent: cachedPriceData.changePercent,
-            timestamp: cachedPriceData.timestamp.toISOString(),
-            cached: true // Indicate this is cached data
+            price: cryptoPriceData.price,
+            change: cryptoPriceData.change || 0,
+            changePercent: cryptoPriceData.changePercent || 0,
+            timestamp: new Date().toISOString(),
+            cached: false // Live CoinGecko data
           });
         } else {
           // Fallback to latest stored price
@@ -548,8 +548,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const period = req.query.period as string || "1d";
       
       const commodity = await storage.getCommodity(commodityId);
-      if (!commodity?.yahooSymbol) {
-        return res.status(404).json({ message: "Yahoo symbol not available" });
+      if (!commodity?.coinGeckoId) {
+        return res.status(404).json({ message: "CoinGecko ID not available" });
       }
 
       // Trigger real-time data update

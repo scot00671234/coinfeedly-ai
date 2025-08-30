@@ -91,18 +91,18 @@ export function LivePriceCard({ commodityId, name, symbol, unit, className = "" 
             <h3 className="font-semibold text-sm text-foreground">{name}</h3>
             <p className="text-xs text-muted-foreground">{symbol}</p>
           </div>
-          {getTrendIcon(priceData.change)}
+          {getTrendIcon(priceData.change || 0)}
         </div>
         <div>
           <p className="text-lg font-bold text-foreground">
             {formatPrice(priceData.price, unit)}
           </p>
           <div className="flex items-center space-x-2 text-xs">
-            <span className={getTrendColor(priceData.change)}>
-              {priceData.change > 0 ? '+' : ''}{priceData.change.toFixed(2)}
+            <span className={getTrendColor(priceData.change || 0)}>
+              {(priceData.change || 0) > 0 ? '+' : ''}{(priceData.change || 0).toFixed(2)}
             </span>
-            <span className={getTrendColor(priceData.changePercent)}>
-              ({priceData.changePercent > 0 ? '+' : ''}{priceData.changePercent.toFixed(2)}%)
+            <span className={getTrendColor(priceData.changePercent || 0)}>
+              ({(priceData.changePercent || 0) > 0 ? '+' : ''}{(priceData.changePercent || 0).toFixed(2)}%)
             </span>
           </div>
         </div>
