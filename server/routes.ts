@@ -279,23 +279,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Commodities
-  app.get("/api/commodities", async (req, res) => {
+  // Cryptocurrencies
+  app.get("/api/cryptocurrencies", async (req, res) => {
     try {
-      const commodities = await storage.getCommodities();
-      res.json(commodities);
+      const cryptocurrencies = await storage.getCryptocurrencies();
+      res.json(cryptocurrencies);
     } catch (error) {
-      console.error("Error fetching commodities:", error);
-      res.status(500).json({ message: "Failed to fetch commodities" });
+      console.error("Error fetching cryptocurrencies:", error);
+      res.status(500).json({ message: "Failed to fetch cryptocurrencies" });
     }
   });
 
   // Chart Data
-  app.get("/api/commodities/:id/chart/:days", async (req, res) => {
+  app.get("/api/cryptocurrencies/:id/chart/:days", async (req, res) => {
     try {
-      const commodityId = req.params.id;
+      const cryptocurrencyId = req.params.id;
       const days = parseInt(req.params.days) || 7;
-      const chartData = await storage.getChartData(commodityId, days);
+      const chartData = await storage.getChartData(cryptocurrencyId, days);
       res.json(chartData);
     } catch (error) {
       console.error("Error fetching chart data:", error);
@@ -304,15 +304,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Unified Chart Data - Returns historical data and future predictions combined
-  app.get("/api/commodities/:id/chart-with-predictions/:period", async (req, res) => {
+  app.get("/api/cryptocurrencies/:id/chart-with-predictions/:period", async (req, res) => {
     try {
-      const commodityId = req.params.id;
+      const cryptocurrencyId = req.params.id;
       const period = req.params.period || "1mo";
       
-      // Get commodity to access CoinGecko ID
-      const commodity = await storage.getCommodity(commodityId);
-      if (!commodity) {
-        return res.status(404).json({ message: "Commodity not found" });
+      // Get cryptocurrency to access CoinGecko ID
+      const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
+      if (!cryptocurrency) {
+        return res.status(404).json({ message: "Cryptocurrency not found" });
       }
 
       // Get AI models for predictions

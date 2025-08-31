@@ -76,14 +76,14 @@ export class CategoryCompositeService {
         });
         
         results.push({
-          commodity,
+          cryptocurrency,
           predictions: recentPredictions
         });
       } catch (error) {
-        console.error(`Error getting predictions for ${commodity.name}:`, error);
-        // Include commodity with empty predictions to maintain category balance
+        console.error(`Error getting predictions for ${cryptocurrency.name}:`, error);
+        // Include cryptocurrency with empty predictions to maintain category balance
         results.push({
-          commodity,
+          cryptocurrency,
           predictions: []
         });
       }

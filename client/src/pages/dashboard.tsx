@@ -12,21 +12,21 @@ import PredictionStatsCard from "@/components/PredictionStatsCard";
 import MarketStatusCard from "@/components/MarketStatusCard";
 import BottomBanner from "@/components/ads/BottomBanner";
 import { motion } from "framer-motion";
-import type { Commodity } from "@shared/schema";
+import type { Cryptocurrency } from "@shared/schema";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [location] = useLocation();
 
-  const { data: commodities = [] } = useQuery<Commodity[]>({
-    queryKey: ["/api/commodities"],
+  const { data: cryptocurrencies = [] } = useQuery<Cryptocurrency[]>({
+    queryKey: ["/api/cryptocurrencies"],
   });
 
-  // Filter commodities based on search query
-  const filteredCommodities = commodities.filter(commodity =>
-    commodity.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    commodity.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    commodity.category.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter cryptocurrencies based on search query
+  const filteredCryptocurrencies = cryptocurrencies.filter(cryptocurrency =>
+    cryptocurrency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    cryptocurrency.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    cryptocurrency.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -63,19 +63,19 @@ export default function Dashboard() {
                 />
                 {searchQuery && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-lg shadow-2xl ring-1 ring-slate-900/10 dark:ring-slate-100/20 max-h-60 overflow-y-auto z-50">
-                    {filteredCommodities.length > 0 ? (
-                      filteredCommodities.map(commodity => (
+                    {filteredCryptocurrencies.length > 0 ? (
+                      filteredCryptocurrencies.map(cryptocurrency => (
                         <div
-                          key={commodity.id}
+                          key={cryptocurrency.id}
                           className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer border-b border-slate-100 dark:border-slate-700 last:border-b-0 transition-colors duration-150"
                           onClick={() => {
                             // Don't clear search query - keep the filtering active
                             // Better scroll targeting - look for the commodity card more reliably
-                            const commodityCard = document.querySelector(`[data-commodity-id="${commodity.id}"]`) || 
-                                                 document.getElementById(`commodity-${commodity.id}`) ||
-                                                 document.querySelector(`[data-testid="commodity-card-${commodity.id}"]`);
-                            if (commodityCard) {
-                              commodityCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            const cryptocurrencyCard = document.querySelector(`[data-cryptocurrency-id="${cryptocurrency.id}"]`) || 
+                                                 document.getElementById(`cryptocurrency-${cryptocurrency.id}`) ||
+                                                 document.querySelector(`[data-testid="cryptocurrency-card-${cryptocurrency.id}"]`);
+                            if (cryptocurrencyCard) {
+                              cryptocurrencyCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             } else {
                               // Fallback: scroll to all cryptocurrencies section
                               document.querySelector('[data-testid="all-cryptocurrencies-section"]')?.scrollIntoView({ behavior: 'smooth' });
@@ -87,15 +87,15 @@ export default function Dashboard() {
                               searchInput?.blur();
                             }, 100);
                           }}
-                          data-testid={`search-result-${commodity.id}`}
+                          data-testid={`search-result-${cryptocurrency.id}`}
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="font-semibold text-slate-900 dark:text-white">{commodity.name}</p>
-                              <p className="text-sm text-slate-600 dark:text-slate-400">{commodity.symbol} • {commodity.category}</p>
+                              <p className="font-semibold text-slate-900 dark:text-white">{cryptocurrency.name}</p>
+                              <p className="text-sm text-slate-600 dark:text-slate-400">{cryptocurrency.symbol} • {cryptocurrency.category}</p>
                             </div>
                             <div className="text-sm text-slate-500 dark:text-slate-500 font-medium">
-                              {commodity.unit}
+                              {cryptocurrency.unit}
                             </div>
                           </div>
                         </div>
@@ -184,7 +184,7 @@ export default function Dashboard() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             viewport={{ once: true, margin: "-50px" }}
           >
-            <AllCommoditiesView filteredCommodities={searchQuery ? filteredCommodities : undefined} />
+            <AllCommoditiesView filteredCryptocurrencies={searchQuery ? filteredCryptocurrencies : undefined} />
           </motion.div>
         </div>
       </main>

@@ -1,8 +1,8 @@
 import { 
   type AiModel, 
   type InsertAiModel,
-  type Commodity,
-  type InsertCommodity,
+  type Cryptocurrency,
+  type InsertCryptocurrency,
   type Prediction,
   type InsertPrediction,
   type ActualPrice,
@@ -17,7 +17,7 @@ import {
   type LeagueTableEntry,
   type ChartDataPoint,
   aiModels,
-  commodities,
+  cryptocurrencies,
   predictions,
   actualPrices,
   accuracyMetrics,
@@ -34,25 +34,25 @@ export interface IStorage {
   getAiModel(id: string): Promise<AiModel | undefined>;
   createAiModel(model: InsertAiModel): Promise<AiModel>;
 
-  // Commodities
-  getCommodities(): Promise<Commodity[]>;
-  getCommodity(id: string): Promise<Commodity | undefined>;
-  getCommodityBySymbol(symbol: string): Promise<Commodity | undefined>;
-  createCommodity(commodity: InsertCommodity): Promise<Commodity>;
+  // Cryptocurrencies
+  getCryptocurrencies(): Promise<Cryptocurrency[]>;
+  getCryptocurrency(id: string): Promise<Cryptocurrency | undefined>;
+  getCryptocurrencyBySymbol(symbol: string): Promise<Cryptocurrency | undefined>;
+  createCryptocurrency(cryptocurrency: InsertCryptocurrency): Promise<Cryptocurrency>;
 
   // Predictions
-  getPredictions(commodityId?: string, aiModelId?: string, timeframe?: string): Promise<Prediction[]>;
-  getPredictionsByCommodity(commodityId: string, timeframe?: string): Promise<Prediction[]>;
+  getPredictions(cryptocurrencyId?: string, aiModelId?: string, timeframe?: string): Promise<Prediction[]>;
+  getPredictionsByCryptocurrency(cryptocurrencyId: string, timeframe?: string): Promise<Prediction[]>;
   createPrediction(prediction: InsertPrediction): Promise<Prediction>;
   insertPrediction(prediction: InsertPrediction): Promise<Prediction>;
   getPredictionsByTimeframe(timeframe: string): Promise<Prediction[]>;
   getPredictionsByTimeframeCommodity(commodityId: string, timeframe: string): Promise<Prediction[]>;
 
   // Actual Prices
-  getActualPrices(commodityId: string, limit?: number): Promise<ActualPrice[]>;
+  getActualPrices(cryptocurrencyId: string, limit?: number): Promise<ActualPrice[]>;
   createActualPrice(price: InsertActualPrice): Promise<ActualPrice>;
   insertActualPrice(price: InsertActualPrice): Promise<ActualPrice>;
-  getLatestPrice(commodityId: string): Promise<ActualPrice | undefined>;
+  getLatestPrice(cryptocurrencyId: string): Promise<ActualPrice | undefined>;
 
   // Accuracy Metrics
   getAccuracyMetrics(period: string): Promise<AccuracyMetric[]>;
@@ -70,11 +70,11 @@ export interface IStorage {
   // Dashboard Data
   getDashboardStats(): Promise<DashboardStats>;
   getLeagueTable(period: string): Promise<LeagueTableEntry[]>;
-  getChartData(commodityId: string, days: number): Promise<ChartDataPoint[]>;
+  getChartData(cryptocurrencyId: string, days: number): Promise<ChartDataPoint[]>;
   
   // Timeframe-specific predictions
   getPredictionsByTimeframe(timeframe: string): Promise<Prediction[]>;
-  getPredictionsByTimeframeCommodity(commodityId: string, timeframe: string): Promise<Prediction[]>;
+  getPredictionsByTimeframeCryptocurrency(cryptocurrencyId: string, timeframe: string): Promise<Prediction[]>;
   
   // Raw SQL queries for complex calculations
   rawQuery(query: string, params?: any[]): Promise<{ rows: any[] }>;
@@ -651,7 +651,7 @@ export class DatabaseStorage implements IStorage {
     return model;
   }
 
-  async getCommodities(): Promise<Commodity[]> {
+  async getCryptocurrencies(): Promise<Cryptocurrency[]> {
     // Ensure initialization is complete before accessing database
     await this.initializationPromise;
     
@@ -664,27 +664,27 @@ export class DatabaseStorage implements IStorage {
         { id: "4", name: "Cardano", symbol: "ADA", category: "layer1", coinGeckoId: "cardano", unit: "USD" }
       ];
     }
-    return await db.select().from(commodities);
+    return await db.select().from(cryptocurrencies);
   }
 
-  async getCommodity(id: string): Promise<Commodity | undefined> {
+  async getCryptocurrency(id: string): Promise<Cryptocurrency | undefined> {
     if (!this.isDbConnected) {
       throw new Error("Database connection required");
     }
-    const [commodity] = await db.select().from(commodities).where(eq(commodities.id, id));
-    return commodity || undefined;
+    const [cryptocurrency] = await db.select().from(cryptocurrencies).where(eq(cryptocurrencies.id, id));
+    return cryptocurrency || undefined;
   }
 
-  async getCommodityBySymbol(symbol: string): Promise<Commodity | undefined> {
-    const [commodity] = await db.select().from(commodities).where(
-      sql`${commodities.symbol} = ${symbol} OR ${commodities.coinGeckoId} = ${symbol}`
+  async getCryptocurrencyBySymbol(symbol: string): Promise<Cryptocurrency | undefined> {
+    const [cryptocurrency] = await db.select().from(cryptocurrencies).where(
+      sql`${cryptocurrencies.symbol} = ${symbol} OR ${cryptocurrencies.coinGeckoId} = ${symbol}`
     );
-    return commodity || undefined;
+    return cryptocurrency || undefined;
   }
 
-  async createCommodity(insertCommodity: InsertCommodity): Promise<Commodity> {
-    const [commodity] = await db.insert(commodities).values(insertCommodity).returning();
-    return commodity;
+  async createCryptocurrency(insertCryptocurrency: InsertCryptocurrency): Promise<Cryptocurrency> {
+    const [cryptocurrency] = await db.insert(cryptocurrencies).values(insertCryptocurrency).returning();
+    return cryptocurrency;
   }
 
   async getPredictions(commodityId?: string, aiModelId?: string, timeframe?: string): Promise<Prediction[]> {

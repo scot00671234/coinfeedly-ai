@@ -29,12 +29,12 @@ export class StartupManager {
     console.log('⚡ Starting heavy initialization (background)...');
     
     try {
-      // Get commodities from verified database
-      const commodities = await this.storage.getCommodities();
-      console.log(`📊 Found ${commodities.length} commodities in database`);
+      // Get cryptocurrencies from verified database
+      const cryptocurrencies = await this.storage.getCryptocurrencies();
+      console.log(`📊 Found ${cryptocurrencies.length} cryptocurrencies in database`);
       
       // Initialize price data in background (don't block startup)
-      this.initializePricesInBackground(commodities);
+      this.initializePricesInBackground(cryptocurrencies);
       
     } catch (error) {
       console.error('❌ Heavy initialization failed (non-critical):', error);
@@ -42,7 +42,7 @@ export class StartupManager {
     }
   }
 
-  private initializePricesInBackground(commodities: any[]): void {
+  private initializePricesInBackground(cryptocurrencies: any[]): void {
     // Run in background without blocking startup
     setTimeout(async () => {
       try {
@@ -51,11 +51,11 @@ export class StartupManager {
         // Initialize CoinGecko crypto data
         const { coinGeckoService } = await import('./coinGeckoService');
         
-        for (const commodity of commodities) {
+        for (const cryptocurrency of cryptocurrencies) {
           try {
-            await coinGeckoService.updateCryptoPrices(commodity.id);
+            await coinGeckoService.updateCryptoPrices(cryptocurrency.id);
           } catch (error) {
-            console.log(`⚠️ Could not initialize prices for ${commodity.name}:`, (error as Error).message);
+            console.log(`⚠️ Could not initialize prices for ${cryptocurrency.name}:`, (error as Error).message);
           }
         }
         
