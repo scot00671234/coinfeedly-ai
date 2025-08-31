@@ -24,12 +24,12 @@ export default function FAQ() {
     {
       id: "models", 
       question: "Which AI models do you track and why?",
-      answer: "We currently track Claude (Anthropic), ChatGPT (OpenAI), and Deepseek. These models were chosen for their advanced reasoning capabilities, market analysis skills, and widespread adoption. We plan to add more AI models as they become available and demonstrate commodity prediction capabilities."
+      answer: "We currently track Claude (Anthropic), ChatGPT (OpenAI), and Deepseek. These models were chosen for their advanced reasoning capabilities, market analysis skills, and widespread adoption. We plan to add more AI models as they become available and demonstrate cryptocurrency prediction capabilities."
     },
     {
       id: "data-sources",
       question: "Where does your price data come from?",
-      answer: "All commodity price data is sourced directly from Yahoo Finance API, providing real-time and historical market data. This ensures consistency, reliability, and industry-standard pricing information for accurate prediction evaluation."
+      answer: "All cryptocurrency price data is sourced from reliable market data providers including CoinGecko API, providing real-time and historical market data. This ensures consistency, reliability, and industry-standard pricing information for accurate prediction evaluation."
     },
     {
       id: "prediction-frequency",
@@ -37,9 +37,9 @@ export default function FAQ() {
       answer: "New AI predictions are generated monthly on the 1st of each month. This provides sufficient time for meaningful price movements while maintaining a robust dataset for accuracy analysis. Each prediction includes 3, 6, 9, and 12-month forecasts."
     },
     {
-      id: "commodities",
-      question: "What commodities do you track?",
-      answer: "We track 14 major commodities across multiple categories: Energy (Crude Oil, Natural Gas), Precious Metals (Gold, Silver, Platinum, Palladium), Industrial Metals (Copper, Aluminum), and Soft Commodities (Coffee, Sugar, Corn, Soybeans, Cotton, Wheat)."
+      id: "cryptocurrencies",
+      question: "What cryptocurrencies do you track?",
+      answer: "We track major cryptocurrencies across multiple categories: Layer 1 (Bitcoin, Ethereum, Solana, Cardano), DeFi Tokens (Uniswap, Aave, Compound), Layer 2 Solutions (Polygon, Arbitrum), and Stablecoins (USDC, USDT). Our focus is on established cryptocurrencies with significant market capitalization and trading volume."
     },
     {
       id: "free-access",
@@ -49,12 +49,12 @@ export default function FAQ() {
     {
       id: "methodology",
       question: "What methodology do AI models use for predictions?",
-      answer: "Each AI model analyzes multiple factors including historical price patterns, market trends, economic indicators, geopolitical events, and supply/demand dynamics. The specific prompts and analysis frameworks are designed to ensure comprehensive market evaluation while maintaining consistency across models."
+      answer: "Each AI model analyzes multiple factors including historical price patterns, market trends, blockchain metrics, adoption indicators, regulatory developments, and market sentiment. The specific prompts and analysis frameworks are designed to ensure comprehensive crypto market evaluation while maintaining consistency across models."
     },
     {
       id: "reliability",
-      question: "How reliable are AI commodity predictions?",
-      answer: "AI predictions should be viewed as analytical tools rather than guaranteed forecasts. Our platform's purpose is to track and compare AI model performance transparently. Historical accuracy data helps users understand which models perform better under different market conditions, but no prediction system is infallible."
+      question: "How reliable are AI cryptocurrency predictions?",
+      answer: "AI predictions should be viewed as analytical tools rather than guaranteed forecasts. Our platform's purpose is to track and compare AI model performance transparently. Historical accuracy data helps users understand which models perform better under different crypto market conditions, but no prediction system is infallible."
     },
     {
       id: "updates",
@@ -106,7 +106,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-            Everything you need to know about AI commodity prediction tracking and platform functionality.
+            Everything you need to know about AI cryptocurrency prediction tracking and platform functionality.
           </p>
         </motion.section>
 
