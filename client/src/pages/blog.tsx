@@ -18,10 +18,10 @@ interface BlogPost {
 
 const blogPosts: BlogPost[] = [
   {
-    id: "ai-commodity-forecasting",
-    title: "The Future of AI-Powered Commodity Forecasting",
-    excerpt: "How artificial intelligence is revolutionizing commodity price predictions and what this means for traders and investors.",
-    content: "In an era where artificial intelligence is reshaping industries, commodity trading stands at the forefront of this transformation...",
+    id: "ai-crypto-forecasting",
+    title: "The Future of AI-Powered Cryptocurrency Forecasting",
+    excerpt: "How artificial intelligence is revolutionizing crypto price predictions and what this means for traders and investors.",
+    content: "In an era where artificial intelligence is reshaping industries, cryptocurrency trading stands at the forefront of this transformation...",
     publishedDate: "August 23, 2025",
     readTime: "6 min read",
     category: "AI & Markets"
@@ -65,7 +65,7 @@ export default function Blog() {
             Blog
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Insights, analysis, and perspectives on AI-powered commodity forecasting
+            Insights, analysis, and perspectives on AI-powered cryptocurrency forecasting
           </p>
         </motion.div>
 

@@ -207,7 +207,7 @@ export default function Analysis() {
               Analysis
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-              Real-time market sentiment and AI-powered commodity indices for comprehensive market analysis
+              Real-time market sentiment and AI-powered cryptocurrency indices for comprehensive market analysis
             </p>
           </motion.div>
 
@@ -225,7 +225,7 @@ export default function Analysis() {
                 <IndexGauge
                   value={parseFloat(overallComposite?.overallIndex || '50')}
                   title="AI Composite Index"
-                  subtitle="All Commodities"
+                  subtitle="All Cryptocurrencies"
                   classification={
                     parseFloat(overallComposite?.overallIndex || '50') >= 75 ? "Extremely Bullish" :
                     parseFloat(overallComposite?.overallIndex || '50') >= 60 ? "Bullish" :
@@ -263,8 +263,8 @@ export default function Analysis() {
               ) : (
                 <IndexGauge
                   value={parseFloat(latestCompositeIndex?.hardCommoditiesIndex || '50')}
-                  title="Hard Commodities"
-                  subtitle="Metals & Energy"
+                  title="Layer 1 Cryptos"
+                  subtitle="Bitcoin & Ethereum"
                   classification={
                     parseFloat(latestCompositeIndex?.hardCommoditiesIndex || '50') >= 75 ? "Very Bullish" :
                     parseFloat(latestCompositeIndex?.hardCommoditiesIndex || '50') >= 60 ? "Bullish" :
@@ -285,8 +285,8 @@ export default function Analysis() {
               ) : (
                 <IndexGauge
                   value={parseFloat(latestCompositeIndex?.softCommoditiesIndex || '50')}
-                  title="Soft Commodities"
-                  subtitle="Agriculture & Food"
+                  title="DeFi & Altcoins"
+                  subtitle="Alternative Cryptocurrencies"
                   classification={
                     parseFloat(latestCompositeIndex?.softCommoditiesIndex || '50') >= 75 ? "Very Bullish" :
                     parseFloat(latestCompositeIndex?.softCommoditiesIndex || '50') >= 60 ? "Bullish" :
@@ -311,7 +311,7 @@ export default function Analysis() {
                 Complete Data Export
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
-                Download a comprehensive Excel report containing all AI prediction data, commodity information, and model performance metrics across all timeframes.
+                Download a comprehensive Excel report containing all AI prediction data, cryptocurrency information, and model performance metrics across all timeframes.
               </p>
               
               <motion.div
@@ -331,7 +331,7 @@ export default function Analysis() {
                 </Button>
                 
                 <div className="mt-4 text-sm text-muted-foreground">
-                  <p>Includes: All predictions • Commodities data • AI model information • Historical performance</p>
+                  <p>Includes: All predictions • Cryptocurrency data • AI model information • Historical performance</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -345,16 +345,16 @@ export default function Analysis() {
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl">
-              {selectedIndex === "composite" && "AI Commodity Composite Index Methodology"}
+              {selectedIndex === "composite" && "AI Cryptocurrency Composite Index Methodology"}
               {selectedIndex === "feargreed" && "Fear & Greed Index Methodology"}
-              {selectedIndex === "hard" && "Hard Commodities Index Methodology"}
-              {selectedIndex === "soft" && "Soft Commodities Index Methodology"}
+              {selectedIndex === "hard" && "Layer 1 Cryptos Index Methodology"}
+              {selectedIndex === "soft" && "DeFi & Altcoins Index Methodology"}
             </DialogTitle>
             <DialogDescription>
               {selectedIndex === "composite" && "Understanding how we combine multiple AI model predictions into a single market intelligence score"}
               {selectedIndex === "feargreed" && "How we measure market sentiment using volatility and behavioral indicators"}
-              {selectedIndex === "hard" && "AI-powered analysis focused on metals, energy, and industrial commodities"}
-              {selectedIndex === "soft" && "AI-powered analysis focused on agricultural and food commodities"}
+              {selectedIndex === "hard" && "AI-powered analysis focused on Bitcoin, Ethereum, and major layer 1 cryptocurrencies"}
+              {selectedIndex === "soft" && "AI-powered analysis focused on DeFi tokens, altcoins, and alternative cryptocurrencies"}
             </DialogDescription>
           </DialogHeader>
 
@@ -386,11 +386,11 @@ export default function Analysis() {
                 <div>
                   <h3 className="text-lg font-semibold mb-3">Data Sources</h3>
                   <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Claude AI predictions across all commodity categories</li>
+                    <li>• Claude AI predictions across all cryptocurrency categories</li>
                     <li>• ChatGPT (GPT-4) price forecasts and market analysis</li>
                     <li>• DeepSeek AI predictions with confidence intervals</li>
                     <li>• Historical accuracy weighting based on past performance</li>
-                    <li>• Real-time price data from Yahoo Finance API</li>
+                    <li>• Real-time price data from CoinGecko API</li>
                   </ul>
                 </div>
 
@@ -456,20 +456,20 @@ export default function Analysis() {
                   <h3 className="text-lg font-semibold mb-3">Category-Specific Analysis</h3>
                   <div className="p-3 bg-muted/20 rounded-lg mb-4">
                     <span className="font-medium">
-                      {selectedIndex === "hard" ? "Hard Commodities Include:" : "Soft Commodities Include:"}
+                      {selectedIndex === "hard" ? "Layer 1 Cryptocurrencies Include:" : "DeFi & Altcoins Include:"}
                     </span>
                     <ul className="text-sm text-muted-foreground mt-2 space-y-1">
                       {selectedIndex === "hard" ? (
                         <>
-                          <li>• Crude Oil, Natural Gas (Energy)</li>
-                          <li>• Gold, Silver, Copper (Precious & Base Metals)</li>
-                          <li>• Aluminum, Platinum, Palladium (Industrial Metals)</li>
+                          <li>• Bitcoin (BTC) - Digital Gold</li>
+                          <li>• Ethereum (ETH) - Smart Contract Platform</li>
+                          <li>• Solana (SOL), Cardano (ADA) - Layer 1 Blockchains</li>
                         </>
                       ) : (
                         <>
-                          <li>• Corn, Soybeans, Wheat (Grains)</li>
-                          <li>• Coffee, Sugar, Cotton (Soft Commodities)</li>
-                          <li>• Agricultural products and food commodities</li>
+                          <li>• Uniswap (UNI), Aave (AAVE) - DeFi Protocols</li>
+                          <li>• Polygon (MATIC), Arbitrum (ARB) - Layer 2 Solutions</li>
+                          <li>• Alternative cryptocurrencies and utility tokens</li>
                         </>
                       )}
                     </ul>
@@ -480,7 +480,7 @@ export default function Analysis() {
                   <h3 className="text-lg font-semibold mb-3">Calculation Methodology</h3>
                   <div className="space-y-2 text-sm text-muted-foreground">
                     <p>• Uses the same AI composite methodology as the overall index</p>
-                    <p>• Applies category-specific weighting for relevant commodities</p>
+                    <p>• Applies category-specific weighting for relevant cryptocurrencies</p>
                     <p>• Combines predictions from Claude, ChatGPT, and DeepSeek</p>
                     <p>• Weighted by directional sentiment (40%), confidence (25%), accuracy (20%), momentum (15%)</p>
                   </div>

@@ -55,11 +55,11 @@ export default function Dashboard() {
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   type="text"
-                  placeholder="Search commodities..."
+                  placeholder="Search cryptocurrencies..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 w-48 sm:w-56 md:w-64 bg-background/60 dark:bg-white/10 border-border/50 dark:border-white/20 focus:border-border/80 dark:focus:border-white/30 placeholder:text-muted-foreground min-h-[44px] transition-all duration-200 focus:scale-105"
-                  data-testid="input-search-commodities"
+                  data-testid="input-search-cryptocurrencies"
                 />
                 {searchQuery && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-lg shadow-2xl ring-1 ring-slate-900/10 dark:ring-slate-100/20 max-h-60 overflow-y-auto z-50">
@@ -77,13 +77,13 @@ export default function Dashboard() {
                             if (commodityCard) {
                               commodityCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             } else {
-                              // Fallback: scroll to all commodities section
-                              document.querySelector('[data-testid="all-commodities-section"]')?.scrollIntoView({ behavior: 'smooth' });
+                              // Fallback: scroll to all cryptocurrencies section
+                              document.querySelector('[data-testid="all-cryptocurrencies-section"]')?.scrollIntoView({ behavior: 'smooth' });
                             }
                             
                             // Close the search dropdown after a short delay
                             setTimeout(() => {
-                              const searchInput = document.querySelector('[data-testid="input-search-commodities"]') as HTMLInputElement;
+                              const searchInput = document.querySelector('[data-testid="input-search-cryptocurrencies"]') as HTMLInputElement;
                               searchInput?.blur();
                             }, 100);
                           }}
@@ -102,7 +102,7 @@ export default function Dashboard() {
                       ))
                     ) : (
                       <div className="px-4 py-3 text-slate-600 dark:text-slate-400 text-center font-medium">
-                        No commodities found
+                        No cryptocurrencies found
                       </div>
                     )}
                   </div>
@@ -130,7 +130,7 @@ export default function Dashboard() {
               AI Prediction Performance
             </h2>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Real-time analysis of AI model accuracy across commodity markets
+              Real-time analysis of AI model accuracy across cryptocurrency markets
             </p>
           </div>
         </motion.section>

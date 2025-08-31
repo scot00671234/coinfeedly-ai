@@ -42,7 +42,7 @@ export default function About() {
             About Coin Feedly
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-            Transparent AI-powered commodity price prediction platform providing unbiased analysis and performance tracking.
+            Transparent AI-powered cryptocurrency price prediction platform providing unbiased analysis and performance tracking.
           </p>
         </motion.section>
 
@@ -63,7 +63,7 @@ export default function About() {
                   there must be reliable, unbiased platforms to evaluate and compare AI model performance.
                 </p>
                 <p className="text-foreground leading-relaxed">
-                  Our platform provides real-time tracking and analysis of commodity price predictions from leading AI models, 
+                  Our platform provides real-time tracking and analysis of cryptocurrency price predictions from leading AI models, 
                   helping users understand which AI systems perform best under different market conditions.
                 </p>
               </CardContent>
@@ -84,8 +84,8 @@ export default function About() {
                   <div className="space-y-3">
                     <h4 className="font-medium text-foreground">Data Collection</h4>
                     <p className="text-sm text-muted-foreground">
-                      We collect real-time commodity price data from Yahoo Finance covering 14 major commodities 
-                      including crude oil, gold, natural gas, coffee, corn, and more.
+                      We collect real-time cryptocurrency price data from CoinGecko covering major cryptocurrencies 
+                      including Bitcoin, Ethereum, Solana, Cardano, and more.
                     </p>
                   </div>
                   <div className="space-y-3">
@@ -105,7 +105,7 @@ export default function About() {
                   <div className="space-y-3">
                     <h4 className="font-medium text-foreground">Performance Rankings</h4>
                     <p className="text-sm text-muted-foreground">
-                      Models are ranked by performance across different commodities and time periods, 
+                      Models are ranked by performance across different cryptocurrencies and time periods, 
                       with detailed analytics and trend analysis available.
                     </p>
                   </div>
@@ -131,7 +131,7 @@ export default function About() {
                 <div className="grid md:grid-cols-3 gap-4 mt-6">
                   <div className="text-center p-4 bg-muted/30 rounded-lg">
                     <div className="text-2xl font-semibold text-foreground mb-1">14</div>
-                    <div className="text-xs text-muted-foreground">Commodities Tracked</div>
+                    <div className="text-xs text-muted-foreground">Cryptocurrencies Tracked</div>
                   </div>
                   <div className="text-center p-4 bg-muted/30 rounded-lg">
                     <div className="text-2xl font-semibold text-foreground mb-1">3</div>
@@ -194,7 +194,7 @@ export default function About() {
                   Ready to Explore AI Predictions?
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  Access our comprehensive dashboard and start analyzing AI model performance across commodity markets.
+                  Access our comprehensive dashboard and start analyzing AI model performance across cryptocurrency markets.
                 </p>
                 <Button asChild>
                   <Link href="/dashboard">
