@@ -7,6 +7,7 @@ import { accuracyCalculator } from "./services/accuracyCalculator";
 import { aiPredictionService } from "./services/aiPredictionService";
 import { predictionScheduler } from "./services/predictionScheduler";
 import { cachedPredictionService } from "./services/cachedPredictionService";
+import { coinGeckoService } from "./services/coinGeckoService";
 import { 
   insertPredictionSchema,
   insertActualPriceSchema,
@@ -308,7 +309,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const commodityId = req.params.id;
       const period = req.params.period || "1mo";
       
-      // Get commodity to access Yahoo symbol
+      // Get commodity to access CoinGecko ID
       const commodity = await storage.getCommodity(commodityId);
       if (!commodity) {
         return res.status(404).json({ message: "Commodity not found" });
@@ -323,29 +324,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         predictions?: Record<string, number>;
       }> = [];
 
-      // Get historical data - always fetch maximum available data
-      if (commodity.yahooSymbol) {
+      // Get historical data from CoinGecko
+      if (commodity.coinGeckoId) {
         try {
-          console.log(`Fetching cached historical data for ${commodity.yahooSymbol}`);
-          const realTimeData = await yahooFinanceCacheService.getCachedChartData(commodity.yahooSymbol, 'max');
-          console.log(`Received ${realTimeData?.length || 0} cached data points for ${commodity.yahooSymbol}`);
+          console.log(`Fetching historical data for ${commodity.coinGeckoId} from CoinGecko`);
+          const historicalData = await coinGeckoService.fetchDetailedHistoricalData(commodity.coinGeckoId, period);
+          console.log(`Received ${historicalData?.length || 0} data points for ${commodity.name}`);
           
-          if (realTimeData && realTimeData.length > 0) {
+          if (historicalData && historicalData.length > 0) {
             // Add historical data points
-            realTimeData.forEach((item: any) => {
+            historicalData.forEach((item) => {
               chartData.push({
-                date: item.date,
+                date: item.date.split('T')[0], // Use just the date part
                 type: 'historical',
                 actualPrice: Number(item.price.toFixed(2))
               });
             });
           } else {
-            console.log(`No real-time data available for ${commodity.yahooSymbol}`);
-            // Return empty data instead of synthetic data
+            console.log(`No historical data available for ${commodity.name}`);
           }
         } catch (error) {
-          console.warn(`Yahoo Finance failed for ${commodity.yahooSymbol}:`, error);
-          // Return empty data instead of synthetic fallback
+          console.warn(`CoinGecko failed for ${commodity.coinGeckoId}:`, error);
         }
       }
 
@@ -514,7 +513,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (commodity.coinGeckoId) {
         // 🚀 Use CoinGecko API to fetch real crypto prices
-        const { coinGeckoService } = await import('./services/coinGeckoService');
         const cryptoPriceData = await coinGeckoService.getCurrentPrice(commodity.coinGeckoId);
         
         if (cryptoPriceData) {
@@ -1019,25 +1017,115 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Yahoo Finance Real-time Data
-  app.post("/api/yahoo-finance/update-all", async (req, res) => {
+  // CoinGecko Real-time Data  
+  app.post("/api/coingecko/update-all", async (req, res) => {
     try {
-      await storage.updateAllCommodityPricesFromYahoo();
-      res.json({ message: "All commodity prices updated from Yahoo Finance" });
+      const commodities = await storage.getCommodities();
+      const cryptoCommodities = commodities.filter(c => c.coinGeckoId);
+      
+      let updatedCount = 0;
+      for (const commodity of cryptoCommodities) {
+        try {
+          const priceData = await coinGeckoService.getCurrentPrice(commodity.coinGeckoId!);
+          if (priceData) {
+            // Store the price data in the database
+            await storage.insertActualPrice({
+              commodityId: commodity.id,
+              date: new Date(),
+              price: priceData.price.toString(),
+              volume: "0", // CoinGecko volume is included but we'll use 0 for now
+              source: "coingecko"
+            });
+            updatedCount++;
+          }
+        } catch (error) {
+          console.error(`Error updating ${commodity.name}:`, error);
+        }
+      }
+      
+      res.json({ 
+        message: `Updated ${updatedCount} cryptocurrency prices from CoinGecko`,
+        updatedCount,
+        totalCryptos: cryptoCommodities.length
+      });
     } catch (error) {
-      console.error("Error updating all prices:", error);
-      res.status(500).json({ message: "Failed to update all commodity prices" });
+      console.error("Error updating all crypto prices:", error);
+      res.status(500).json({ message: "Failed to update all cryptocurrency prices" });
     }
   });
 
-  app.post("/api/yahoo-finance/update/:commodityId", async (req, res) => {
+  app.post("/api/coingecko/update/:commodityId", async (req, res) => {
     try {
       const { commodityId } = req.params;
-      await storage.updateSingleCommodityPricesFromYahoo(commodityId);
-      res.json({ message: `Commodity ${commodityId} prices updated from Yahoo Finance` });
+      const commodity = await storage.getCommodity(commodityId);
+      
+      if (!commodity?.coinGeckoId) {
+        return res.status(404).json({ message: "Cryptocurrency not found or no CoinGecko ID" });
+      }
+      
+      const priceData = await coinGeckoService.getCurrentPrice(commodity.coinGeckoId);
+      if (priceData) {
+        await storage.insertActualPrice({
+          commodityId: commodity.id,
+          date: new Date(),
+          price: priceData.price.toString(),
+          volume: "0",
+          source: "coingecko"
+        });
+        
+        res.json({ 
+          message: `${commodity.name} price updated from CoinGecko`,
+          price: priceData.price,
+          change: priceData.changePercent
+        });
+      } else {
+        res.status(503).json({ message: "Failed to fetch price from CoinGecko" });
+      }
     } catch (error) {
-      console.error("Error updating commodity prices:", error);
-      res.status(500).json({ message: "Failed to update commodity prices" });
+      console.error("Error updating cryptocurrency price:", error);
+      res.status(500).json({ message: "Failed to update cryptocurrency price" });
+    }
+  });
+
+  // Populate Historical Data from CoinGecko
+  app.post("/api/coingecko/populate-historical/:commodityId", async (req, res) => {
+    try {
+      const { commodityId } = req.params;
+      const period = req.query.period as string || "30"; // days
+      
+      const commodity = await storage.getCommodity(commodityId);
+      if (!commodity?.coinGeckoId) {
+        return res.status(404).json({ message: "Cryptocurrency not found or no CoinGecko ID" });
+      }
+      
+      const historicalData = await coinGeckoService.fetchHistoricalData(commodity.coinGeckoId, parseInt(period));
+      
+      let insertedCount = 0;
+      for (const dataPoint of historicalData) {
+        try {
+          await storage.insertActualPrice({
+            commodityId: commodity.id,
+            date: new Date(dataPoint.date),
+            price: dataPoint.price.toString(),
+            volume: dataPoint.volume.toString(),
+            source: "coingecko"
+          });
+          insertedCount++;
+        } catch (error) {
+          // Skip duplicate entries
+          continue;
+        }
+      }
+      
+      res.json({ 
+        message: `Populated ${insertedCount} historical price points for ${commodity.name}`,
+        insertedCount,
+        totalFetched: historicalData.length,
+        period: `${period} days`
+      });
+    } catch (error) {
+      console.error("Error populating historical data:", error);
+      res.status(500).json({ message: "Failed to populate historical data" });
     }
   });
 
