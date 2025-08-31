@@ -46,7 +46,7 @@ export interface IStorage {
   createPrediction(prediction: InsertPrediction): Promise<Prediction>;
   insertPrediction(prediction: InsertPrediction): Promise<Prediction>;
   getPredictionsByTimeframe(timeframe: string): Promise<Prediction[]>;
-  getPredictionsByTimeframeCommodity(commodityId: string, timeframe: string): Promise<Prediction[]>;
+  getPredictionsByTimeframeCryptocurrency(cryptocurrencyId: string, timeframe: string): Promise<Prediction[]>;
 
   // Actual Prices
   getActualPrices(cryptocurrencyId: string, limit?: number): Promise<ActualPrice[]>;
@@ -618,7 +618,7 @@ export class DatabaseStorage implements IStorage {
         { name: "Shiba Inu", symbol: "SHIB", category: "meme", coinGeckoId: "shiba-inu", unit: "USD" }
       ];
 
-      await db.insert(commodities).values(defaultCommodities);
+      await db.insert(cryptocurrencies).values(defaultCommodities);
       
       console.log("Default data initialized successfully");
     } catch (error) {
@@ -687,7 +687,7 @@ export class DatabaseStorage implements IStorage {
     return cryptocurrency;
   }
 
-  async getPredictions(commodityId?: string, aiModelId?: string, timeframe?: string): Promise<Prediction[]> {
+  async getPredictions(cryptocurrencyId?: string, aiModelId?: string, timeframe?: string): Promise<Prediction[]> {
     if (!this.isDbConnected) {
       // Return mock predictions for development
       return [];
@@ -698,7 +698,7 @@ export class DatabaseStorage implements IStorage {
       await this.ensureTimeframeColumn();
       
       const conditions = [];
-      if (commodityId) conditions.push(eq(predictions.commodityId, commodityId));
+      if (cryptocurrencyId) conditions.push(eq(predictions.cryptocurrencyId, cryptocurrencyId));
       if (aiModelId) conditions.push(eq(predictions.aiModelId, aiModelId));
       if (timeframe) conditions.push(eq(predictions.timeframe, timeframe));
       
@@ -725,7 +725,7 @@ export class DatabaseStorage implements IStorage {
         
         // Return basic query without timeframe
         const conditions = [];
-        if (commodityId) conditions.push(eq(predictions.commodityId, commodityId));
+        if (cryptocurrencyId) conditions.push(eq(predictions.cryptocurrencyId, cryptocurrencyId));
         if (aiModelId) conditions.push(eq(predictions.aiModelId, aiModelId));
         
         let query = db.select().from(predictions);
@@ -771,7 +771,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getPredictionsByTimeframeCommodity(commodityId: string, timeframe: string): Promise<Prediction[]> {
+  async getPredictionsByTimeframeCryptocurrency(cryptocurrencyId: string, timeframe: string): Promise<Prediction[]> {
     if (!this.isDbConnected) {
       throw new Error("Database connection required");
     }
@@ -781,7 +781,7 @@ export class DatabaseStorage implements IStorage {
       await this.ensureTimeframeColumn();
       return await db.select().from(predictions)
         .where(and(
-          eq(predictions.commodityId, commodityId),
+          eq(predictions.cryptocurrencyId, cryptocurrencyId),
           eq(predictions.timeframe, timeframe)
         ))
         .orderBy(desc(predictions.createdAt));
@@ -793,7 +793,7 @@ export class DatabaseStorage implements IStorage {
           await db.execute(sql`ALTER TABLE "predictions" ADD COLUMN IF NOT EXISTS "timeframe" text NOT NULL DEFAULT '3mo'`);
         } catch {}
         return await db.select().from(predictions)
-          .where(eq(predictions.commodityId, commodityId))
+          .where(eq(predictions.cryptocurrencyId, cryptocurrencyId))
           .orderBy(desc(predictions.createdAt));
       }
       throw error;
@@ -802,18 +802,18 @@ export class DatabaseStorage implements IStorage {
 
 
 
-  async getPredictionsByCommodity(commodityId: string, timeframe?: string): Promise<Prediction[]> {
-    return this.getPredictions(commodityId, undefined, timeframe);
+  async getPredictionsByCryptocurrency(cryptocurrencyId: string, timeframe?: string): Promise<Prediction[]> {
+    return this.getPredictions(cryptocurrencyId, undefined, timeframe);
   }
 
-  async getActualPrices(commodityId?: string, limit?: number): Promise<ActualPrice[]> {
+  async getActualPrices(cryptocurrencyId?: string, limit?: number): Promise<ActualPrice[]> {
     if (!this.isDbConnected) {
       throw new Error("Database connection required");
     }
     let query = db.select().from(actualPrices);
     
-    if (commodityId) {
-      query = query.where(eq(actualPrices.commodityId, commodityId)) as any;
+    if (cryptocurrencyId) {
+      query = query.where(eq(actualPrices.cryptocurrencyId, cryptocurrencyId)) as any;
     }
     
     query = query.orderBy(desc(actualPrices.date)) as any;
@@ -835,11 +835,11 @@ export class DatabaseStorage implements IStorage {
 
 
 
-  async getLatestPrice(commodityId: string): Promise<ActualPrice | undefined> {
+  async getLatestPrice(cryptocurrencyId: string): Promise<ActualPrice | undefined> {
     if (!this.isDbConnected) {
       throw new Error("Database connection required");
     }
-    const prices = await this.getActualPrices(commodityId, 1);
+    const prices = await this.getActualPrices(cryptocurrencyId, 1);
     return prices[0];
   }
 
@@ -854,7 +854,7 @@ export class DatabaseStorage implements IStorage {
       .where(
         and(
           eq(accuracyMetrics.aiModelId, insertMetric.aiModelId),
-          eq(accuracyMetrics.commodityId, insertMetric.commodityId),
+          eq(accuracyMetrics.cryptocurrencyId, insertMetric.cryptocurrencyId),
           eq(accuracyMetrics.period, insertMetric.period)
         )
       )
@@ -891,12 +891,12 @@ export class DatabaseStorage implements IStorage {
         totalPredictions: 156,
         topModel: "OpenAI GPT-4o",
         topAccuracy: 73.2,
-        activeCommodities: 12,
+        activeCryptocurrencies: 12,
         avgAccuracy: 68.5
       };
     }
     const allPredictions = await db.select().from(predictions);
-    const allCommodities = await this.getCommodities();
+    const allCryptocurrencies = await this.getCryptocurrencies();
     
     // Get the best performing model using accuracy calculator rankings
     const rankings = await this.getLeagueTable('30d');
@@ -914,15 +914,15 @@ export class DatabaseStorage implements IStorage {
       totalPredictions: allPredictions.length,
       topModel: typeof topModel === 'string' ? topModel : topModel.name,
       topAccuracy: Number(topAccuracy.toFixed(1)),
-      activeCommodities: allCommodities.length,
+      activeCryptocurrencies: allCryptocurrencies.length,
       avgAccuracy: Number(avgAccuracy.toFixed(2))
     };
   }
 
   async getLeagueTable(period: string): Promise<LeagueTableEntry[]> {
-    // Calculate comprehensive model rankings across all commodities
+    // Calculate comprehensive model rankings across all cryptocurrencies
     const aiModels = await this.getAiModels();
-    const commodities = await this.getCommodities();
+    const cryptocurrencies = await this.getCryptocurrencies();
     const entries: LeagueTableEntry[] = [];
 
     for (const model of aiModels) {
@@ -930,10 +930,10 @@ export class DatabaseStorage implements IStorage {
       let totalPredictions = 0;
       let accuracySum = 0;
 
-      // Calculate accuracy across all commodities for this model
-      for (const commodity of commodities) {
-        const predictions = await this.getPredictions(commodity.id, model.id);
-        const actualPrices = await this.getActualPrices(commodity.id, 100);
+      // Calculate accuracy across all cryptocurrencies for this model
+      for (const cryptocurrency of cryptocurrencies) {
+        const predictions = await this.getPredictions(cryptocurrency.id, model.id);
+        const actualPrices = await this.getActualPrices(cryptocurrency.id, 100);
 
         if (predictions.length > 0 && actualPrices.length > 0) {
           // Match predictions with actual prices and calculate accuracy
@@ -980,9 +980,9 @@ export class DatabaseStorage implements IStorage {
       .map((entry, index) => ({ ...entry, rank: index + 1 }));
   }
 
-  async getChartData(commodityId: string, days: number): Promise<ChartDataPoint[]> {
-    const prices = await this.getActualPrices(commodityId, days);
-    const predictions = await this.getPredictions(commodityId);
+  async getChartData(cryptocurrencyId: string, days: number): Promise<ChartDataPoint[]> {
+    const prices = await this.getActualPrices(cryptocurrencyId, days);
+    const predictions = await this.getPredictions(cryptocurrencyId);
     const aiModels = await this.getAiModels();
 
     const chartData: ChartDataPoint[] = [];
@@ -1037,34 +1037,34 @@ export class DatabaseStorage implements IStorage {
   // Add missing Yahoo Finance update methods
   async updateAllCommodityPricesFromCoinGecko(): Promise<void> {
     console.log("Updating all cryptocurrency prices from CoinGecko...");
-    const commodities = await this.getCommodities();
-    for (const commodity of commodities) {
+    const cryptocurrencies = await this.getCryptocurrencies();
+    for (const cryptocurrency of cryptocurrencies) {
       try {
-        await this.updateSingleCommodityPricesFromCoinGecko(commodity.id);
+        await this.updateSingleCommodityPricesFromCoinGecko(cryptocurrency.id);
       } catch (error) {
-        console.error(`Failed to update prices for ${commodity.name}:`, error);
+        console.error(`Failed to update prices for ${cryptocurrency.name}:`, error);
       }
     }
   }
 
-  async updateSingleCommodityPricesFromCoinGecko(commodityId: string): Promise<void> {
+  async updateSingleCommodityPricesFromCoinGecko(cryptocurrencyId: string): Promise<void> {
     if (!this.isDbConnected) {
       console.log("Database not connected, skipping CoinGecko update");
       return;
     }
     
-    const commodity = await this.getCommodity(commodityId);
-    if (!commodity || !commodity.coinGeckoId) {
-      console.log(`No CoinGecko ID for commodity ${commodityId}`);
+    const cryptocurrency = await this.getCryptocurrency(cryptocurrencyId);
+    if (!cryptocurrency || !cryptocurrency.coinGeckoId) {
+      console.log(`No CoinGecko ID for cryptocurrency ${cryptocurrencyId}`);
       return;
     }
 
     try {
       // This would integrate with your CoinGecko service
       // For now, just log the attempt
-      console.log(`Updating prices for ${commodity.name} (${commodity.coinGeckoId})`);
+      console.log(`Updating prices for ${cryptocurrency.name} (${cryptocurrency.coinGeckoId})`);
     } catch (error) {
-      console.error(`CoinGecko update failed for ${commodity.name}:`, error);
+      console.error(`CoinGecko update failed for ${cryptocurrency.name}:`, error);
     }
   }
 

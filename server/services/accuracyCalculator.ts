@@ -1,9 +1,9 @@
 import { storage } from "../storage";
-import type { Commodity, AiModel, Prediction, ActualPrice } from "@shared/schema";
+import type { Cryptocurrency, AiModel, Prediction, ActualPrice } from "@shared/schema";
 
 export interface AccuracyResult {
   aiModelId: string;
-  commodityId: string;
+  cryptocurrencyId: string;
   totalPredictions: number;
   correctPredictions: number;
   avgAbsoluteError: number;
@@ -18,8 +18,8 @@ export interface ModelRanking {
   totalPredictions: number;
   avgAbsoluteError: number;
   avgPercentageError: number;
-  commodityPerformance: Array<{
-    commodity: Commodity;
+  cryptocurrencyPerformance: Array<{
+    cryptocurrency: Cryptocurrency;
     accuracy: number;
     predictions: number;
   }>;
@@ -121,7 +121,7 @@ export class AccuracyCalculator {
 
     return {
       aiModelId: predictions[0].aiModelId,
-      commodityId: predictions[0].commodityId,
+      cryptocurrencyId: predictions[0].cryptocurrencyId,
       totalPredictions: matches.length,
       correctPredictions,
       avgAbsoluteError,
@@ -132,11 +132,11 @@ export class AccuracyCalculator {
   }
 
   /**
-   * Calculate comprehensive model rankings across all commodities
+   * Calculate comprehensive model rankings across all cryptocurrencies
    */
   async calculateModelRankings(period: string = "all"): Promise<ModelRanking[]> {
     const aiModels = await storage.getAiModels();
-    const commodities = await storage.getCommodities();
+    const cryptocurrencies = await storage.getCryptocurrencies();
     const rankings: ModelRanking[] = [];
 
     for (const model of aiModels) {
@@ -144,12 +144,12 @@ export class AccuracyCalculator {
       let totalPredictions = 0;
       let totalAbsoluteError = 0;
       let totalPercentageError = 0;
-      const commodityPerformance: ModelRanking['commodityPerformance'] = [];
+      const cryptocurrencyPerformance: ModelRanking['cryptocurrencyPerformance'] = [];
 
-      for (const commodity of commodities) {
-        // Get predictions for this model and commodity
-        const predictions = await storage.getPredictions(commodity.id, model.id);
-        const actualPrices = await storage.getActualPrices(commodity.id, 1000);
+      for (const cryptocurrency of cryptocurrencies) {
+        // Get predictions for this model and cryptocurrency
+        const predictions = await storage.getPredictions(cryptocurrency.id, model.id);
+        const actualPrices = await storage.getActualPrices(cryptocurrency.id, 1000);
 
         // Filter by period if specified
         const filteredPredictions = this.filterByPeriod(predictions, period);
@@ -163,8 +163,8 @@ export class AccuracyCalculator {
             totalAbsoluteError += accuracyResult.avgAbsoluteError * accuracyResult.totalPredictions;
             totalPercentageError += accuracyResult.avgPercentageError * accuracyResult.totalPredictions;
 
-            commodityPerformance.push({
-              commodity,
+            cryptocurrencyPerformance.push({
+              cryptocurrency,
               accuracy: accuracyResult.accuracy,
               predictions: accuracyResult.totalPredictions
             });
@@ -182,7 +182,7 @@ export class AccuracyCalculator {
         totalPredictions,
         avgAbsoluteError,
         avgPercentageError,
-        commodityPerformance: commodityPerformance.sort((a, b) => b.accuracy - a.accuracy),
+        cryptocurrencyPerformance: cryptocurrencyPerformance.sort((a, b) => b.accuracy - a.accuracy),
         rank: 0, // Will be set after sorting
         trend: 0 // Will be calculated based on historical comparison
       });
@@ -257,9 +257,9 @@ export class AccuracyCalculator {
   }
 
   /**
-   * Calculate model-specific accuracy for a commodity with realistic variations
+   * Calculate model-specific accuracy for a cryptocurrency with realistic variations
    */
-  calculateModelAccuracy(modelName: string, commodityId: string): number {
+  calculateModelAccuracy(modelName: string, cryptocurrencyId: string): number {
     // Base accuracy patterns for different models
     const modelBaseAccuracies: Record<string, number> = {
       "Claude": 86.4,
@@ -267,8 +267,8 @@ export class AccuracyCalculator {
       "Deepseek": 88.2
     };
 
-    // Commodity-specific modifiers (some commodities are harder to predict)
-    const commodityModifiers: Record<string, number> = {
+    // Cryptocurrency-specific modifiers (some cryptocurrencies are harder to predict)
+    const cryptocurrencyModifiers: Record<string, number> = {
       "c1": 0,    // Crude Oil - baseline
       "c2": 2,    // Gold - easier to predict, stable
       "c3": -3,   // Natural Gas - very volatile, harder
@@ -282,25 +282,25 @@ export class AccuracyCalculator {
     };
 
     const baseAccuracy = modelBaseAccuracies[modelName] || 80;
-    const commodityModifier = commodityModifiers[commodityId] || 0;
+    const cryptocurrencyModifier = cryptocurrencyModifiers[cryptocurrencyId] || 0;
     
     // Add small random variation (±2%) for realism
     const randomVariation = (Math.random() - 0.5) * 4;
     
-    return Math.max(70, Math.min(95, baseAccuracy + commodityModifier + randomVariation));
+    return Math.max(70, Math.min(95, baseAccuracy + cryptocurrencyModifier + randomVariation));
   }
 
   /**
-   * Update accuracy metrics for all models and commodities
+   * Update accuracy metrics for all models and cryptocurrencies
    */
   async updateAllAccuracyMetrics(): Promise<void> {
     const aiModels = await storage.getAiModels();
-    const commodities = await storage.getCommodities();
+    const cryptocurrencies = await storage.getCryptocurrencies();
 
     for (const model of aiModels) {
-      for (const commodity of commodities) {
-        const predictions = await storage.getPredictions(commodity.id, model.id);
-        const actualPrices = await storage.getActualPrices(commodity.id, 1000);
+      for (const cryptocurrency of cryptocurrencies) {
+        const predictions = await storage.getPredictions(cryptocurrency.id, model.id);
+        const actualPrices = await storage.getActualPrices(cryptocurrency.id, 1000);
 
         const accuracyResult = await this.calculateAccuracy(predictions, actualPrices);
         
@@ -315,7 +315,7 @@ export class AccuracyCalculator {
             if (periodAccuracy) {
               await storage.updateAccuracyMetric({
                 aiModelId: model.id,
-                commodityId: commodity.id,
+                cryptocurrencyId: cryptocurrency.id,
                 period,
                 accuracy: periodAccuracy.accuracy.toString(),
                 totalPredictions: periodAccuracy.totalPredictions,

@@ -132,23 +132,23 @@ class YahooFinanceCacheService {
   private async refreshAllCommodityPrices(): Promise<void> {
     try {
       console.log(`🔄 Starting background price refresh for all commodities...`);
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       
       let refreshedCount = 0;
       let errorCount = 0;
       
-      for (const commodity of commodities) {
-        if (!commodity.yahooSymbol) continue;
+      for (const cryptocurrency of cryptocurrencies) {
+        if (!cryptocurrency.symbol) continue;
         
         try {
-          // This will fetch fresh data and update the cache
-          await this.getCachedCurrentPrice(commodity.yahooSymbol);
+          // This will fetch fresh data and update the cache - using symbol for now
+          await this.getCachedCurrentPrice(cryptocurrency.symbol + "-USD");
           refreshedCount++;
           
-          // Add small delay between requests to respect Yahoo Finance rate limits
+          // Add small delay between requests to respect rate limits
           await new Promise(resolve => setTimeout(resolve, 1000));
         } catch (error) {
-          console.error(`Error refreshing price for ${commodity.name}:`, error);
+          console.error(`Error refreshing price for ${cryptocurrency.name}:`, error);
           errorCount++;
         }
       }
