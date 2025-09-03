@@ -4,7 +4,7 @@ import { useTheme } from '@/components/theme-provider';
 import { useQuery } from '@tanstack/react-query';
 
 interface UnifiedChartProps {
-  commodityId: string;
+  cryptocurrencyId: string;
   period?: string;
   height?: number;
 }
@@ -53,7 +53,7 @@ const prepareDataWithZoom = (data: any[], period: string) => {
 };
 
 const UnifiedChart: React.FC<UnifiedChartProps> = ({ 
-  commodityId, 
+  cryptocurrencyId, 
   period = "1mo", 
   height = 400 
 }) => {
@@ -64,9 +64,9 @@ const UnifiedChart: React.FC<UnifiedChartProps> = ({
 
   // Fetch chart data with predictions - always fetch max data
   const { data: rawChartData, isLoading: dataLoading } = useQuery({
-    queryKey: [`/api/commodities/${commodityId}/chart-with-predictions/max`],
-    queryFn: () => fetch(`/api/commodities/${commodityId}/chart-with-predictions/max`).then(res => res.json()),
-    enabled: !!commodityId,
+    queryKey: [`/api/cryptocurrencies/${cryptocurrencyId}/chart-with-predictions/max`],
+    queryFn: () => fetch(`/api/cryptocurrencies/${cryptocurrencyId}/chart-with-predictions/max`).then(res => res.json()),
+    enabled: !!cryptocurrencyId,
     staleTime: 300000, // Cache for 5 minutes since we're fetching max data
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -82,8 +82,8 @@ const UnifiedChart: React.FC<UnifiedChartProps> = ({
 
   // Fetch the true current price (separate from historical data)
   const { data: currentPrice } = useQuery({
-    queryKey: [`/api/commodities/${commodityId}/latest-price`],
-    enabled: !!commodityId,
+    queryKey: [`/api/cryptocurrencies/${cryptocurrencyId}/latest-price`],
+    enabled: !!cryptocurrencyId,
     staleTime: 60000, // Cache for 1 minute
   });
 

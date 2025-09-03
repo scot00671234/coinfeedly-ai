@@ -8,12 +8,12 @@ import { TrendingUp, TrendingDown, Activity } from "lucide-react";
 import ModelAccuracyRanking from "./model-accuracy-ranking";
 import UnifiedChart from "./unified-chart";
 import { PredictionsTable } from "./predictions-table";
-import type { Commodity, AiModel, TimePeriod, LatestPrice } from "@shared/schema";
+import type { Cryptocurrency, AiModel, TimePeriod, LatestPrice } from "@shared/schema";
 
 interface EnhancedChartDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  commodity: Commodity;
+  cryptocurrency: Cryptocurrency;
   aiModels: AiModel[];
 }
 
@@ -33,12 +33,12 @@ const TIME_PERIODS: Array<{ value: TimePeriod; label: string; group: string }> =
 
 
 
-export default function EnhancedChartDialog({ isOpen, onClose, commodity, aiModels }: EnhancedChartDialogProps) {
+export default function EnhancedChartDialog({ isOpen, onClose, cryptocurrency, aiModels }: EnhancedChartDialogProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>("3mo");
 
   const { data: latestPrice } = useQuery<LatestPrice>({
-    queryKey: ["/api/commodities", commodity.id, "latest-price"],
-    enabled: isOpen && !!commodity.id,
+    queryKey: ["/api/cryptocurrencies", cryptocurrency.id, "latest-price"],
+    enabled: isOpen && !!cryptocurrency.id,
   });
 
 
@@ -73,12 +73,12 @@ export default function EnhancedChartDialog({ isOpen, onClose, commodity, aiMode
               <DialogTitle className="text-xl md:text-2xl lg:text-3xl font-normal tracking-wide flex items-center space-x-3">
                 {/* Triangle icon matching the logo */}
                 <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent border-b-black dark:border-b-white"></div>
-                <span>{commodity.name} Price Analysis</span>
+                <span>{cryptocurrency.name} Price Analysis</span>
               </DialogTitle>
               <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-8">
                 <div className="flex items-center space-x-3">
                   <span className="text-sm text-muted-foreground font-light">Symbol:</span>
-                  <span className="font-mono text-sm bg-muted/50 px-3 py-1 rounded-md font-medium border border-border/50">{commodity.symbol}</span>
+                  <span className="font-mono text-sm bg-muted/50 px-3 py-1 rounded-md font-medium border border-border/50">{cryptocurrency.symbol}</span>
                 </div>
                 {latestPrice && (
                   <div className="flex items-center space-x-6">

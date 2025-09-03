@@ -5,32 +5,32 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import EnhancedChartDialog from "./enhanced-chart-dialog";
-import type { ChartDataPoint, Commodity, AiModel, LatestPrice } from "@shared/schema";
+import type { ChartDataPoint, Cryptocurrency, AiModel, LatestPrice } from "@shared/schema";
 
-interface CommodityChartGridProps {
-  filteredCommodities?: Commodity[];
+interface CryptocurrencyChartGridProps {
+  filteredCryptocurrencies?: Cryptocurrency[];
 }
 
-export default function CommodityChartGrid({ filteredCommodities }: CommodityChartGridProps) {
-  const [selectedCommodity, setSelectedCommodity] = useState<Commodity | null>(null);
+export default function CryptocurrencyChartGrid({ filteredCryptocurrencies }: CryptocurrencyChartGridProps) {
+  const [selectedCryptocurrency, setSelectedCryptocurrency] = useState<Cryptocurrency | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const { data: allCommodities } = useQuery<Commodity[]>({
-    queryKey: ["/api/commodities"],
+  const { data: allCryptocurrencies } = useQuery<Cryptocurrency[]>({
+    queryKey: ["/api/cryptocurrencies"],
   });
 
-  const commodities = filteredCommodities || allCommodities;
+  const cryptocurrencies = filteredCryptocurrencies || allCryptocurrencies;
 
   const { data: aiModels } = useQuery<AiModel[]>({
     queryKey: ["/api/ai-models"],
   });
 
-  const handleChartClick = (commodity: Commodity) => {
-    setSelectedCommodity(commodity);
+  const handleChartClick = (cryptocurrency: Cryptocurrency) => {
+    setSelectedCryptocurrency(cryptocurrency);
     setDialogOpen(true);
   };
 
-  if (!commodities || !aiModels) {
+  if (!cryptocurrencies || !aiModels) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {Array.from({ length: 8 }).map((_, i) => (
@@ -51,22 +51,22 @@ export default function CommodityChartGrid({ filteredCommodities }: CommodityCha
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-        {commodities.map(commodity => (
-          <div key={commodity.id} id={`commodity-${commodity.id}`}>
-            <CommodityChartCard
-              commodity={commodity}
+        {cryptocurrencies.map(cryptocurrency => (
+          <div key={cryptocurrency.id} id={`cryptocurrency-${cryptocurrency.id}`}>
+            <CryptocurrencyChartCard
+              cryptocurrency={cryptocurrency}
               aiModels={aiModels}
-              onClick={() => handleChartClick(commodity)}
+              onClick={() => handleChartClick(cryptocurrency)}
             />
           </div>
         ))}
       </div>
 
-      {selectedCommodity && (
+      {selectedCryptocurrency && (
         <EnhancedChartDialog
           isOpen={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          commodity={selectedCommodity}
+          cryptocurrency={selectedCryptocurrency}
           aiModels={aiModels}
         />
       )}
@@ -74,13 +74,13 @@ export default function CommodityChartGrid({ filteredCommodities }: CommodityCha
   );
 }
 
-interface CommodityChartCardProps {
-  commodity: Commodity;
+interface CryptocurrencyChartCardProps {
+  cryptocurrency: Cryptocurrency;
   aiModels: AiModel[];
   onClick: () => void;
 }
 
-function CommodityChartCard({ commodity, aiModels, onClick }: CommodityChartCardProps) {
+function CryptocurrencyChartCard({ cryptocurrency, aiModels, onClick }: CryptocurrencyChartCardProps) {
   // AI Model color mapping
   const getModelColor = (modelName: string) => {
     const colors: Record<string, string> = {
@@ -93,10 +93,10 @@ function CommodityChartCard({ commodity, aiModels, onClick }: CommodityChartCard
   };
 
   const { data: latestPrice } = useQuery<LatestPrice>({
-    queryKey: ["/api/commodities", commodity.id, "latest-price"],
+    queryKey: ["/api/cryptocurrencies", cryptocurrency.id, "latest-price"],
   });
 
-  // Fetch accuracy data for this commodity
+  // Fetch accuracy data for this cryptocurrency
   const { data: accuracyData } = useQuery<{
     aiModel: AiModel;
     accuracy: number;
@@ -104,8 +104,8 @@ function CommodityChartCard({ commodity, aiModels, onClick }: CommodityChartCard
     trend: number;
     rank: number;
   }[]>({
-    queryKey: ["/api/accuracy-metrics", commodity.id, "30d"],
-    enabled: !!commodity.id,
+    queryKey: ["/api/accuracy-metrics", cryptocurrency.id, "30d"],
+    enabled: !!cryptocurrency.id,
   });
 
   const calculateChange = () => {
@@ -124,8 +124,8 @@ function CommodityChartCard({ commodity, aiModels, onClick }: CommodityChartCard
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <div className="min-w-0 flex-1">
-            <CardTitle className="text-base font-semibold truncate">{commodity.name}</CardTitle>
-            <p className="text-xs text-muted-foreground font-mono mt-0.5">{commodity.symbol}</p>
+            <CardTitle className="text-base font-semibold truncate">{cryptocurrency.name}</CardTitle>
+            <p className="text-xs text-muted-foreground font-mono mt-0.5">{cryptocurrency.symbol}</p>
           </div>
           {latestPrice && (
             <div className="text-right ml-3 flex-shrink-0">

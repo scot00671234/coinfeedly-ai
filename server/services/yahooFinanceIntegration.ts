@@ -113,21 +113,21 @@ export class YahooFinanceIntegration {
 
   async updateSingleCryptocurrencyPrices(cryptocurrencyId: string): Promise<void> {
     try {
-      const commodity = await storage.getCommodity(commodityId);
+      const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
       
-      if (!commodity || !commodity.yahooSymbol) {
-        console.log(`Cannot update prices for commodity ${commodityId} - not found or no Yahoo symbol`);
+      if (!cryptocurrency || !cryptocurrency.yahooSymbol) {
+        console.log(`Cannot update prices for cryptocurrency ${cryptocurrencyId} - not found or no Yahoo symbol`);
         return;
       }
 
-      console.log(`Updating prices for ${commodity.name} (${commodity.yahooSymbol})`);
+      console.log(`Updating prices for ${cryptocurrency.name} (${cryptocurrency.yahooSymbol})`);
       
       // Fetch real-time price
-      const realtimeData = await this.fetchRealTimePrices(commodity.yahooSymbol);
+      const realtimeData = await this.fetchRealTimePrices(cryptocurrency.yahooSymbol);
       
       if (realtimeData) {
         const actualPrice: InsertActualPrice = {
-          commodityId: commodity.id,
+          cryptocurrencyId: cryptocurrency.id,
           date: new Date(),
           price: realtimeData.price.toString(),
           volume: realtimeData.volume ? realtimeData.volume.toString() : null,
@@ -135,11 +135,11 @@ export class YahooFinanceIntegration {
         };
 
         await storage.createActualPrice(actualPrice);
-        console.log(`Updated real-time price for ${commodity.name}: $${realtimeData.price}`);
+        console.log(`Updated real-time price for ${cryptocurrency.name}: $${realtimeData.price}`);
       }
       
     } catch (error) {
-      console.error(`Error updating single commodity prices for ${commodityId}:`, error);
+      console.error(`Error updating single cryptocurrency prices for ${cryptocurrencyId}:`, error);
     }
   }
 

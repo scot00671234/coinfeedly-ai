@@ -3,10 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUpIcon, TrendingDownIcon, MinusIcon } from "lucide-react";
 
 interface LivePriceCardProps {
-  commodityId: string;
+  cryptocurrencyId: string;
   name: string;
   symbol: string;
-  unit: string;
+  unit?: string;
   className?: string;
 }
 
@@ -18,9 +18,9 @@ interface PriceData {
   cached: boolean;
 }
 
-export function LivePriceCard({ commodityId, name, symbol, unit, className = "" }: LivePriceCardProps) {
+export function LivePriceCard({ cryptocurrencyId, name, symbol, unit, className = "" }: LivePriceCardProps) {
   const { data: priceData, isLoading } = useQuery<PriceData>({
-    queryKey: ['/api/commodities', commodityId, 'latest-price'],
+    queryKey: ['/api/cryptocurrencies', cryptocurrencyId, 'latest-price'],
     refetchInterval: 60000, // Refetch every minute
     staleTime: 30000, // Consider data stale after 30 seconds
   });
