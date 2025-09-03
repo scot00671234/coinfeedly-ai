@@ -24,7 +24,7 @@ interface CryptoDataPoint {
 export class CoinGeckoService {
   private baseUrl = "https://api.coingecko.com/api/v3";
   private lastRequestTime = 0;
-  private minDelay = 1000; // 1 second between requests for free tier (more lenient)
+  private minDelay = 2000; // 2 seconds between requests to avoid rate limits
 
   private async enforceRateLimit(): Promise<void> {
     const now = Date.now();
@@ -58,6 +58,14 @@ export class CoinGeckoService {
 
       if (!response.ok) {
         console.error(`CoinGecko API error: ${response.status} ${response.statusText}`);
+        
+        // If rate limited, wait and retry once
+        if (response.status === 429) {
+          console.log('Rate limited, waiting 5 seconds before retry...');
+          await this.delay(5000);
+          return this.getCurrentPrices(cryptoIds); // Retry once
+        }
+        
         return null;
       }
 
@@ -99,6 +107,14 @@ export class CoinGeckoService {
 
       if (!response.ok) {
         console.error(`CoinGecko API error: ${response.status} ${response.statusText}`);
+        
+        // If rate limited, wait and retry once
+        if (response.status === 429) {
+          console.log('Rate limited, waiting 5 seconds before retry...');
+          await this.delay(5000);
+          return this.fetchHistoricalData(cryptoId, days); // Retry once
+        }
+        
         return [];
       }
 
