@@ -1035,19 +1035,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Add missing Yahoo Finance update methods
-  async updateAllCommodityPricesFromCoinGecko(): Promise<void> {
+  async updateAllCryptocurrencyPricesFromCoinGecko(): Promise<void> {
     console.log("Updating all cryptocurrency prices from CoinGecko...");
     const cryptocurrencies = await this.getCryptocurrencies();
     for (const cryptocurrency of cryptocurrencies) {
       try {
-        await this.updateSingleCommodityPricesFromCoinGecko(cryptocurrency.id);
+        await this.updateSingleCryptocurrencyPricesFromCoinGecko(cryptocurrency.id);
       } catch (error) {
         console.error(`Failed to update prices for ${cryptocurrency.name}:`, error);
       }
     }
   }
 
-  async updateSingleCommodityPricesFromCoinGecko(cryptocurrencyId: string): Promise<void> {
+  async updateSingleCryptocurrencyPricesFromCoinGecko(cryptocurrencyId: string): Promise<void> {
     if (!this.isDbConnected) {
       console.log("Database not connected, skipping CoinGecko update");
       return;

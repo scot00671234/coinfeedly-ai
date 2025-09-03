@@ -14,7 +14,7 @@ if (process.env.OPENAI_API_KEY) {
   });
 }
 
-interface CommodityData {
+interface CryptocurrencyData {
   name: string;
   symbol: string;
   currentPrice: number;
@@ -29,17 +29,17 @@ export class AIPredictionService {
     return !!process.env.OPENAI_API_KEY && !!openai;
   }
   
-  async generateOpenAIPrediction(commodityData: CommodityData): Promise<{
+  async generateOpenAIPrediction(cryptocurrencyData: CryptocurrencyData): Promise<{
     predictedPrice: number;
     confidence: number;
     reasoning: string;
   }> {
-    const prompt = `You are an expert commodity trader with decades of experience analyzing ${commodityData.category} commodity markets. Analyze ${commodityData.name} (${commodityData.symbol}).
+    const prompt = `You are an expert cryptocurrency trader with decades of experience analyzing ${cryptocurrencyData.category} cryptocurrency markets. Analyze ${cryptocurrencyData.name} (${cryptocurrencyData.symbol}).
 
 Current Market Context:
-- Current Price: $${commodityData.currentPrice} per ${commodityData.unit}
-- Commodity Type: ${commodityData.category} commodity
-- Recent Price History: ${this.formatHistoricalData(commodityData.historicalPrices)}
+- Current Price: $${cryptocurrencyData.currentPrice} per ${cryptocurrencyData.unit}
+- Cryptocurrency Type: ${cryptocurrencyData.category} cryptocurrency
+- Recent Price History: ${this.formatHistoricalData(cryptocurrencyData.historicalPrices)}
 
 Provide a sophisticated 7-day price forecast considering:
 - Technical analysis indicators (moving averages, RSI, MACD)
@@ -98,71 +98,71 @@ Respond in JSON format:
 
 
   async generateMonthlyPredictions(): Promise<void> {
-    console.log("🚀 Starting monthly AI prediction generation for all commodities...");
+    console.log("🚀 Starting monthly AI prediction generation for all cryptocurrencies...");
     console.log("📅 Generating predictions for timeframes: 3mo, 6mo, 9mo, 12mo");
     
     try {
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       const timeframes = [3, 6, 9, 12]; // months
       
-      for (const commodity of commodities) {
-        console.log(`📊 Processing ${commodity.name} for all timeframes...`);
+      for (const cryptocurrency of cryptocurrencies) {
+        console.log(`📊 Processing ${cryptocurrency.name} for all timeframes...`);
         
         for (const monthsAhead of timeframes) {
-          await this.generatePredictionsForCommodityWithTimeframe(commodity.id, monthsAhead);
+          await this.generatePredictionsForCryptocurrencyWithTimeframe(cryptocurrency.id, monthsAhead);
           
           // Add small delay between predictions to respect rate limits
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
         
-        console.log(`✅ Completed all timeframe predictions for ${commodity.name}`);
+        console.log(`✅ Completed all timeframe predictions for ${cryptocurrency.name}`);
       }
       
-      console.log("✅ Completed monthly AI prediction generation for all commodities");
+      console.log("✅ Completed monthly AI prediction generation for all cryptocurrencies");
     } catch (error) {
       console.error("❌ Error in generateMonthlyPredictions:", error);
       throw error;
     }
   }
 
-  async generatePredictionsForCommodityWithTimeframe(commodityId: string, monthsAhead: number): Promise<void> {
-    console.log(`Generating ${monthsAhead}-month AI predictions for commodity ${commodityId}...`);
+  async generatePredictionsForCryptocurrencyWithTimeframe(cryptocurrencyId: string, monthsAhead: number): Promise<void> {
+    console.log(`Generating ${monthsAhead}-month AI predictions for cryptocurrency ${cryptocurrencyId}...`);
     
     try {
-      const commodity = await storage.getCommodity(commodityId);
-      if (!commodity) {
-        console.error(`Commodity ${commodityId} not found`);
+      const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
+      if (!cryptocurrency) {
+        console.error(`Cryptocurrency ${cryptocurrencyId} not found`);
         return;
       }
 
       // Get historical prices for context
-      const historicalPrices = await storage.getActualPrices(commodityId, 30);
+      const historicalPrices = await storage.getActualPrices(cryptocurrencyId, 30);
       if (historicalPrices.length === 0) {
-        console.log(`No historical data for ${commodity.name}, fetching from Yahoo Finance...`);
-        await yahooFinanceIntegration.updateSingleCommodityPrices(commodityId);
-        const newHistoricalPrices = await storage.getActualPrices(commodityId, 30);
+        console.log(`No historical data for ${cryptocurrency.name}, fetching from Yahoo Finance...`);
+        await yahooFinanceIntegration.updateSingleCryptocurrencyPrices(cryptocurrencyId);
+        const newHistoricalPrices = await storage.getActualPrices(cryptocurrencyId, 30);
         if (newHistoricalPrices.length === 0) {
-          console.error(`Still no historical data for ${commodity.name}, skipping predictions`);
+          console.error(`Still no historical data for ${cryptocurrency.name}, skipping predictions`);
           return;
         }
       }
 
-      const latestPrice = await storage.getLatestPrice(commodityId);
+      const latestPrice = await storage.getLatestPrice(cryptocurrencyId);
       if (!latestPrice) {
-        console.error(`No current price available for ${commodity.name}`);
+        console.error(`No current price available for ${cryptocurrency.name}`);
         return;
       }
 
-      const commodityData: CommodityData = {
-        name: commodity.name,
-        symbol: commodity.symbol,
+      const cryptocurrencyData: CryptocurrencyData = {
+        name: cryptocurrency.name,
+        symbol: cryptocurrency.symbol,
         currentPrice: Number(latestPrice.price),
         historicalPrices: historicalPrices.map(p => ({
           date: p.date.toISOString(),
           price: Number(p.price)
         })),
-        category: commodity.category,
-        unit: commodity.unit || "USD"
+        category: cryptocurrency.category,
+        unit: cryptocurrency.unit || "USD"
       };
 
       // Calculate target date (months ahead)
@@ -180,17 +180,17 @@ Respond in JSON format:
 
           // Generate prediction using the appropriate service
           if (model.name === 'ChatGPT' && this.isOpenAIConfigured()) {
-            prediction = await this.generateOpenAIPredictionWithTimeframe(commodityData, monthsAhead);
+            prediction = await this.generateOpenAIPredictionWithTimeframe(cryptocurrencyData, monthsAhead);
           } else if (model.name === 'Claude' && claudeService.isConfigured()) {
-            prediction = await claudeService.generatePredictionWithTimeframe(commodityData, monthsAhead);
+            prediction = await claudeService.generatePredictionWithTimeframe(cryptocurrencyData, monthsAhead);
           } else if (model.name === 'Deepseek' && deepseekService.isConfigured()) {
-            prediction = await deepseekService.generatePredictionWithTimeframe(commodityData, monthsAhead);
+            prediction = await deepseekService.generatePredictionWithTimeframe(cryptocurrencyData, monthsAhead);
           }
 
           if (prediction) {
             const insertPrediction: InsertPrediction = {
               aiModelId: model.id,
-              commodityId: commodity.id,
+              cryptocurrencyId: cryptocurrency.id,
               predictionDate,
               targetDate,
               predictedPrice: prediction.predictedPrice.toString(),
@@ -199,40 +199,40 @@ Respond in JSON format:
               metadata: {
                 reasoning: prediction.reasoning,
                 inputData: {
-                  currentPrice: commodityData.currentPrice,
-                  historicalDataPoints: commodityData.historicalPrices.length,
+                  currentPrice: cryptocurrencyData.currentPrice,
+                  historicalDataPoints: cryptocurrencyData.historicalPrices.length,
                   timeframe: timeframeSuffix
                 }
               }
             };
 
             await storage.createPrediction(insertPrediction);
-            console.log(`Generated ${model.name} ${monthsAhead}-month prediction for ${commodity.name}: $${prediction.predictedPrice} (confidence: ${prediction.confidence})`);
+            console.log(`Generated ${model.name} ${monthsAhead}-month prediction for ${cryptocurrency.name}: $${prediction.predictedPrice} (confidence: ${prediction.confidence})`);
           } else {
-            console.log(`Skipped ${model.name} ${monthsAhead}-month prediction for ${commodity.name} - service not configured`);
+            console.log(`Skipped ${model.name} ${monthsAhead}-month prediction for ${cryptocurrency.name} - service not configured`);
           }
         } catch (error) {
-          console.error(`Error generating ${model.name} ${monthsAhead}-month prediction for ${commodity.name}:`, error);
+          console.error(`Error generating ${model.name} ${monthsAhead}-month prediction for ${cryptocurrency.name}:`, error);
         }
       }
       
-      console.log(`Completed ${monthsAhead}-month AI predictions for ${commodity.name}`);
+      console.log(`Completed ${monthsAhead}-month AI predictions for ${cryptocurrency.name}`);
     } catch (error) {
-      console.error(`Error in generatePredictionsForCommodityWithTimeframe for ${commodityId} (${monthsAhead}mo):`, error);
+      console.error(`Error in generatePredictionsForCryptocurrencyWithTimeframe for ${cryptocurrencyId} (${monthsAhead}mo):`, error);
     }
   }
 
-  async generateOpenAIPredictionWithTimeframe(commodityData: CommodityData, monthsAhead: number): Promise<{
+  async generateOpenAIPredictionWithTimeframe(cryptocurrencyData: CryptocurrencyData, monthsAhead: number): Promise<{
     predictedPrice: number;
     confidence: number;
     reasoning: string;
   }> {
-    const prompt = `You are an expert commodity trader with decades of experience analyzing ${commodityData.category} commodity markets. Analyze ${commodityData.name} (${commodityData.symbol}).
+    const prompt = `You are an expert cryptocurrency trader with decades of experience analyzing ${cryptocurrencyData.category} cryptocurrency markets. Analyze ${cryptocurrencyData.name} (${cryptocurrencyData.symbol}).
 
 Current Market Context:
-- Current Price: $${commodityData.currentPrice} per ${commodityData.unit}
-- Commodity Type: ${commodityData.category} commodity
-- Recent Price History: ${this.formatHistoricalData(commodityData.historicalPrices)}
+- Current Price: $${cryptocurrencyData.currentPrice} per ${cryptocurrencyData.unit}
+- Cryptocurrency Type: ${cryptocurrencyData.category} cryptocurrency
+- Recent Price History: ${this.formatHistoricalData(cryptocurrencyData.historicalPrices)}
 
 Provide a sophisticated ${monthsAhead}-month price forecast considering:
 - Technical analysis indicators (moving averages, RSI, MACD)

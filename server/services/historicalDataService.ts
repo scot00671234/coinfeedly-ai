@@ -1,6 +1,6 @@
 import { storage } from "../storage";
 import { yahooFinanceService } from "./yahooFinance";
-import type { InsertActualPrice, Commodity } from "@shared/schema";
+import type { InsertActualPrice, Cryptocurrency } from "@shared/schema";
 
 /**
  * Service for fetching and storing extensive historical data
@@ -11,7 +11,7 @@ class HistoricalDataService {
   private readonly BATCH_DELAY = 3000; // 3 seconds between batches to avoid rate limiting
 
   /**
-   * Fetch and store historical data for all commodities
+   * Fetch and store historical data for all cryptocurrencies
    * This will populate the database with years of historical data
    */
   async populateHistoricalData(): Promise<void> {
@@ -24,39 +24,39 @@ class HistoricalDataService {
     console.log('🔄 Starting comprehensive historical data population...');
 
     try {
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       const periods = ['5y', '10y', 'max']; // Focus on long-term periods
 
-      for (const commodity of commodities) {
-        if (!commodity.yahooSymbol) {
-          console.log(`Skipping ${commodity.name} - no Yahoo symbol`);
+      for (const cryptocurrency of cryptocurrencies) {
+        if (!cryptocurrency.symbol) {
+          console.log(`Skipping ${cryptocurrency.name} - no symbol`);
           continue;
         }
 
-        console.log(`📊 Processing historical data for ${commodity.name} (${commodity.yahooSymbol})`);
+        console.log(`📊 Processing historical data for ${cryptocurrency.name} (${cryptocurrency.symbol})`);
         
         // Check if we already have substantial historical data
-        const existingData = await storage.getActualPrices(commodity.id, 1000);
+        const existingData = await storage.getActualPrices(cryptocurrency.id, 1000);
         if (existingData.length > 500) {
-          console.log(`${commodity.name} already has ${existingData.length} data points, skipping...`);
+          console.log(`${cryptocurrency.name} already has ${existingData.length} data points, skipping...`);
           continue;
         }
 
         // Try different periods to get maximum historical coverage
         for (const period of periods) {
           try {
-            console.log(`  📅 Fetching ${period} data for ${commodity.name}`);
-            const historicalData = await yahooFinanceService.fetchDetailedHistoricalData(commodity.yahooSymbol, period);
+            console.log(`  📅 Fetching ${period} data for ${cryptocurrency.name}`);
+            const historicalData = await yahooFinanceService.fetchDetailedHistoricalData(cryptocurrency.symbol, period);
             
             if (historicalData.length > 0) {
               console.log(`  ✅ Got ${historicalData.length} data points for ${period}`);
               
               // Store the data in batches to avoid overwhelming the database
-              await this.storeHistoricalDataBatch(commodity, historicalData);
+              await this.storeHistoricalDataBatch(cryptocurrency, historicalData);
               
               // If we got a good amount of data, we can break
               if (historicalData.length > 1000) {
-                console.log(`  🎯 Sufficient data obtained for ${commodity.name}`);
+                console.log(`  🎯 Sufficient data obtained for ${cryptocurrency.name}`);
                 break;
               }
             } else {
@@ -67,13 +67,13 @@ class HistoricalDataService {
             await this.delay(this.BATCH_DELAY);
 
           } catch (error) {
-            console.error(`  ❌ Error fetching ${period} data for ${commodity.name}:`, error);
+            console.error(`  ❌ Error fetching ${period} data for ${cryptocurrency.name}:`, error);
             continue;
           }
         }
 
-        // Rate limiting between commodities
-        console.log(`  ⏳ Waiting before next commodity...`);
+        // Rate limiting between cryptocurrencies
+        console.log(`  ⏳ Waiting before next cryptocurrency...`);
         await this.delay(this.BATCH_DELAY);
       }
 
@@ -89,14 +89,14 @@ class HistoricalDataService {
   /**
    * Store historical data in the database, avoiding duplicates
    */
-  private async storeHistoricalDataBatch(commodity: Commodity, historicalData: any[]): Promise<void> {
+  private async storeHistoricalDataBatch(cryptocurrency: Cryptocurrency, historicalData: any[]): Promise<void> {
     let stored = 0;
     let skipped = 0;
 
     for (const dataPoint of historicalData) {
       try {
         const actualPrice: InsertActualPrice = {
-          commodityId: commodity.id,
+          cryptocurrencyId: cryptocurrency.id,
           date: new Date(dataPoint.date),
           price: dataPoint.price.toString(),
           volume: dataPoint.volume ? dataPoint.volume.toString() : null,
@@ -104,7 +104,7 @@ class HistoricalDataService {
         };
 
         // Check if this data point already exists (simple date-based check)
-        const existingPrice = await storage.getActualPrices(commodity.id, 1)
+        const existingPrice = await storage.getActualPrices(cryptocurrency.id, 1)
           .then(prices => prices.find(p => 
             p.date.toDateString() === actualPrice.date.toDateString()
           ));
@@ -125,29 +125,29 @@ class HistoricalDataService {
       } catch (error) {
         // Skip duplicate or invalid data points
         if (!(error as Error).message?.includes('duplicate') && !(error as Error).message?.includes('unique')) {
-          console.error(`Error storing data point for ${commodity.name}:`, error);
+          console.error(`Error storing data point for ${cryptocurrency.name}:`, error);
         }
         skipped++;
       }
     }
 
-    console.log(`  📝 Stored: ${stored}, Skipped: ${skipped} data points for ${commodity.name}`);
+    console.log(`  📝 Stored: ${stored}, Skipped: ${skipped} data points for ${cryptocurrency.name}`);
   }
 
   /**
    * Get summary of available historical data coverage
    */
-  async getDataCoverageSummary(): Promise<{ commodity: string; earliestDate: string; latestDate: string; totalPoints: number }[]> {
-    const commodities = await storage.getCommodities();
+  async getDataCoverageSummary(): Promise<{ cryptocurrency: string; earliestDate: string; latestDate: string; totalPoints: number }[]> {
+    const cryptocurrencies = await storage.getCryptocurrencies();
     const summary = [];
 
-    for (const commodity of commodities) {
-      const prices = await storage.getActualPrices(commodity.id, 10000); // Get lots of data
+    for (const cryptocurrency of cryptocurrencies) {
+      const prices = await storage.getActualPrices(cryptocurrency.id, 10000); // Get lots of data
       
       if (prices.length > 0) {
         const sortedPrices = prices.sort((a, b) => a.date.getTime() - b.date.getTime());
         summary.push({
-          commodity: commodity.name,
+          cryptocurrency: cryptocurrency.name,
           earliestDate: sortedPrices[0].date.toISOString().split('T')[0],
           latestDate: sortedPrices[sortedPrices.length - 1].date.toISOString().split('T')[0],
           totalPoints: prices.length
@@ -163,24 +163,24 @@ class HistoricalDataService {
   }
 
   /**
-   * Manual trigger for specific commodity
+   * Manual trigger for specific cryptocurrency
    */
-  async populateForCommodity(commodityId: string): Promise<void> {
-    const commodity = await storage.getCommodity(commodityId);
-    if (!commodity?.yahooSymbol) {
-      throw new Error('Commodity not found or missing Yahoo symbol');
+  async populateForCryptocurrency(cryptocurrencyId: string): Promise<void> {
+    const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
+    if (!cryptocurrency?.symbol) {
+      throw new Error('Cryptocurrency not found or missing symbol');
     }
 
-    console.log(`🔄 Fetching extensive historical data for ${commodity.name}`);
+    console.log(`🔄 Fetching extensive historical data for ${cryptocurrency.name}`);
     
     const periods = ['max', '10y', '5y']; // Try maximum first
     
     for (const period of periods) {
       try {
-        const data = await yahooFinanceService.fetchDetailedHistoricalData(commodity.yahooSymbol, period);
+        const data = await yahooFinanceService.fetchDetailedHistoricalData(cryptocurrency.symbol, period);
         if (data.length > 0) {
-          await this.storeHistoricalDataBatch(commodity, data);
-          console.log(`✅ Successfully stored ${data.length} data points for ${commodity.name} (${period})`);
+          await this.storeHistoricalDataBatch(cryptocurrency, data);
+          console.log(`✅ Successfully stored ${data.length} data points for ${cryptocurrency.name} (${period})`);
           return;
         }
       } catch (error) {
@@ -189,7 +189,7 @@ class HistoricalDataService {
       }
     }
     
-    throw new Error(`Failed to fetch historical data for ${commodity.name}`);
+    throw new Error(`Failed to fetch historical data for ${cryptocurrency.name}`);
   }
 }
 
