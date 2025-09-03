@@ -324,15 +324,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         predictions?: Record<string, number>;
       }> = [];
 
-      // Get historical data from CoinGecko
-      if (cryptocurrency.coinGeckoId) {
-        try {
-          console.log(`Fetching historical data for ${cryptocurrency.coinGeckoId} from CoinGecko`);
+      // Get historical data from database first, then fallback to CoinGecko
+      try {
+        // First try to get data from database
+        const dbHistoricalData = await storage.getActualPrices(cryptocurrencyId, 365); // Get up to 1 year of data
+        console.log(`Found ${dbHistoricalData?.length || 0} historical price records in database for ${cryptocurrency.name}`);
+        
+        if (dbHistoricalData && dbHistoricalData.length > 0) {
+          // Add database historical data points
+          dbHistoricalData.forEach((item) => {
+            chartData.push({
+              date: item.date.toISOString().split('T')[0], // Use just the date part
+              type: 'historical',
+              actualPrice: Number(parseFloat(item.price.toString()).toFixed(2))
+            });
+          });
+        } else if (cryptocurrency.coinGeckoId) {
+          // Fallback to CoinGecko if no database data
+          console.log(`No database data found, fetching from CoinGecko for ${cryptocurrency.coinGeckoId}`);
           const historicalData = await coinGeckoService.fetchDetailedHistoricalData(cryptocurrency.coinGeckoId, period);
-          console.log(`Received ${historicalData?.length || 0} data points for ${cryptocurrency.name}`);
+          console.log(`Received ${historicalData?.length || 0} data points from CoinGecko for ${cryptocurrency.name}`);
           
           if (historicalData && historicalData.length > 0) {
-            // Add historical data points
+            // Add CoinGecko historical data points
             historicalData.forEach((item) => {
               chartData.push({
                 date: item.date.split('T')[0], // Use just the date part
@@ -343,9 +357,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           } else {
             console.log(`No historical data available for ${cryptocurrency.name}`);
           }
-        } catch (error) {
-          console.warn(`CoinGecko failed for ${cryptocurrency.coinGeckoId}:`, error);
         }
+      } catch (error) {
+        console.warn(`Error fetching historical data for ${cryptocurrency.name}:`, error);
       }
 
       // Get AI predictions for historical overlay and future dates
@@ -502,18 +516,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Latest Price with Server-Side Caching (Scale-optimized for 50k users)
-  app.get("/api/commodities/:id/latest-price", async (req, res) => {
+  app.get("/api/cryptocurrencies/:id/latest-price", async (req, res) => {
     try {
-      const commodityId = req.params.id;
-      const commodity = await storage.getCommodity(commodityId);
+      const cryptocurrencyId = req.params.id;
+      const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
       
-      if (!commodity) {
-        return res.status(404).json({ message: "Commodity not found" });
+      if (!cryptocurrency) {
+        return res.status(404).json({ message: "Cryptocurrency not found" });
       }
 
-      if (commodity.coinGeckoId) {
+      if (cryptocurrency.coinGeckoId) {
         // 🚀 Use CoinGecko API to fetch real crypto prices
-        const cryptoPriceData = await coinGeckoService.getCurrentPrice(commodity.coinGeckoId);
+        const cryptoPriceData = await coinGeckoService.getCurrentPrice(cryptocurrency.coinGeckoId);
         
         if (cryptoPriceData) {
           res.json({
@@ -525,12 +539,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         } else {
           // Fallback to latest stored price
-          const latestPrice = await storage.getLatestPrice(commodityId);
+          const latestPrice = await storage.getLatestPrice(cryptocurrencyId);
           res.json(latestPrice || { price: 0, timestamp: new Date().toISOString(), cached: false });
         }
       } else {
         // Use stored data
-        const latestPrice = await storage.getLatestPrice(commodityId);
+        const latestPrice = await storage.getLatestPrice(cryptocurrencyId);
         res.json(latestPrice || { price: 0, timestamp: new Date().toISOString(), cached: false });
       }
     } catch (error) {
