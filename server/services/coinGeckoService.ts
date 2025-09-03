@@ -24,7 +24,7 @@ interface CryptoDataPoint {
 export class CoinGeckoService {
   private baseUrl = "https://api.coingecko.com/api/v3";
   private lastRequestTime = 0;
-  private minDelay = 2000; // 2 seconds between requests for free tier (30 calls/min)
+  private minDelay = 1000; // 1 second between requests for free tier (more lenient)
 
   private async enforceRateLimit(): Promise<void> {
     const now = Date.now();
@@ -52,7 +52,7 @@ export class CoinGeckoService {
       const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'AIForecast-Hub/1.0'
+          'User-Agent': 'Mozilla/5.0 (compatible; AIForecast-Hub/1.0)'
         }
       });
 
@@ -93,7 +93,7 @@ export class CoinGeckoService {
       const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'AIForecast-Hub/1.0'
+          'User-Agent': 'Mozilla/5.0 (compatible; AIForecast-Hub/1.0)'
         }
       });
 
