@@ -3,17 +3,17 @@ import { HammerIcon, Sprout } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Commodity } from "@shared/schema";
+import type { Cryptocurrency } from "@shared/schema";
 import { CRYPTO_CATEGORIES } from "@/lib/constants";
 
-interface CommoditySelectorProps {
-  onSelect?: (commodity: Commodity) => void;
-  selectedCommodityId?: string;
+interface CryptocurrencySelectorProps {
+  onSelect?: (cryptocurrency: Cryptocurrency) => void;
+  selectedCryptocurrencyId?: string;
 }
 
-export default function CommoditySelector({ onSelect, selectedCommodityId }: CommoditySelectorProps) {
-  const { data: commodities, isLoading } = useQuery<Commodity[]>({
-    queryKey: ["/api/commodities"],
+export default function CryptocurrencySelector({ onSelect, selectedCryptocurrencyId }: CryptocurrencySelectorProps) {
+  const { data: cryptocurrencies, isLoading } = useQuery<Cryptocurrency[]>({
+    queryKey: ["/api/cryptocurrencies"],
   });
 
   if (isLoading) {
@@ -41,14 +41,14 @@ export default function CommoditySelector({ onSelect, selectedCommodityId }: Com
     );
   }
 
-  const layer1Cryptos = commodities?.filter(c => c.category === CRYPTO_CATEGORIES.LAYER1) || [];
-  const defiCryptos = commodities?.filter(c => c.category === CRYPTO_CATEGORIES.DEFI) || [];
-  const paymentCryptos = commodities?.filter(c => c.category === CRYPTO_CATEGORIES.PAYMENT) || [];
-  const layer2Cryptos = commodities?.filter(c => c.category === CRYPTO_CATEGORIES.LAYER2) || [];
-  const memeCryptos = commodities?.filter(c => c.category === CRYPTO_CATEGORIES.MEME) || [];
+  const layer1Cryptos = cryptocurrencies?.filter(c => c.category === CRYPTO_CATEGORIES.LAYER1) || [];
+  const defiCryptos = cryptocurrencies?.filter(c => c.category === CRYPTO_CATEGORIES.DEFI) || [];
+  const paymentCryptos = cryptocurrencies?.filter(c => c.category === CRYPTO_CATEGORIES.PAYMENT) || [];
+  const layer2Cryptos = cryptocurrencies?.filter(c => c.category === CRYPTO_CATEGORIES.LAYER2) || [];
+  const memeCryptos = cryptocurrencies?.filter(c => c.category === CRYPTO_CATEGORIES.MEME) || [];
 
-  const handleCommoditySelect = (commodity: Commodity) => {
-    onSelect?.(commodity);
+  const handleCryptocurrencySelect = (cryptocurrency: Cryptocurrency) => {
+    onSelect?.(cryptocurrency);
   };
 
   return (

@@ -61,19 +61,19 @@ export class YahooFinanceIntegration {
     }
   }
 
-  async updateAllCommodityPrices(): Promise<void> {
-    console.log("Starting Yahoo Finance price update for all commodities...");
+  async updateAllCryptocurrencyPrices(): Promise<void> {
+    console.log("Starting Yahoo Finance price update for all cryptocurrencies...");
     
     try {
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       
-      for (const commodity of commodities) {
-        if (!commodity.yahooSymbol) {
-          console.log(`Skipping ${commodity.name} - no Yahoo symbol configured`);
+      for (const cryptocurrency of cryptocurrencies) {
+        if (!cryptocurrency.symbol) {
+          console.log(`Skipping ${cryptocurrency.name} - no symbol configured`);
           continue;
         }
 
-        console.log(`Updating prices for ${commodity.name} (${commodity.yahooSymbol})`);
+        console.log(`Updating prices for ${cryptocurrency.name} (${cryptocurrency.symbol})`);
         
         try {
           // Fetch last 30 days of historical data
@@ -81,14 +81,14 @@ export class YahooFinanceIntegration {
           thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
           
           const historicalData = await this.fetchHistoricalData(
-            commodity.yahooSymbol, 
+            cryptocurrency.symbol + '-USD', 
             thirtyDaysAgo
           );
 
           // Store historical prices
           for (const dataPoint of historicalData) {
             const actualPrice: InsertActualPrice = {
-              commodityId: commodity.id,
+              cryptocurrencyId: cryptocurrency.id,
               date: new Date(dataPoint.date),
               price: dataPoint.close.toString(),
               volume: dataPoint.volume ? dataPoint.volume.toString() : null,
@@ -98,20 +98,20 @@ export class YahooFinanceIntegration {
             await storage.createActualPrice(actualPrice);
           }
 
-          console.log(`Updated ${historicalData.length} price points for ${commodity.name}`);
+          console.log(`Updated ${historicalData.length} price points for ${cryptocurrency.name}`);
           
         } catch (error) {
-          console.error(`Failed to update prices for ${commodity.name}:`, error);
+          console.error(`Failed to update prices for ${cryptocurrency.name}:`, error);
         }
       }
       
       console.log("Yahoo Finance price update completed");
     } catch (error) {
-      console.error("Error in updateAllCommodityPrices:", error);
+      console.error("Error in updateAllCryptocurrencyPrices:", error);
     }
   }
 
-  async updateSingleCommodityPrices(commodityId: string): Promise<void> {
+  async updateSingleCryptocurrencyPrices(cryptocurrencyId: string): Promise<void> {
     try {
       const commodity = await storage.getCommodity(commodityId);
       

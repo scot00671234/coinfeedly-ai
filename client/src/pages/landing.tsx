@@ -33,9 +33,9 @@ export default function Landing() {
     navigate("/dashboard");
   };
 
-  // Fetch live commodities data for the landing page
-  const { data: commodities = [] } = useQuery<any[]>({
-    queryKey: ['/api/commodities'],
+  // Fetch live cryptocurrencies data for the landing page
+  const { data: cryptocurrencies = [] } = useQuery<any[]>({
+    queryKey: ['/api/cryptocurrencies'],
     staleTime: 300000, // 5 minutes
   });
 
@@ -339,9 +339,9 @@ export default function Landing() {
                   </div>
                 </div>
                 <div className="p-6">
-                  {commodities.length > 0 && (
+                  {cryptocurrencies.length > 0 && (
                     <LandingChart 
-                      commodityId={commodities.find(c => c.name === 'Bitcoin')?.id || commodities[0]?.id} 
+                      cryptocurrencyId={cryptocurrencies.find(c => c.name === 'Bitcoin')?.id || cryptocurrencies[0]?.id} 
                       period="3mo" 
                       height={400} 
                     />
@@ -404,28 +404,28 @@ export default function Landing() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             viewport={{ once: true, margin: "-50px" }}
           >
-            {commodities.slice(0, 8).map((commodity, index: number) => (
+            {cryptocurrencies.slice(0, 8).map((cryptocurrency, index: number) => (
               <motion.div
-                key={commodity.id}
+                key={cryptocurrency.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.1, ease: "easeOut" }}
                 viewport={{ once: true }}
               >
                 <LivePriceCard
-                  commodityId={commodity.id}
-                  name={commodity.name}
-                  symbol={commodity.symbol}
-                  unit={commodity.unit}
+                  cryptocurrencyId={cryptocurrency.id}
+                  name={cryptocurrency.name}
+                  symbol={cryptocurrency.symbol}
+                  unit={cryptocurrency.unit}
                 />
               </motion.div>
             ))}
           </motion.div>
           
-          {commodities.length > 8 && (
+          {cryptocurrencies.length > 8 && (
             <div className="text-center">
               <p className="text-muted-foreground mb-6">
-                + {commodities.length - 8} more cryptocurrencies tracked
+                + {cryptocurrencies.length - 8} more cryptocurrencies tracked
               </p>
               <Button
                 onClick={handleGetStarted}

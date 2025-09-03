@@ -325,11 +325,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }> = [];
 
       // Get historical data from CoinGecko
-      if (commodity.coinGeckoId) {
+      if (cryptocurrency.coinGeckoId) {
         try {
-          console.log(`Fetching historical data for ${commodity.coinGeckoId} from CoinGecko`);
-          const historicalData = await coinGeckoService.fetchDetailedHistoricalData(commodity.coinGeckoId, period);
-          console.log(`Received ${historicalData?.length || 0} data points for ${commodity.name}`);
+          console.log(`Fetching historical data for ${cryptocurrency.coinGeckoId} from CoinGecko`);
+          const historicalData = await coinGeckoService.fetchDetailedHistoricalData(cryptocurrency.coinGeckoId, period);
+          console.log(`Received ${historicalData?.length || 0} data points for ${cryptocurrency.name}`);
           
           if (historicalData && historicalData.length > 0) {
             // Add historical data points
@@ -341,16 +341,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
               });
             });
           } else {
-            console.log(`No historical data available for ${commodity.name}`);
+            console.log(`No historical data available for ${cryptocurrency.name}`);
           }
         } catch (error) {
-          console.warn(`CoinGecko failed for ${commodity.coinGeckoId}:`, error);
+          console.warn(`CoinGecko failed for ${cryptocurrency.coinGeckoId}:`, error);
         }
       }
 
       // Get AI predictions for historical overlay and future dates
       try {
-        const predictions = await storage.getPredictions(commodityId);
+        const predictions = await storage.getPredictions(cryptocurrencyId);
         console.log(`Found ${predictions.length} predictions for ${commodityId}`);
         
         // Get all predictions for chart overlay (both historical and future)
