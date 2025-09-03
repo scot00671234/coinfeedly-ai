@@ -174,11 +174,11 @@ export function FuturePredictionsChart({ commodityId }: FuturePredictionsChartPr
   };
 
   const { data, isLoading, error } = useQuery<FuturePredictionsData>({
-    queryKey: ['/api/commodities', commodityId, 'future-predictions', selectedTimeframe],
+    queryKey: ['/api/cryptocurrencies', commodityId, 'future-predictions', selectedTimeframe],
     queryFn: async () => {
       const url = selectedTimeframe 
-        ? `/api/commodities/${commodityId}/future-predictions?timeframe=${selectedTimeframe}`
-        : `/api/commodities/${commodityId}/future-predictions`;
+        ? `/api/cryptocurrencies/${commodityId}/future-predictions?timeframe=${selectedTimeframe}`
+        : `/api/cryptocurrencies/${commodityId}/future-predictions`;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch predictions');
       return response.json();
@@ -199,7 +199,7 @@ export function FuturePredictionsChart({ commodityId }: FuturePredictionsChartPr
         title: "Predictions Generated",
         description: "New AI predictions have been generated for this commodity.",
       });
-      queryClient.invalidateQueries({ queryKey: ['/api/commodities', commodityId, 'future-predictions'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/cryptocurrencies', commodityId, 'future-predictions'] });
     },
     onError: (error: any) => {
       toast({

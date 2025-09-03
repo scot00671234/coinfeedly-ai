@@ -32,7 +32,7 @@ export function PredictionsTable({ commodity, aiModels }: PredictionsTableProps)
 
   // Fetch predictions data
   const { data: predictions, isLoading } = useQuery<PredictionRow[]>({
-    queryKey: [`/api/commodities/${commodity.id}/predictions-table`],
+    queryKey: [`/api/cryptocurrencies/${commodity.id}/predictions-table`],
     enabled: !!commodity.id,
   });
 

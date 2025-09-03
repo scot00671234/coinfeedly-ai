@@ -14,7 +14,7 @@ export default function PriceChart() {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: commodities } = useQuery<Commodity[]>({
-    queryKey: ["/api/commodities"],
+    queryKey: ["/api/cryptocurrencies"],
   });
 
   const { data: aiModels } = useQuery<AiModel[]>({
@@ -26,12 +26,12 @@ export default function PriceChart() {
   const activeCommodityId = selectedCommodityId || defaultCommodityId;
 
   const { data: chartData, isLoading } = useQuery<ChartDataPoint[]>({
-    queryKey: ["/api/commodities", activeCommodityId, "chart", selectedDays],
+    queryKey: ["/api/cryptocurrencies", activeCommodityId, "chart", selectedDays],
     enabled: !!activeCommodityId,
   });
 
   const { data: latestPrice } = useQuery<LatestPrice>({
-    queryKey: ["/api/commodities", activeCommodityId, "latest-price"],
+    queryKey: ["/api/cryptocurrencies", activeCommodityId, "latest-price"],
     enabled: !!activeCommodityId,
   });
 

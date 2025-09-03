@@ -64,8 +64,8 @@ const LandingChart: React.FC<LandingChartProps> = ({
 
   // Fetch chart data with predictions - always fetch max data
   const { data: rawChartData, isLoading: dataLoading } = useQuery({
-    queryKey: [`/api/commodities/${commodityId}/chart-with-predictions/max`],
-    queryFn: () => fetch(`/api/commodities/${commodityId}/chart-with-predictions/max`).then(res => res.json()),
+    queryKey: [`/api/cryptocurrencies/${commodityId}/chart-with-predictions/max`],
+    queryFn: () => fetch(`/api/cryptocurrencies/${commodityId}/chart-with-predictions/max`).then(res => res.json()),
     enabled: !!commodityId,
     staleTime: 300000, // Cache for 5 minutes since we're fetching max data
     refetchOnMount: false,
@@ -82,7 +82,7 @@ const LandingChart: React.FC<LandingChartProps> = ({
 
   // Fetch the true current price (separate from historical data)
   const { data: currentPrice } = useQuery({
-    queryKey: [`/api/commodities/${commodityId}/latest-price`],
+    queryKey: [`/api/cryptocurrencies/${commodityId}/latest-price`],
     enabled: !!commodityId,
     staleTime: 60000, // Cache for 1 minute
   });

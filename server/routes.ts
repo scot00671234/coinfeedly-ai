@@ -351,7 +351,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get AI predictions for historical overlay and future dates
       try {
         const predictions = await storage.getPredictions(cryptocurrencyId);
-        console.log(`Found ${predictions.length} predictions for ${commodityId}`);
+        console.log(`Found ${predictions.length} predictions for ${cryptocurrencyId}`);
         
         // Get all predictions for chart overlay (both historical and future)
         const allPredictions = predictions;
@@ -381,7 +381,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Error fetching predictions:", error);
       }
 
-      console.log(`Returning ${chartData.length} chart data points for ${commodityId}`);
+      console.log(`Returning ${chartData.length} chart data points for ${cryptocurrencyId}`);
       res.json(chartData);
     } catch (error) {
       console.error("Error fetching unified chart data:", error);
