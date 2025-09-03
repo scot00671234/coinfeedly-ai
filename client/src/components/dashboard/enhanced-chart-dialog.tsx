@@ -123,7 +123,7 @@ export default function EnhancedChartDialog({ isOpen, onClose, cryptocurrency, a
           <div className="space-y-6">
             <div className="bg-card/50 border border-border/40 rounded-xl overflow-hidden backdrop-blur-sm p-6">
               <UnifiedChart 
-                commodityId={commodity.id} 
+                cryptocurrencyId={cryptocurrency.id} 
                 period={selectedPeriod} 
                 height={500}
               />
@@ -132,7 +132,7 @@ export default function EnhancedChartDialog({ isOpen, onClose, cryptocurrency, a
             {/* Model Accuracy Rankings */}
             <div className="bg-card/30 border border-border/40 rounded-xl p-6 backdrop-blur-sm">
               <ModelAccuracyRanking 
-                commodity={commodity}
+                commodity={cryptocurrency}
                 aiModels={aiModels}
                 period="30d"
               />
@@ -141,7 +141,7 @@ export default function EnhancedChartDialog({ isOpen, onClose, cryptocurrency, a
             {/* Predictions Data Table */}
             <div className="bg-card/30 border border-border/40 rounded-xl backdrop-blur-sm">
               <PredictionsTable 
-                commodity={commodity}
+                commodity={cryptocurrency}
                 aiModels={aiModels}
               />
             </div>

@@ -270,7 +270,7 @@ const UnifiedChart: React.FC<UnifiedChartProps> = ({
         chartRef.current = null;
       }
     };
-  }, [chartData, focusRange, theme, height, dataLoading, commodityId, period]);
+  }, [chartData, focusRange, theme, height, dataLoading, cryptocurrencyId, period]);
 
   // Update chart theme when theme changes
   useEffect(() => {
