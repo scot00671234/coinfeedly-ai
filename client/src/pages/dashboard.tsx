@@ -10,7 +10,6 @@ import AllCommoditiesView from "@/components/dashboard/all-commodities-view";
 import { CompositeIndexGauge } from "@/components/CompositeIndexGauge";
 import PredictionStatsCard from "@/components/PredictionStatsCard";
 import MarketStatusCard from "@/components/MarketStatusCard";
-import BottomBanner from "@/components/ads/BottomBanner";
 import { motion } from "framer-motion";
 import type { Cryptocurrency } from "@shared/schema";
 
@@ -196,7 +195,6 @@ export default function Dashboard() {
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <BottomBanner />
       </motion.div>
 
       {/* Modern Footer - matching landing page */}

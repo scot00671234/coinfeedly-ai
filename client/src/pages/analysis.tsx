@@ -6,7 +6,6 @@ import { SmartBackButton } from "../components/smart-back-button";
 import { useLocation, Link } from "wouter";
 import { TrendingUpIcon, TrendingDownIcon, ActivityIcon, InfoIcon, DownloadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import BottomBanner from "@/components/ads/BottomBanner";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -511,7 +510,6 @@ export default function Analysis() {
       </Dialog>
 
       {/* Bottom Banner Ad */}
-      <BottomBanner />
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/30 mt-20 md:mt-32">
