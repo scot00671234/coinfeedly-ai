@@ -163,17 +163,17 @@ export class DatabaseStorage implements IStorage {
         `
       },
       {
-        name: 'commodities',
+        name: 'cryptocurrencies',
         query: sql`
-          CREATE TABLE IF NOT EXISTS "commodities" (
+          CREATE TABLE IF NOT EXISTS "cryptocurrencies" (
             "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
             "name" text NOT NULL,
             "symbol" text NOT NULL,
             "category" text NOT NULL,
-            "yahoo_symbol" text,
+            "coingecko_id" text,
             "unit" text DEFAULT 'USD',
-            CONSTRAINT "commodities_name_unique" UNIQUE("name"),
-            CONSTRAINT "commodities_symbol_unique" UNIQUE("symbol")
+            CONSTRAINT "cryptocurrencies_name_unique" UNIQUE("name"),
+            CONSTRAINT "cryptocurrencies_symbol_unique" UNIQUE("symbol")
           )
         `
       },
@@ -183,7 +183,7 @@ export class DatabaseStorage implements IStorage {
           CREATE TABLE IF NOT EXISTS "predictions" (
             "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
             "ai_model_id" varchar NOT NULL,
-            "commodity_id" varchar NOT NULL,
+            "cryptocurrency_id" varchar NOT NULL,
             "prediction_date" timestamp NOT NULL,
             "target_date" timestamp NOT NULL,
             "predicted_price" numeric(10,4) NOT NULL,
@@ -201,8 +201,8 @@ export class DatabaseStorage implements IStorage {
             "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
             "date" timestamp NOT NULL UNIQUE,
             "overall_index" numeric(5,2) NOT NULL,
-            "hard_commodities_index" numeric(5,2) NOT NULL,
-            "soft_commodities_index" numeric(5,2) NOT NULL,
+            "layer1_index" numeric(5,2) NOT NULL,
+            "defi_index" numeric(5,2) NOT NULL,
             "directional_component" numeric(5,2) NOT NULL,
             "confidence_component" numeric(5,2) NOT NULL,
             "accuracy_component" numeric(5,2) NOT NULL,
@@ -218,7 +218,7 @@ export class DatabaseStorage implements IStorage {
         query: sql`
           CREATE TABLE IF NOT EXISTS "actual_prices" (
             "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
-            "commodity_id" varchar NOT NULL,
+            "cryptocurrency_id" varchar NOT NULL,
             "date" timestamp NOT NULL,
             "price" numeric(10,4) NOT NULL,
             "volume" numeric(15,2),
@@ -233,7 +233,7 @@ export class DatabaseStorage implements IStorage {
           CREATE TABLE IF NOT EXISTS "accuracy_metrics" (
             "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
             "ai_model_id" varchar NOT NULL,
-            "commodity_id" varchar NOT NULL,
+            "cryptocurrency_id" varchar NOT NULL,
             "period" text NOT NULL,
             "accuracy" numeric(5,2) NOT NULL,
             "total_predictions" integer NOT NULL,
@@ -252,7 +252,7 @@ export class DatabaseStorage implements IStorage {
             "severity" text NOT NULL,
             "title" text NOT NULL,
             "description" text NOT NULL,
-            "commodity_id" varchar,
+            "cryptocurrency_id" varchar,
             "ai_model_id" varchar,
             "is_active" integer DEFAULT 1 NOT NULL,
             "created_at" timestamp DEFAULT now() NOT NULL
@@ -270,11 +270,11 @@ export class DatabaseStorage implements IStorage {
     // Add foreign key constraints (only if they don't exist)
     try {
       await db.execute(sql`ALTER TABLE "predictions" ADD CONSTRAINT "predictions_ai_model_id_ai_models_id_fk" FOREIGN KEY ("ai_model_id") REFERENCES "ai_models"("id") ON DELETE no action ON UPDATE no action`);
-      await db.execute(sql`ALTER TABLE "predictions" ADD CONSTRAINT "predictions_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
-      await db.execute(sql`ALTER TABLE "actual_prices" ADD CONSTRAINT "actual_prices_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
+      await db.execute(sql`ALTER TABLE "predictions" ADD CONSTRAINT "predictions_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
+      await db.execute(sql`ALTER TABLE "actual_prices" ADD CONSTRAINT "actual_prices_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
       await db.execute(sql`ALTER TABLE "accuracy_metrics" ADD CONSTRAINT "accuracy_metrics_ai_model_id_ai_models_id_fk" FOREIGN KEY ("ai_model_id") REFERENCES "ai_models"("id") ON DELETE no action ON UPDATE no action`);
-      await db.execute(sql`ALTER TABLE "accuracy_metrics" ADD CONSTRAINT "accuracy_metrics_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
-      await db.execute(sql`ALTER TABLE "market_alerts" ADD CONSTRAINT "market_alerts_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
+      await db.execute(sql`ALTER TABLE "accuracy_metrics" ADD CONSTRAINT "accuracy_metrics_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
+      await db.execute(sql`ALTER TABLE "market_alerts" ADD CONSTRAINT "market_alerts_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
       await db.execute(sql`ALTER TABLE "market_alerts" ADD CONSTRAINT "market_alerts_ai_model_id_ai_models_id_fk" FOREIGN KEY ("ai_model_id") REFERENCES "ai_models"("id") ON DELETE no action ON UPDATE no action`);
     } catch (error) {
       // Constraints might already exist, continue
@@ -327,8 +327,8 @@ export class DatabaseStorage implements IStorage {
           "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
           "date" timestamp NOT NULL UNIQUE,
           "overall_index" numeric(5,2) NOT NULL,
-          "hard_commodities_index" numeric(5,2) NOT NULL,
-          "soft_commodities_index" numeric(5,2) NOT NULL,
+          "layer1_index" numeric(5,2) NOT NULL,
+          "defi_index" numeric(5,2) NOT NULL,
           "directional_component" numeric(5,2) NOT NULL,
           "confidence_component" numeric(5,2) NOT NULL,
           "accuracy_component" numeric(5,2) NOT NULL,
@@ -379,23 +379,23 @@ export class DatabaseStorage implements IStorage {
       ON CONFLICT (name) DO NOTHING
     `);
 
-    // Insert commodities with conflict handling
+    // Insert cryptocurrencies with conflict handling
     await db.execute(sql`
-      INSERT INTO "commodities" ("name", "symbol", "category", "yahoo_symbol") VALUES
-      ('Crude Oil', 'CL', 'hard', 'CL=F'),
-      ('Gold', 'AU', 'hard', 'GC=F'),
-      ('Natural Gas', 'NG', 'hard', 'NG=F'),
-      ('Copper', 'CU', 'hard', 'HG=F'),
-      ('Silver', 'AG', 'hard', 'SI=F'),
-      ('Aluminum', 'AL', 'hard', 'ALI=F'),
-      ('Platinum', 'PT', 'hard', 'PL=F'),
-      ('Palladium', 'PD', 'hard', 'PA=F'),
-      ('Coffee', 'KC', 'soft', 'KC=F'),
-      ('Sugar', 'SB', 'soft', 'SB=F'),
-      ('Corn', 'ZC', 'soft', 'ZC=F'),
-      ('Soybeans', 'ZS', 'soft', 'ZS=F'),
-      ('Cotton', 'CT', 'soft', 'CT=F'),
-      ('Wheat', 'ZW', 'soft', 'ZW=F')
+      INSERT INTO "cryptocurrencies" ("name", "symbol", "category", "coingecko_id") VALUES
+      ('Bitcoin', 'BTC', 'layer1', 'bitcoin'),
+      ('Ethereum', 'ETH', 'layer1', 'ethereum'),
+      ('Solana', 'SOL', 'layer1', 'solana'),
+      ('Cardano', 'ADA', 'layer1', 'cardano'),
+      ('Avalanche', 'AVAX', 'layer1', 'avalanche-2'),
+      ('Chainlink', 'LINK', 'defi', 'chainlink'),
+      ('Uniswap', 'UNI', 'defi', 'uniswap'),
+      ('Aave', 'AAVE', 'defi', 'aave'),
+      ('XRP', 'XRP', 'payment', 'ripple'),
+      ('Litecoin', 'LTC', 'payment', 'litecoin'),
+      ('Polygon', 'MATIC', 'layer2', 'matic-network'),
+      ('Polkadot', 'DOT', 'layer1', 'polkadot'),
+      ('Dogecoin', 'DOGE', 'meme', 'dogecoin'),
+      ('Shiba Inu', 'SHIB', 'meme', 'shiba-inu')
       ON CONFLICT (name) DO NOTHING
     `);
     
@@ -407,7 +407,7 @@ export class DatabaseStorage implements IStorage {
     
     try {
       // Drop existing tables if they exist (in case of partial creation)
-      const tableNames = ['market_alerts', 'accuracy_metrics', 'actual_prices', 'predictions', 'commodities', 'ai_models'];
+      const tableNames = ['market_alerts', 'accuracy_metrics', 'actual_prices', 'predictions', 'cryptocurrencies', 'ai_models'];
       
       for (const tableName of tableNames) {
         try {
@@ -469,17 +469,17 @@ export class DatabaseStorage implements IStorage {
       )
     `);
 
-    // Create commodities table
+    // Create cryptocurrencies table
     await db.execute(sql`
-      CREATE TABLE "commodities" (
+      CREATE TABLE "cryptocurrencies" (
         "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
         "name" text NOT NULL,
         "symbol" text NOT NULL,
         "category" text NOT NULL,
-        "yahoo_symbol" text,
+        "coingecko_id" text,
         "unit" text DEFAULT 'USD',
-        CONSTRAINT "commodities_name_unique" UNIQUE("name"),
-        CONSTRAINT "commodities_symbol_unique" UNIQUE("symbol")
+        CONSTRAINT "cryptocurrencies_name_unique" UNIQUE("name"),
+        CONSTRAINT "cryptocurrencies_symbol_unique" UNIQUE("symbol")
       )
     `);
 
@@ -488,7 +488,7 @@ export class DatabaseStorage implements IStorage {
       CREATE TABLE "predictions" (
         "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
         "ai_model_id" varchar NOT NULL,
-        "commodity_id" varchar NOT NULL,
+        "cryptocurrency_id" varchar NOT NULL,
         "prediction_date" timestamp NOT NULL,
         "target_date" timestamp NOT NULL,
         "predicted_price" numeric(10,4) NOT NULL,
@@ -502,7 +502,7 @@ export class DatabaseStorage implements IStorage {
     await db.execute(sql`
       CREATE TABLE "actual_prices" (
         "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
-        "commodity_id" varchar NOT NULL,
+        "cryptocurrency_id" varchar NOT NULL,
         "date" timestamp NOT NULL,
         "price" numeric(10,4) NOT NULL,
         "volume" numeric(15,2),
@@ -516,7 +516,7 @@ export class DatabaseStorage implements IStorage {
       CREATE TABLE "accuracy_metrics" (
         "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
         "ai_model_id" varchar NOT NULL,
-        "commodity_id" varchar NOT NULL,
+        "cryptocurrency_id" varchar NOT NULL,
         "period" text NOT NULL,
         "accuracy" numeric(5,2) NOT NULL,
         "total_predictions" integer NOT NULL,
@@ -534,7 +534,7 @@ export class DatabaseStorage implements IStorage {
         "severity" text NOT NULL,
         "title" text NOT NULL,
         "description" text NOT NULL,
-        "commodity_id" varchar,
+        "cryptocurrency_id" varchar,
         "ai_model_id" varchar,
         "is_active" integer DEFAULT 1 NOT NULL,
         "created_at" timestamp DEFAULT now() NOT NULL
@@ -547,8 +547,8 @@ export class DatabaseStorage implements IStorage {
         "id" varchar PRIMARY KEY DEFAULT gen_random_uuid(),
         "date" timestamp NOT NULL UNIQUE,
         "overall_index" numeric(5,2) NOT NULL,
-        "hard_commodities_index" numeric(5,2) NOT NULL,
-        "soft_commodities_index" numeric(5,2) NOT NULL,
+        "layer1_index" numeric(5,2) NOT NULL,
+        "defi_index" numeric(5,2) NOT NULL,
         "directional_component" numeric(5,2) NOT NULL,
         "confidence_component" numeric(5,2) NOT NULL,
         "accuracy_component" numeric(5,2) NOT NULL,
@@ -561,11 +561,11 @@ export class DatabaseStorage implements IStorage {
 
     // Add foreign key constraints
     await db.execute(sql`ALTER TABLE "predictions" ADD CONSTRAINT "predictions_ai_model_id_ai_models_id_fk" FOREIGN KEY ("ai_model_id") REFERENCES "ai_models"("id") ON DELETE no action ON UPDATE no action`);
-    await db.execute(sql`ALTER TABLE "predictions" ADD CONSTRAINT "predictions_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
-    await db.execute(sql`ALTER TABLE "actual_prices" ADD CONSTRAINT "actual_prices_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
+    await db.execute(sql`ALTER TABLE "predictions" ADD CONSTRAINT "predictions_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
+    await db.execute(sql`ALTER TABLE "actual_prices" ADD CONSTRAINT "actual_prices_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
     await db.execute(sql`ALTER TABLE "accuracy_metrics" ADD CONSTRAINT "accuracy_metrics_ai_model_id_ai_models_id_fk" FOREIGN KEY ("ai_model_id") REFERENCES "ai_models"("id") ON DELETE no action ON UPDATE no action`);
-    await db.execute(sql`ALTER TABLE "accuracy_metrics" ADD CONSTRAINT "accuracy_metrics_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
-    await db.execute(sql`ALTER TABLE "market_alerts" ADD CONSTRAINT "market_alerts_commodity_id_commodities_id_fk" FOREIGN KEY ("commodity_id") REFERENCES "commodities"("id") ON DELETE no action ON UPDATE no action`);
+    await db.execute(sql`ALTER TABLE "accuracy_metrics" ADD CONSTRAINT "accuracy_metrics_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
+    await db.execute(sql`ALTER TABLE "market_alerts" ADD CONSTRAINT "market_alerts_cryptocurrency_id_cryptocurrencies_id_fk" FOREIGN KEY ("cryptocurrency_id") REFERENCES "cryptocurrencies"("id") ON DELETE no action ON UPDATE no action`);
     await db.execute(sql`ALTER TABLE "market_alerts" ADD CONSTRAINT "market_alerts_ai_model_id_ai_models_id_fk" FOREIGN KEY ("ai_model_id") REFERENCES "ai_models"("id") ON DELETE no action ON UPDATE no action`);
   }
 
@@ -596,8 +596,8 @@ export class DatabaseStorage implements IStorage {
 
       await db.insert(aiModels).values(defaultModels);
 
-      // Initialize Commodities
-      const defaultCommodities = [
+      // Initialize Cryptocurrencies
+      const defaultCryptocurrencies = [
         // Layer 1 Cryptocurrencies
         { name: "Bitcoin", symbol: "BTC", category: "layer1", coinGeckoId: "bitcoin", unit: "USD" },
         { name: "Ethereum", symbol: "ETH", category: "layer1", coinGeckoId: "ethereum", unit: "USD" },
@@ -618,7 +618,7 @@ export class DatabaseStorage implements IStorage {
         { name: "Shiba Inu", symbol: "SHIB", category: "meme", coinGeckoId: "shiba-inu", unit: "USD" }
       ];
 
-      await db.insert(cryptocurrencies).values(defaultCommodities);
+      await db.insert(cryptocurrencies).values(defaultCryptocurrencies);
       
       console.log("Default data initialized successfully");
     } catch (error) {
@@ -788,7 +788,7 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       // NUCLEAR FALLBACK
       if ((error as any)?.code === '42703') {
-        console.log('🚨 EMERGENCY: Timeframe column missing, returning commodity predictions only');
+        console.log('🚨 EMERGENCY: Timeframe column missing, returning cryptocurrency predictions only');
         try {
           await db.execute(sql`ALTER TABLE "predictions" ADD COLUMN IF NOT EXISTS "timeframe" text NOT NULL DEFAULT '3mo'`);
         } catch {}

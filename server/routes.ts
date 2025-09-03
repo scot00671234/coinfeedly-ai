@@ -193,22 +193,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Accuracy Metrics by Commodity
-  app.get("/api/accuracy-metrics/:commodityId/:period", async (req, res) => {
+  // Accuracy Metrics by Cryptocurrency
+  app.get("/api/accuracy-metrics/:cryptocurrencyId/:period", async (req, res) => {
     try {
-      const { commodityId, period } = req.params;
+      const { cryptocurrencyId, period } = req.params;
       
-      console.log(`📊 Calculating accuracy metrics for commodity: ${commodityId}, period: ${period}`);
+      console.log(`📊 Calculating accuracy metrics for cryptocurrency: ${cryptocurrencyId}, period: ${period}`);
       
       // Get all AI models first
       const aiModels = await storage.getAiModels();
       
-      // Calculate real accuracy for each model for this specific commodity
+      // Calculate real accuracy for each model for this specific cryptocurrency
       const modelAccuracies = await Promise.all(
         aiModels.map(async (model) => {
-          // Get predictions for this model and commodity
-          const predictions = await storage.getPredictions(commodityId, model.id);
-          const actualPrices = await storage.getActualPrices(commodityId, 1000);
+          // Get predictions for this model and cryptocurrency
+          const predictions = await storage.getPredictions(cryptocurrencyId, model.id);
+          const actualPrices = await storage.getActualPrices(cryptocurrencyId, 1000);
           
           console.log(`🔍 Model ${model.name}: ${predictions.length} predictions, ${actualPrices.length} actual prices`);
           
@@ -258,7 +258,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .sort((a, b) => b.accuracy - a.accuracy)
         .map((item, index) => ({ ...item, rank: index + 1 }));
 
-      console.log(`✅ Final accuracy rankings for ${commodityId}:`, 
+      console.log(`✅ Final accuracy rankings for ${cryptocurrencyId}:`, 
         rankedAccuracies.map(r => `${r.aiModel.name}: ${r.accuracy}% (#${r.rank})`));
 
       res.json(rankedAccuracies);
@@ -403,21 +403,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Detailed Chart Data with Real Yahoo Finance Integration and AI Predictions
-  app.get("/api/commodities/:id/detailed-chart", async (req, res) => {
+  // Detailed Chart Data with Real CoinGecko Integration and AI Predictions
+  app.get("/api/cryptocurrencies/:id/detailed-chart", async (req, res) => {
     try {
-      const commodityId = req.params.id;
+      const cryptocurrencyId = req.params.id;
       const period = req.query.period as string || "1mo";
       
-      // Get commodity to access Yahoo symbol
-      const commodity = await storage.getCommodity(commodityId);
-      if (!commodity) {
-        return res.status(404).json({ message: "Commodity not found" });
+      // Get cryptocurrency to access CoinGecko ID
+      const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
+      if (!cryptocurrency) {
+        return res.status(404).json({ message: "Cryptocurrency not found" });
       }
 
       // Get chart data with AI predictions from storage
       try {
-        const chartData = await storage.getChartData(commodityId, 30);
+        const chartData = await storage.getChartData(cryptocurrencyId, 30);
         if (chartData.length > 0) {
           return res.json(chartData);
         }
@@ -428,13 +428,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // For now, create a simplified mock prediction structure for chart display
       const aiModels = await storage.getAiModels();
       
-      if (commodity.yahooSymbol) {
+      if (cryptocurrency.coinGeckoId) {
         try {
-          // Fetch cached chart data instead of direct Yahoo Finance calls
-          const realTimeData = await yahooFinanceCacheService.getCachedChartData(commodity.yahooSymbol, 'max');
+          // Fetch cached chart data instead of direct CoinGecko calls
+          const realTimeData = await coinGeckoService.getCachedChartData(cryptocurrency.coinGeckoId, 'max');
           
           if (realTimeData && realTimeData.length > 0) {
-            // Map real Yahoo Finance data with AI predictions
+            // Map real CoinGecko data with AI predictions
             const enhancedData = realTimeData.map((item: any, index: number) => {
               const predictions: Record<string, number> = {};
               
@@ -469,12 +469,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             return res.json(enhancedData);
           }
         } catch (error) {
-          console.warn(`Yahoo Finance failed for ${commodity.yahooSymbol}, using fallback data:`, error);
+          console.warn(`CoinGecko failed for ${cryptocurrency.coinGeckoId}, using fallback data:`, error);
         }
       }
 
       // No real data available
-      console.log(`No historical data available for ${commodity.yahooSymbol}`);
+      console.log(`No historical data available for ${cryptocurrency.coinGeckoId}`);
       res.json([]);
     } catch (error) {
       console.error("Error fetching detailed chart data:", error);
@@ -559,7 +559,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const commodityId = req.params.id;
       const period = req.query.period as string || "1d";
       
-      const commodity = await storage.getCommodity(commodityId);
+      const cryptocurrency = await storage.getCryptocurrency(commodityId);
       if (!commodity?.coinGeckoId) {
         return res.status(404).json({ message: "CoinGecko ID not available" });
       }
@@ -667,7 +667,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI Predictions for All Commodities
   app.get("/api/predictions/all", async (req, res) => {
     try {
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       const allPredictions: any[] = [];
 
       for (const commodity of commodities) {
@@ -692,7 +692,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Endpoint to populate database with sample prediction data
   app.post("/api/populate-predictions", async (req, res) => {
     try {
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       const aiModels = await storage.getAiModels();
       
       let totalPredictions = 0;
@@ -850,7 +850,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const commodityId = req.params.id;
       const timeframe = req.query.timeframe as string; // Optional timeframe filter
-      const commodity = await storage.getCommodity(commodityId);
+      const cryptocurrency = await storage.getCryptocurrency(commodityId);
       
       if (!commodity) {
         return res.status(404).json({ message: "Commodity not found" });
@@ -1034,7 +1034,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // CoinGecko Real-time Data  
   app.post("/api/coingecko/update-all", async (req, res) => {
     try {
-      const commodities = await storage.getCommodities();
+      const cryptocurrencies = await storage.getCryptocurrencies();
       const cryptoCommodities = commodities.filter(c => c.coinGeckoId);
       
       let updatedCount = 0;
@@ -1071,7 +1071,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/coingecko/update/:commodityId", async (req, res) => {
     try {
       const { commodityId } = req.params;
-      const commodity = await storage.getCommodity(commodityId);
+      const cryptocurrency = await storage.getCryptocurrency(commodityId);
       
       if (!commodity?.coinGeckoId) {
         return res.status(404).json({ message: "Cryptocurrency not found or no CoinGecko ID" });
@@ -1107,7 +1107,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { commodityId } = req.params;
       const period = req.query.period as string || "30"; // days
       
-      const commodity = await storage.getCommodity(commodityId);
+      const cryptocurrency = await storage.getCryptocurrency(commodityId);
       if (!commodity?.coinGeckoId) {
         return res.status(404).json({ message: "Cryptocurrency not found or no CoinGecko ID" });
       }
