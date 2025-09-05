@@ -4,5 +4,6 @@
 [x] 4. Update service files to use cryptocurrency methods instead of commodity methods
 [x] 5. Fix frontend API calls to use cryptocurrency endpoints
 [x] 6. Update CoinGecko service for better API compatibility
-[ ] 7. Verify the project is working using the feedback tool
-[ ] 8. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool
+[x] 7. Verify the project is working using the feedback tool
+[x] 8. Set dark mode as the default theme per user request
+[x] 9. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool
