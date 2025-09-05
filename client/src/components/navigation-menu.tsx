@@ -43,6 +43,7 @@ export function NavigationMenu({ currentPath = "/" }: NavigationMenuProps) {
   const menuItems = [
     { path: "/dashboard", label: "Dashboard", description: "View AI predictions and analytics" },
     { path: "/analysis", label: "Analysis", description: "Market indices and sentiment analysis" },
+    { path: "/news", label: "News", description: "Latest crypto news from trusted sources" },
     { path: "/about", label: "About", description: "Learn about our platform and methodology" },
     { path: "/faq", label: "FAQ", description: "Frequently asked questions" },
     { path: "/blog", label: "Blog", description: "Insights and market analysis" },

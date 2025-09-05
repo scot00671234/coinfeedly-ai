@@ -82,6 +82,47 @@ export const compositeIndex = pgTable("composite_index", {
   createdAt: timestamp("created_at").default(sql`now()`).notNull(),
 });
 
+export const newsArticles = pgTable("news_articles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  summary: text("summary"),
+  content: text("content"),
+  url: text("url").notNull().unique(),
+  imageUrl: text("image_url"),
+  source: text("source").notNull(), // 'coingecko', 'cryptopanic', 'newsapi', 'cryptonews'
+  sourceName: text("source_name").notNull(), // 'CoinDesk', 'CoinTelegraph', etc.
+  author: text("author"),
+  category: text("category").notNull(), // 'market', 'technology', 'regulation', 'defi', 'nft', 'gaming'
+  tags: jsonb("tags"), // Array of relevant crypto tags ['bitcoin', 'ethereum', 'defi']
+  sentiment: text("sentiment"), // 'positive', 'negative', 'neutral'
+  sentimentScore: decimal("sentiment_score", { precision: 5, scale: 2 }), // -1 to 1
+  impactScore: decimal("impact_score", { precision: 5, scale: 2 }), // 1 to 10
+  publishedAt: timestamp("published_at").notNull(),
+  crawledAt: timestamp("crawled_at").default(sql`now()`).notNull(),
+  isActive: integer("is_active").default(1).notNull(),
+});
+
+export const newsCategories = pgTable("news_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  description: text("description"),
+  color: text("color").notNull(), // Hex color for UI
+  isActive: integer("is_active").default(1).notNull(),
+});
+
+export const newsSources = pgTable("news_sources", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  baseUrl: text("base_url").notNull(),
+  apiType: text("api_type").notNull(), // 'rss', 'api', 'scrape'
+  reliability: integer("reliability").default(5).notNull(), // 1-10 scale
+  updateFrequency: integer("update_frequency").default(60).notNull(), // minutes
+  isActive: integer("is_active").default(1).notNull(),
+  lastFetch: timestamp("last_fetch"),
+});
+
 // Insert Schemas
 export const insertAiModelSchema = createInsertSchema(aiModels).omit({
   id: true,
@@ -116,6 +157,19 @@ export const insertCompositeIndexSchema = createInsertSchema(compositeIndex).omi
   createdAt: true,
 });
 
+export const insertNewsArticleSchema = createInsertSchema(newsArticles).omit({
+  id: true,
+  crawledAt: true,
+});
+
+export const insertNewsCategorySchema = createInsertSchema(newsCategories).omit({
+  id: true,
+});
+
+export const insertNewsSourceSchema = createInsertSchema(newsSources).omit({
+  id: true,
+});
+
 // Types
 export type AiModel = typeof aiModels.$inferSelect;
 export type InsertAiModel = z.infer<typeof insertAiModelSchema>;
@@ -137,6 +191,15 @@ export type InsertMarketAlert = z.infer<typeof insertMarketAlertSchema>;
 
 export type CompositeIndex = typeof compositeIndex.$inferSelect;
 export type InsertCompositeIndex = z.infer<typeof insertCompositeIndexSchema>;
+
+export type NewsArticle = typeof newsArticles.$inferSelect;
+export type InsertNewsArticle = z.infer<typeof insertNewsArticleSchema>;
+
+export type NewsCategory = typeof newsCategories.$inferSelect;
+export type InsertNewsCategory = z.infer<typeof insertNewsCategorySchema>;
+
+export type NewsSource = typeof newsSources.$inferSelect;
+export type InsertNewsSource = z.infer<typeof insertNewsSourceSchema>;
 
 // Additional types for API responses
 export type DashboardStats = {
@@ -168,6 +231,34 @@ export type LeagueTableEntry = {
   accuracy: number;
   totalPredictions: number;
   trend: number;
+};
+
+export type NewsFilters = {
+  sources?: string[];
+  categories?: string[];
+  sentiment?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  tags?: string[];
+  search?: string;
+};
+
+export type NewsSortOption = 'publishedAt' | 'impact' | 'sentiment' | 'source';
+export type SortDirection = 'asc' | 'desc';
+
+export type NewsApiResponse = {
+  articles: NewsArticle[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+};
+
+export type NewsStats = {
+  totalArticles: number;
+  sourcesCount: number;
+  categoriesCount: number;
+  lastUpdate: string;
 };
 
 

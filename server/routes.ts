@@ -17,6 +17,7 @@ import { compositeIndexService } from "./services/compositeIndexService";
 import { FearGreedService } from "./services/fearGreedService";
 import { CategoryCompositeService } from "./services/categoryCompositeService";
 import { yahooFinanceCacheService } from "./services/yahooFinanceCacheService";
+import { cryptoNewsService } from "./services/cryptoNewsService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -1442,6 +1443,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error generating full report:", error);
       res.status(500).json({ error: "Failed to generate full report" });
+    }
+  });
+
+  // News API Routes
+  app.get("/api/news", async (req, res) => {
+    try {
+      const {
+        sources,
+        categories,
+        sentiment,
+        dateFrom,
+        dateTo,
+        search,
+        sort = 'publishedAt',
+        direction = 'desc',
+        page = '1',
+        pageSize = '20'
+      } = req.query;
+
+      const filters = {
+        sources: sources ? String(sources).split(',') : undefined,
+        categories: categories ? String(categories).split(',') : undefined,
+        sentiment: sentiment ? String(sentiment) : undefined,
+        dateFrom: dateFrom ? String(dateFrom) : undefined,
+        dateTo: dateTo ? String(dateTo) : undefined,
+        search: search ? String(search) : undefined,
+      };
+
+      const result = await cryptoNewsService.getNews(
+        filters,
+        sort as any,
+        direction as any,
+        parseInt(String(page)),
+        parseInt(String(pageSize))
+      );
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      res.status(500).json({ error: 'Failed to fetch news' });
+    }
+  });
+
+  app.get("/api/news/categories", async (req, res) => {
+    try {
+      const categories = await cryptoNewsService.getCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      res.status(500).json({ error: 'Failed to fetch categories' });
+    }
+  });
+
+  app.get("/api/news/sources", async (req, res) => {
+    try {
+      const sources = await cryptoNewsService.getSources();
+      res.json(sources);
+    } catch (error) {
+      console.error('Error fetching sources:', error);
+      res.status(500).json({ error: 'Failed to fetch sources' });
+    }
+  });
+
+  app.get("/api/news/stats", async (req, res) => {
+    try {
+      const stats = await cryptoNewsService.getNewsStats();
+      res.json(stats);
+    } catch (error) {
+      console.error('Error fetching news stats:', error);
+      res.status(500).json({ error: 'Failed to fetch news stats' });
+    }
+  });
+
+  app.post("/api/news/fetch", async (req, res) => {
+    try {
+      await cryptoNewsService.aggregateAllNews();
+      res.json({ success: true, message: 'News aggregation completed' });
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      res.status(500).json({ error: 'Failed to fetch news' });
     }
   });
 

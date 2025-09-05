@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
 import Analysis from "@/pages/analysis";
+import News from "@/pages/news";
 import About from "@/pages/about";
 import FAQ from "@/pages/faq";
 import Blog from "@/pages/blog";
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/analysis" component={Analysis} />
+      <Route path="/news" component={News} />
       <Route path="/about" component={About} />
       <Route path="/faq" component={FAQ} />
       <Route path="/blog" component={Blog} />
