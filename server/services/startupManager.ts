@@ -33,8 +33,8 @@ export class StartupManager {
       const cryptocurrencies = await this.storage.getCryptocurrencies();
       console.log(`📊 Found ${cryptocurrencies.length} cryptocurrencies in database`);
       
-      // Initialize price data in background (don't block startup)
-      this.initializePricesInBackground(cryptocurrencies);
+      // Temporarily disabled to resolve rate limiting issues
+      // this.initializePricesInBackground(cryptocurrencies);
       
     } catch (error) {
       console.error('❌ Heavy initialization failed (non-critical):', error);

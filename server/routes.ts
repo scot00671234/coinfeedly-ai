@@ -20,6 +20,61 @@ import { yahooFinanceCacheService } from "./services/yahooFinanceCacheService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Test endpoint for historical data loading
+  app.get("/api/test/historical/:cryptoId", async (req, res) => {
+    try {
+      const { cryptoId } = req.params;
+      console.log(`🧪 Testing historical data for cryptocurrency: ${cryptoId}`);
+      
+      const cryptocurrency = await storage.getCryptocurrency(cryptoId);
+      if (!cryptocurrency) {
+        return res.status(404).json({ error: "Cryptocurrency not found" });
+      }
+      
+      console.log(`📊 Found cryptocurrency: ${cryptocurrency.name} (${cryptocurrency.coinGeckoId})`);
+      
+      if (!cryptocurrency.coinGeckoId) {
+        return res.status(400).json({ error: "Cryptocurrency missing CoinGecko ID" });
+      }
+      
+      // Test different periods
+      const testPeriods = ['1d', '7d', '30d', '90d'];
+      const results = {};
+      
+      for (const period of testPeriods) {
+        console.log(`⏱️ Testing period: ${period}`);
+        try {
+          const data = await coinGeckoService.fetchDetailedHistoricalData(cryptocurrency.coinGeckoId, period);
+          results[period] = {
+            success: true,
+            dataPoints: data.length,
+            data: data.slice(0, 3) // Show first 3 points for verification
+          };
+          console.log(`✅ ${period}: ${data.length} data points`);
+        } catch (error) {
+          results[period] = {
+            success: false,
+            error: (error as Error).message
+          };
+          console.log(`❌ ${period}: ${(error as Error).message}`);
+        }
+      }
+      
+      res.json({
+        cryptocurrency: {
+          name: cryptocurrency.name,
+          symbol: cryptocurrency.symbol,
+          coinGeckoId: cryptocurrency.coinGeckoId
+        },
+        results
+      });
+      
+    } catch (error) {
+      console.error('Test endpoint error:', error);
+      res.status(500).json({ error: 'Test failed', details: (error as Error).message });
+    }
+  });
+
   // Health Check Endpoint for Production Monitoring
   app.get("/api/health", async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 import { storage } from "../storage";
 import { claudeService } from "./claudeService";
 import { deepseekService } from "./deepseekService";
-import { yahooFinanceIntegration } from "./yahooFinanceIntegration";
+import { historicalDataService } from "./historicalDataService";
 import { OpenAI } from "openai";
 import type { InsertPrediction } from "@shared/schema";
 
@@ -136,12 +136,17 @@ Respond in JSON format:
       }
 
       // Get historical prices for context
-      const historicalPrices = await storage.getActualPrices(cryptocurrencyId, 30);
+      let historicalPrices = await storage.getActualPrices(cryptocurrencyId, 30);
       if (historicalPrices.length === 0) {
-        console.log(`No historical data for ${cryptocurrency.name}, fetching from Yahoo Finance...`);
-        await yahooFinanceIntegration.updateSingleCryptocurrencyPrices(cryptocurrencyId);
-        const newHistoricalPrices = await storage.getActualPrices(cryptocurrencyId, 30);
-        if (newHistoricalPrices.length === 0) {
+        console.log(`No historical data for ${cryptocurrency.name}, fetching from CoinGecko...`);
+        try {
+          await historicalDataService.populateForCryptocurrency(cryptocurrencyId);
+          historicalPrices = await storage.getActualPrices(cryptocurrencyId, 30);
+        } catch (error) {
+          console.error(`Failed to fetch historical data for ${cryptocurrency.name}:`, error);
+        }
+        
+        if (historicalPrices.length === 0) {
           console.error(`Still no historical data for ${cryptocurrency.name}, skipping predictions`);
           return;
         }

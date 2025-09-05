@@ -24,7 +24,7 @@ interface CryptoDataPoint {
 export class CoinGeckoService {
   private baseUrl = "https://api.coingecko.com/api/v3";
   private lastRequestTime = 0;
-  private minDelay = 2000; // 2 seconds between requests to avoid rate limits
+  private minDelay = 6000; // 6 seconds between requests to avoid rate limits (free tier is limited)
 
   private async enforceRateLimit(): Promise<void> {
     const now = Date.now();
@@ -147,7 +147,7 @@ export class CoinGeckoService {
       "1y": 365,
       "2y": 730,
       "5y": 1825,
-      "max": 2000 // CoinGecko free tier max
+      "max": 365 // CoinGecko free tier max (1 year)
     };
 
     const days = periodMap[period] || 30;

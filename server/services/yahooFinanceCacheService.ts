@@ -23,12 +23,13 @@ class YahooFinanceCacheService {
   // Cache durations in milliseconds
   private readonly PRICE_CACHE_DURATION = 2 * 60 * 1000; // 2 minutes for real-time prices
   private readonly CHART_CACHE_DURATION = 15 * 60 * 1000; // 15 minutes for chart data
-  private readonly BACKGROUND_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes background refresh
+  private readonly BACKGROUND_REFRESH_INTERVAL = 60 * 60 * 1000; // 60 minutes background refresh to reduce API load
   
   private refreshTimer?: NodeJS.Timeout;
 
   constructor() {
-    this.startBackgroundRefresh();
+    // Temporarily disabled to resolve CoinGecko rate limiting conflicts
+    // this.startBackgroundRefresh();
   }
 
   /**

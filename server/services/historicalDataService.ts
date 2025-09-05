@@ -1,5 +1,5 @@
 import { storage } from "../storage";
-import { yahooFinanceService } from "./yahooFinance";
+import { coinGeckoService } from "./coinGeckoService";
 import type { InsertActualPrice, Cryptocurrency } from "@shared/schema";
 
 /**
@@ -8,7 +8,7 @@ import type { InsertActualPrice, Cryptocurrency } from "@shared/schema";
  */
 class HistoricalDataService {
   private isRunning = false;
-  private readonly BATCH_DELAY = 3000; // 3 seconds between batches to avoid rate limiting
+  private readonly BATCH_DELAY = 8000; // 8 seconds between batches to avoid CoinGecko rate limiting
 
   /**
    * Fetch and store historical data for all cryptocurrencies
@@ -28,12 +28,12 @@ class HistoricalDataService {
       const periods = ['5y', '10y', 'max']; // Focus on long-term periods
 
       for (const cryptocurrency of cryptocurrencies) {
-        if (!cryptocurrency.symbol) {
-          console.log(`Skipping ${cryptocurrency.name} - no symbol`);
+        if (!cryptocurrency.coinGeckoId) {
+          console.log(`Skipping ${cryptocurrency.name} - no CoinGecko ID`);
           continue;
         }
 
-        console.log(`📊 Processing historical data for ${cryptocurrency.name} (${cryptocurrency.symbol})`);
+        console.log(`📊 Processing historical data for ${cryptocurrency.name} (${cryptocurrency.coinGeckoId})`);
         
         // Check if we already have substantial historical data
         const existingData = await storage.getActualPrices(cryptocurrency.id, 1000);
@@ -46,7 +46,7 @@ class HistoricalDataService {
         for (const period of periods) {
           try {
             console.log(`  📅 Fetching ${period} data for ${cryptocurrency.name}`);
-            const historicalData = await yahooFinanceService.fetchDetailedHistoricalData(cryptocurrency.symbol, period);
+            const historicalData = await coinGeckoService.fetchDetailedHistoricalData(cryptocurrency.coinGeckoId, period);
             
             if (historicalData.length > 0) {
               console.log(`  ✅ Got ${historicalData.length} data points for ${period}`);
@@ -100,7 +100,7 @@ class HistoricalDataService {
           date: new Date(dataPoint.date),
           price: dataPoint.price.toString(),
           volume: dataPoint.volume ? dataPoint.volume.toString() : null,
-          source: "yahoo_finance_historical"
+          source: "coingecko_historical"
         };
 
         // Check if this data point already exists (simple date-based check)
@@ -167,17 +167,17 @@ class HistoricalDataService {
    */
   async populateForCryptocurrency(cryptocurrencyId: string): Promise<void> {
     const cryptocurrency = await storage.getCryptocurrency(cryptocurrencyId);
-    if (!cryptocurrency?.symbol) {
-      throw new Error('Cryptocurrency not found or missing symbol');
+    if (!cryptocurrency?.coinGeckoId) {
+      throw new Error('Cryptocurrency not found or missing CoinGecko ID');
     }
 
     console.log(`🔄 Fetching extensive historical data for ${cryptocurrency.name}`);
     
-    const periods = ['max', '10y', '5y']; // Try maximum first
+    const periods = ['max', '5y', '2y']; // Try maximum first, with reasonable limits
     
     for (const period of periods) {
       try {
-        const data = await yahooFinanceService.fetchDetailedHistoricalData(cryptocurrency.symbol, period);
+        const data = await coinGeckoService.fetchDetailedHistoricalData(cryptocurrency.coinGeckoId, period);
         if (data.length > 0) {
           await this.storeHistoricalDataBatch(cryptocurrency, data);
           console.log(`✅ Successfully stored ${data.length} data points for ${cryptocurrency.name} (${period})`);
