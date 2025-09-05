@@ -123,26 +123,12 @@ export default function News() {
       <header className="sticky top-0 z-40 border-b border-border/40 bg-background/98 backdrop-blur-xl supports-[backdrop-filter]:bg-background/95 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
-                <span className="font-semibold text-lg text-foreground">Crypto News Hub</span>
-              </div>
-              <NavigationMenu />
+            <div className="flex items-center space-x-3">
+              <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-foreground"></div>
+              <span className="font-semibold text-lg text-foreground">Coin Feedly</span>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <Button
-                onClick={() => fetchNewsMutation.mutate()}
-                disabled={fetchNewsMutation.isPending}
-                variant="outline"
-                size="sm"
-                className="flex items-center space-x-2"
-              >
-                <RefreshCwIcon className={`w-4 h-4 ${fetchNewsMutation.isPending ? 'animate-spin' : ''}`} />
-                <span>Refresh News</span>
-              </Button>
-            </div>
+            <NavigationMenu />
           </div>
         </div>
       </header>
@@ -156,12 +142,25 @@ export default function News() {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-foreground mb-2">Crypto News Feed</h1>
-          <p className="text-muted-foreground">
-            Stay updated with the latest cryptocurrency news from trusted sources
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Crypto News Feed</h1>
+              <p className="text-muted-foreground">
+                Stay updated with the latest cryptocurrency news from trusted sources
+              </p>
+            </div>
+            <Button
+              onClick={() => fetchNewsMutation.mutate()}
+              disabled={fetchNewsMutation.isPending}
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <RefreshCwIcon className={`w-4 h-4 ${fetchNewsMutation.isPending ? 'animate-spin' : ''}`} />
+              <span>Refresh News</span>
+            </Button>
+          </div>
           {newsStats && (
-            <div className="flex items-center space-x-6 mt-4 text-sm text-muted-foreground">
+            <div className="flex items-center space-x-6 text-sm text-muted-foreground">
               <div className="flex items-center space-x-1">
                 <TrendingUpIcon className="w-4 h-4" />
                 <span>{newsStats.totalArticles} articles</span>
