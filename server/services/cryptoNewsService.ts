@@ -287,87 +287,8 @@ export class CryptoNewsService {
   }
 
   async fetchSampleNews(): Promise<Partial<NewsArticle>[]> {
-    // Sample news data to demonstrate the UI when no API keys are available
-    return [
-      {
-        title: "Bitcoin Reaches New All-Time High as Institutional Adoption Soars",
-        summary: "Bitcoin has reached unprecedented levels as more institutions embrace cryptocurrency as a store of value and hedge against inflation.",
-        url: "https://example.com/bitcoin-ath",
-        source: 'sample',
-        sourceName: 'Crypto Times',
-        category: 'market',
-        tags: ['bitcoin', 'institutional', 'ath'],
-        sentiment: 'positive',
-        sentimentScore: '0.8',
-        impactScore: '9',
-        publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-      },
-      {
-        title: "Ethereum 2.0 Staking Rewards Hit Record High",
-        summary: "Ethereum's transition to proof-of-stake continues to show impressive returns for validators as network security strengthens.",
-        url: "https://example.com/eth2-staking",
-        source: 'sample',
-        sourceName: 'DeFi Daily',
-        category: 'technology',
-        tags: ['ethereum', 'staking', 'pos'],
-        sentiment: 'positive',
-        sentimentScore: '0.7',
-        impactScore: '7',
-        publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
-      },
-      {
-        title: "New DeFi Protocol Launches with Revolutionary Yield Farming Features",
-        summary: "A groundbreaking decentralized finance protocol introduces innovative yield farming mechanisms that could reshape the DeFi landscape.",
-        url: "https://example.com/new-defi-protocol",
-        source: 'sample',
-        sourceName: 'Blockchain Weekly',
-        category: 'defi',
-        tags: ['defi', 'yield-farming', 'protocol'],
-        sentiment: 'neutral',
-        sentimentScore: '0.1',
-        impactScore: '6',
-        publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
-      },
-      {
-        title: "SEC Provides Clarity on Cryptocurrency Regulations",
-        summary: "The Securities and Exchange Commission has issued new guidance that brings much-needed clarity to the cryptocurrency regulatory landscape.",
-        url: "https://example.com/sec-crypto-regulations",
-        source: 'sample',
-        sourceName: 'Regulatory Report',
-        category: 'regulation',
-        tags: ['sec', 'regulation', 'compliance'],
-        sentiment: 'positive',
-        sentimentScore: '0.5',
-        impactScore: '8',
-        publishedAt: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
-      },
-      {
-        title: "NFT Market Shows Signs of Recovery with New Gaming Projects",
-        summary: "The NFT marketplace is experiencing renewed interest as blockchain-based gaming projects introduce utility-focused collections.",
-        url: "https://example.com/nft-gaming-recovery",
-        source: 'sample',
-        sourceName: 'NFT News',
-        category: 'nft',
-        tags: ['nft', 'gaming', 'recovery'],
-        sentiment: 'positive',
-        sentimentScore: '0.6',
-        impactScore: '5',
-        publishedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
-      },
-      {
-        title: "Major Exchange Implements Advanced Security Measures",
-        summary: "Leading cryptocurrency exchange announces implementation of cutting-edge security protocols to protect user assets.",
-        url: "https://example.com/exchange-security",
-        source: 'sample',
-        sourceName: 'Security Today',
-        category: 'technology',
-        tags: ['security', 'exchange', 'protection'],
-        sentiment: 'positive',
-        sentimentScore: '0.4',
-        impactScore: '7',
-        publishedAt: new Date(Date.now() - 18 * 60 * 60 * 1000), // 18 hours ago
-      }
-    ];
+    // NO MORE SAMPLE DATA - Return empty array to prevent mock articles
+    return [];
   }
 
   async fetchFromCryptoNewsAPI(): Promise<Partial<NewsArticle>[]> {
@@ -600,11 +521,19 @@ export class CryptoNewsService {
       .from(newsArticles)
       .where(eq(newsArticles.isActive, 1));
     
-    return result.map(r => ({
-      id: r.name,
-      name: r.name,
-      displayName: r.displayName || r.name.charAt(0).toUpperCase() + r.name.slice(1)
-    }));
+    // Group by source name to prevent duplicates
+    const sourceMap = new Map();
+    result.forEach(r => {
+      if (!sourceMap.has(r.name)) {
+        sourceMap.set(r.name, {
+          id: r.name,
+          name: r.name,
+          displayName: r.displayName || r.name.charAt(0).toUpperCase() + r.name.slice(1)
+        });
+      }
+    });
+    
+    return Array.from(sourceMap.values());
   }
 
   async getNewsStats() {
