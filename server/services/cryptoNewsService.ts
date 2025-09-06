@@ -568,22 +568,22 @@ export class CryptoNewsService {
     };
   }
 
-  async getCategories(): Promise<string[]> {
+  async getCategories(): Promise<any[]> {
     const result = await db
-      .selectDistinct({ category: newsArticles.category })
-      .from(newsArticles)
-      .where(eq(newsArticles.isActive, 1));
+      .select()
+      .from(newsCategories)
+      .where(eq(newsCategories.isActive, 1));
     
-    return result.map(r => r.category);
+    return result;
   }
 
-  async getSources(): Promise<string[]> {
+  async getSources(): Promise<any[]> {
     const result = await db
-      .selectDistinct({ source: newsArticles.source })
-      .from(newsArticles)
-      .where(eq(newsArticles.isActive, 1));
+      .select()
+      .from(newsSources)
+      .where(eq(newsSources.isActive, 1));
     
-    return result.map(r => r.source);
+    return result;
   }
 
   async getNewsStats() {
