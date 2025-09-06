@@ -65,6 +65,15 @@ export class CryptoNewsService {
     newsAPI: "https://newsapi.org/v2",
     cryptoNewsAPI: "https://cryptonews-api.com",
   };
+
+  private rssFeeds = [
+    { url: 'https://cointelegraph.com/rss', name: 'CoinTelegraph', reliability: 9 },
+    { url: 'https://www.coindesk.com/arc/outboundfeeds/rss/', name: 'CoinDesk', reliability: 10 },
+    { url: 'https://decrypt.co/feed', name: 'Decrypt', reliability: 8 },
+    { url: 'https://blockworks.co/feed/', name: 'Blockworks', reliability: 7 },
+    { url: 'https://www.theblock.co/rss.xml', name: 'The Block', reliability: 9 },
+    { url: 'https://bitcoinmagazine.com/feed', name: 'Bitcoin Magazine', reliability: 8 }
+  ];
   
   private lastRequestTime: { [key: string]: number } = {};
   private minDelay = 1000; // 1 second between requests
@@ -189,52 +198,80 @@ export class CryptoNewsService {
   }
 
   async fetchFromRSSFeeds(): Promise<Partial<NewsArticle>[]> {
-    await this.enforceRateLimit('rss');
+    const allArticles: Partial<NewsArticle>[] = [];
     
-    try {
-      // Fetch from free RSS feeds
-      const response = await fetch('https://cointelegraph.com/rss');
-      
-      if (!response.ok) {
-        console.log('RSS feed not available, trying alternative...');
-        return this.fetchSampleNews();
-      }
+    // Fetch from multiple RSS sources for better content variety
+    for (const feed of this.rssFeeds.slice(0, 3)) { // Limit to 3 sources to avoid rate limits
+      try {
+        await this.enforceRateLimit('rss');
+        
+        console.log(`📰 Fetching from ${feed.name}...`);
+        const response = await fetch(feed.url, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; AIForecast-Hub/1.0)',
+            'Accept': 'application/rss+xml, application/xml, text/xml'
+          }
+        });
+        
+        if (!response.ok) {
+          console.log(`❌ ${feed.name} RSS feed not available: ${response.status}`);
+          continue;
+        }
 
-      const rssText = await response.text();
-      // Basic RSS parsing for XML
-      const articles: Partial<NewsArticle>[] = [];
-      
-      // Simple regex parsing for RSS (basic implementation)
-      const itemMatches = rssText.match(/<item[^>]*>(.*?)<\/item>/gs);
-      
-      if (itemMatches) {
-        for (const item of itemMatches.slice(0, 10)) { // Limit to 10 articles
-          const titleMatch = item.match(/<title[^>]*><!\[CDATA\[(.*?)\]\]><\/title>/);
-          const linkMatch = item.match(/<link[^>]*>(.*?)<\/link>/);
-          const descMatch = item.match(/<description[^>]*><!\[CDATA\[(.*?)\]\]><\/description>/);
-          const pubDateMatch = item.match(/<pubDate[^>]*>(.*?)<\/pubDate>/);
-          
-          if (titleMatch && linkMatch) {
-            articles.push({
-              title: titleMatch[1].trim(),
-              summary: descMatch ? descMatch[1].replace(/<[^>]*>/g, '').trim().substring(0, 200) : null,
-              url: linkMatch[1].trim(),
-              source: 'rss',
-              sourceName: 'CoinTelegraph',
-              category: this.categorizeArticle(titleMatch[1]),
-              tags: this.extractTags(titleMatch[1], descMatch?.[1] || ''),
-              impactScore: '6',
-              publishedAt: pubDateMatch ? new Date(pubDateMatch[1]) : new Date(),
-            });
+        const rssText = await response.text();
+        const articles: Partial<NewsArticle>[] = [];
+        
+        // Enhanced RSS parsing for XML with better regex patterns
+        const itemMatches = rssText.match(/<item[^>]*>[\s\S]*?<\/item>/g);
+        
+        if (itemMatches) {
+          for (const item of itemMatches.slice(0, 15)) { // More articles per source
+            let titleMatch = item.match(/<title[^>]*>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/);
+            let linkMatch = item.match(/<link[^>]*>(.*?)<\/link>/);
+            let descMatch = item.match(/<description[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/);
+            let pubDateMatch = item.match(/<pubDate[^>]*>(.*?)<\/pubDate>/);
+            
+            // Try alternative tag patterns
+            if (!titleMatch) titleMatch = item.match(/<title>(.*?)<\/title>/);
+            if (!linkMatch) linkMatch = item.match(/<guid[^>]*>(https?:\/\/[^<]+)<\/guid>/);
+            
+            if (titleMatch && linkMatch) {
+              const title = titleMatch[1].trim();
+              const url = linkMatch[1].trim();
+              
+              // Skip if already exists (basic deduplication)
+              const isDuplicate = allArticles.some(existing => 
+                existing.url === url || existing.title === title
+              );
+              
+              if (!isDuplicate) {
+                articles.push({
+                  title,
+                  summary: descMatch ? descMatch[1].replace(/<[^>]*>/g, '').trim().substring(0, 200) : null,
+                  url,
+                  source: 'rss',
+                  sourceName: feed.name,
+                  category: this.categorizeArticle(title),
+                  tags: this.extractTags(title),
+                  impactScore: feed.reliability.toString(),
+                  publishedAt: pubDateMatch ? new Date(pubDateMatch[1]) : new Date(),
+                });
+              }
+            }
           }
         }
+
+        console.log(`✅ ${feed.name}: ${articles.length} new articles`);
+        allArticles.push(...articles);
+        
+      } catch (error) {
+        console.error(`Error fetching from ${feed.name}:`, error);
+        continue; // Continue with other feeds
       }
-      
-      return articles;
-    } catch (error) {
-      console.error('Error fetching RSS feeds:', error);
-      return this.fetchSampleNews();
     }
+
+    console.log(`📊 Total RSS articles collected: ${allArticles.length}`);
+    return allArticles;
   }
 
   async fetchFromNewsAPI(): Promise<Partial<NewsArticle>[]> {
@@ -246,7 +283,7 @@ export class CryptoNewsService {
       
       if (!process.env.NEWS_API_KEY) {
         console.log('NewsAPI key not configured, using RSS fallback...');
-        return this.fetchFromRSSFeeds();
+        return [];
       }
 
       const response = await fetch(url, {
