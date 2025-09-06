@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { NavigationMenu } from "../components/navigation-menu";
 import { motion } from "framer-motion";
-import type { NewsApiResponse, NewsFilters, NewsSortOption, SortDirection, NewsStats, NewsCategory, NewsSource } from "@shared/schema";
+import type { NewsApiResponse, NewsFilters, NewsSortOption, SortDirection, NewsStats, NewsCategory, NewsSource, NewsArticle } from "@shared/schema";
 
 export default function News() {
   const { toast } = useToast();
@@ -55,19 +55,23 @@ export default function News() {
       const response = await fetch(`/api/news?${queryParams}`);
       if (!response.ok) throw new Error('Failed to fetch news');
       return response.json();
-    },
-    onSuccess: (data) => {
-      if (currentPage === 1) {
-        // Reset articles for new search/filter
-        setAllArticles(data.articles);
-      } else {
-        // Append for infinite scroll
-        setAllArticles(prev => [...prev, ...data.articles]);
-      }
-      setHasMorePages(data.hasMore);
-      setIsLoadingMore(false);
     }
   });
+
+  // Handle newsData updates when query completes
+  useEffect(() => {
+    if (newsData) {
+      if (currentPage === 1) {
+        // Reset articles for new search/filter
+        setAllArticles(newsData.articles);
+      } else {
+        // Append for infinite scroll
+        setAllArticles(prev => [...prev, ...newsData.articles]);
+      }
+      setHasMorePages(newsData.hasMore);
+      setIsLoadingMore(false);
+    }
+  }, [newsData, currentPage]);
 
   // Fetch categories and sources for filters
   const { data: categories = [] } = useQuery<NewsCategory[]>({
@@ -392,13 +396,13 @@ export default function News() {
                         <span>{article.sourceName}</span>
                         <div className="flex items-center space-x-1">
                           <CalendarIcon className="w-3 h-3" />
-                          <span>{formatDate(article.publishedAt)}</span>
+                          <span>{formatDate(article.publishedAt as string)}</span>
                         </div>
                       </div>
                       
-                      {article.tags && article.tags.length > 0 && (
+                      {article.tags && Array.isArray(article.tags) && article.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-4">
-                          {(article.tags as string[]).slice(0, 3).map((tag) => (
+                          {article.tags.slice(0, 3).map((tag: string) => (
                             <Badge key={tag} variant="outline" className="text-xs">
                               {tag}
                             </Badge>
