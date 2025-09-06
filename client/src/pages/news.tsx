@@ -1,5 +1,5 @@
 import { SearchIcon, FilterIcon, CalendarIcon, TrendingUpIcon, ExternalLinkIcon, RefreshCwIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,19 +24,28 @@ export default function News() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12;
 
+  // Build query parameters with useMemo to prevent unnecessary re-renders
+  const queryParams = useMemo(() => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.set('search', searchQuery);
+    if (selectedCategory !== "all") params.set('categories', selectedCategory);
+    if (selectedSource !== "all") params.set('sources', selectedSource);
+    if (selectedSentiment !== "all") params.set('sentiment', selectedSentiment);
+    params.set('sort', sortBy);
+    params.set('direction', sortDirection);
+    params.set('page', currentPage.toString());
+    params.set('pageSize', pageSize.toString());
+    return params.toString();
+  }, [searchQuery, selectedCategory, selectedSource, selectedSentiment, sortBy, sortDirection, currentPage, pageSize]);
+
   // Fetch news data
   const { data: newsData, isLoading, refetch } = useQuery<NewsApiResponse>({
-    queryKey: ["/api/news", {
-      search: searchQuery || undefined,
-      categories: selectedCategory !== "all" ? [selectedCategory] : undefined,
-      sources: selectedSource !== "all" ? [selectedSource] : undefined,
-      sentiment: selectedSentiment !== "all" ? selectedSentiment : undefined,
-      sort: sortBy,
-      direction: sortDirection,
-      page: currentPage,
-      pageSize
-    }],
-    enabled: true,
+    queryKey: ["news", queryParams],
+    queryFn: async () => {
+      const response = await fetch(`/api/news?${queryParams}`);
+      if (!response.ok) throw new Error('Failed to fetch news');
+      return response.json();
+    },
   });
 
   // Fetch categories and sources for filters
