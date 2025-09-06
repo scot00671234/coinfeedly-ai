@@ -22,7 +22,10 @@ export default function News() {
   const [sortBy, setSortBy] = useState<NewsSortOption>("publishedAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12;
+  const pageSize = 20; // Increased for better scrolling experience
+  const [allArticles, setAllArticles] = useState<NewsArticle[]>([]);
+  const [hasMorePages, setHasMorePages] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   // Build query parameters with useMemo to prevent unnecessary re-renders
   const queryParams = useMemo(() => {
@@ -45,7 +48,7 @@ export default function News() {
     return params.toString();
   }, [searchQuery, selectedCategory, selectedSource, selectedSentiment, sortBy, sortDirection, currentPage, pageSize]);
 
-  // Fetch news data
+  // Fetch news data with infinite scroll support
   const { data: newsData, isLoading, refetch } = useQuery<NewsApiResponse>({
     queryKey: ["news", queryParams],
     queryFn: async () => {
@@ -53,6 +56,17 @@ export default function News() {
       if (!response.ok) throw new Error('Failed to fetch news');
       return response.json();
     },
+    onSuccess: (data) => {
+      if (currentPage === 1) {
+        // Reset articles for new search/filter
+        setAllArticles(data.articles);
+      } else {
+        // Append for infinite scroll
+        setAllArticles(prev => [...prev, ...data.articles]);
+      }
+      setHasMorePages(data.hasMore);
+      setIsLoadingMore(false);
+    }
   });
 
   // Fetch categories and sources for filters
@@ -94,7 +108,28 @@ export default function News() {
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
+    setAllArticles([]);
+    setHasMorePages(true);
   }, [searchQuery, selectedCategory, selectedSource, selectedSentiment, sortBy, sortDirection]);
+
+  // Infinite scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop
+        >= document.documentElement.offsetHeight - 1000 // Trigger 1000px before bottom
+        && hasMorePages 
+        && !isLoading 
+        && !isLoadingMore
+      ) {
+        setIsLoadingMore(true);
+        setCurrentPage(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMorePages, isLoading, isLoadingMore]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -275,7 +310,7 @@ export default function News() {
         </motion.div>
 
         {/* News Grid */}
-        {isLoading ? (
+        {isLoading && currentPage === 1 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <Card key={i} className="border-border/50">
@@ -293,7 +328,7 @@ export default function News() {
               </Card>
             ))}
           </div>
-        ) : newsData?.articles.length === 0 ? (
+        ) : allArticles.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -312,7 +347,7 @@ export default function News() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
             >
-              {newsData?.articles.map((article, index) => (
+              {allArticles.map((article, index) => (
                 <motion.div
                   key={article.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -393,35 +428,30 @@ export default function News() {
               ))}
             </motion.div>
 
-            {/* Pagination */}
-            {newsData && newsData.total > pageSize && (
+            {/* Infinite Scroll Loading Indicator */}
+            {isLoadingMore && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex items-center justify-center space-x-4"
+                className="flex items-center justify-center py-8"
               >
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-                
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-muted-foreground">
-                    Page {currentPage} of {Math.ceil(newsData.total / pageSize)}
-                  </span>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                  <span className="text-sm text-muted-foreground">Loading more articles...</span>
                 </div>
+              </motion.div>
+            )}
 
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage(p => p + 1)}
-                  disabled={!newsData.hasMore}
-                >
-                  Next
-                </Button>
+            {/* End of Feed Indicator */}
+            {!hasMorePages && allArticles.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-8"
+              >
+                <div className="text-sm text-muted-foreground">
+                  🎉 You've reached the end! All {allArticles.length} articles loaded.
+                </div>
               </motion.div>
             )}
           </>
