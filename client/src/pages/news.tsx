@@ -30,7 +30,14 @@ export default function News() {
     if (searchQuery) params.set('search', searchQuery);
     if (selectedCategory !== "all") params.set('categories', selectedCategory);
     if (selectedSource !== "all") params.set('sources', selectedSource);
-    if (selectedSentiment !== "all") params.set('sentiment', selectedSentiment);
+    if (selectedSentiment !== "all") {
+      // Handle empty sentiment special case
+      if (selectedSentiment === "empty") {
+        params.set('sentiment', '');
+      } else {
+        params.set('sentiment', selectedSentiment);
+      }
+    }
     params.set('sort', sortBy);
     params.set('direction', sortDirection);
     params.set('page', currentPage.toString());
@@ -243,6 +250,7 @@ export default function News() {
                 <SelectItem value="positive">Positive</SelectItem>
                 <SelectItem value="neutral">Neutral</SelectItem>
                 <SelectItem value="negative">Negative</SelectItem>
+                <SelectItem value="empty">No Sentiment</SelectItem>
               </SelectContent>
             </Select>
 

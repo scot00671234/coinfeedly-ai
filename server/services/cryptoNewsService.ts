@@ -502,8 +502,16 @@ export class CryptoNewsService {
       conditions.push(inArray(newsArticles.category, filters.categories));
     }
     
-    if (filters.sentiment) {
-      conditions.push(eq(newsArticles.sentiment, filters.sentiment));
+    if (filters.sentiment !== undefined) {
+      if (filters.sentiment === '') {
+        // Handle empty/null sentiment
+        conditions.push(or(
+          eq(newsArticles.sentiment, ''),
+          sql`${newsArticles.sentiment} IS NULL`
+        ));
+      } else {
+        conditions.push(eq(newsArticles.sentiment, filters.sentiment));
+      }
     }
     
     if (filters.dateFrom) {
@@ -569,21 +577,34 @@ export class CryptoNewsService {
   }
 
   async getCategories(): Promise<any[]> {
+    // Get actual category values from articles, not configured categories
     const result = await db
-      .select()
-      .from(newsCategories)
-      .where(eq(newsCategories.isActive, 1));
+      .selectDistinct({ category: newsArticles.category })
+      .from(newsArticles)
+      .where(eq(newsArticles.isActive, 1));
     
-    return result;
+    return result.map(r => ({
+      id: r.category,
+      name: r.category,
+      displayName: r.category.charAt(0).toUpperCase() + r.category.slice(1)
+    }));
   }
 
   async getSources(): Promise<any[]> {
+    // Get actual source values from articles, not configured sources
     const result = await db
-      .select()
-      .from(newsSources)
-      .where(eq(newsSources.isActive, 1));
+      .selectDistinct({ 
+        name: newsArticles.source,
+        displayName: newsArticles.sourceName 
+      })
+      .from(newsArticles)
+      .where(eq(newsArticles.isActive, 1));
     
-    return result;
+    return result.map(r => ({
+      id: r.name,
+      name: r.name,
+      displayName: r.displayName || r.name.charAt(0).toUpperCase() + r.name.slice(1)
+    }));
   }
 
   async getNewsStats() {
