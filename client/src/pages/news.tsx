@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { NavigationMenu } from "../components/navigation-menu";
 import { motion } from "framer-motion";
-import type { NewsApiResponse, NewsFilters, NewsSortOption, SortDirection, NewsStats } from "@shared/schema";
+import type { NewsApiResponse, NewsFilters, NewsSortOption, SortDirection, NewsStats, NewsCategory, NewsSource } from "@shared/schema";
 
 export default function News() {
   const { toast } = useToast();
@@ -49,11 +49,11 @@ export default function News() {
   });
 
   // Fetch categories and sources for filters
-  const { data: categories = [] } = useQuery<string[]>({
+  const { data: categories = [] } = useQuery<NewsCategory[]>({
     queryKey: ["/api/news/categories"],
   });
 
-  const { data: sources = [] } = useQuery<string[]>({
+  const { data: sources = [] } = useQuery<NewsSource[]>({
     queryKey: ["/api/news/sources"],
   });
 
@@ -211,8 +211,8 @@ export default function News() {
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
                 {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  <SelectItem key={category.id} value={category.name}>
+                    {category.displayName}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -226,8 +226,8 @@ export default function News() {
               <SelectContent>
                 <SelectItem value="all">All Sources</SelectItem>
                 {sources.map((source) => (
-                  <SelectItem key={source} value={source}>
-                    {source.charAt(0).toUpperCase() + source.slice(1)}
+                  <SelectItem key={source.id} value={source.name}>
+                    {source.displayName}
                   </SelectItem>
                 ))}
               </SelectContent>
